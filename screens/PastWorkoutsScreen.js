@@ -1,16 +1,14 @@
 import { View, Text, StyleSheet } from "react-native";
-import React from "react";
+import { Col, Row, Grid } from "react-native-easy-grid";
 
-import TableRow from "../components/UI/table/TableHeaderRow";
 import IncompleteSetNumber from "../components/UI/table/row/IncompleteSetNumber";
 import IncompleteRow from "../components/UI/table/IncompleteRow";
+import Exercise from "../components/Exercise";
 
 export default function PastWorkoutsScreen() {
   return (
     <View style={styles.container}>
-      <Text>PastWorkoutsScreen</Text>
-      <TableRow />
-      <IncompleteRow />
+      <Exercise exerciseName={"Barbell Bench Press"} />
     </View>
   );
 }

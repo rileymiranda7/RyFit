@@ -4,7 +4,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { Colors } from "../../../constants/colors";
 import TableColumnHeader from "./row/TableColumnHeader";
 
-export default function TableRow() {
+export default function TableHeaderRow() {
   return (
     <View style={styles.container}>
       <TableColumnHeader>Set#</TableColumnHeader>
