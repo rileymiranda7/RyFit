@@ -13,18 +13,26 @@ import "react-native-gesture-handler";
 const BottomTabs = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
 
-function DrawerNavigator() {
+function BottomTabsNavigator() {
   return (
-    <Drawer.Navigator>
-      <Drawer.Screen
-        name="StartWorkout"
-        component={StartWorkoutScreen}
+    <BottomTabs.Navigator initialRouteName="Drawer">
+      <BottomTabs.Screen
+        name="PastWorkouts"
+        component={PastWorkoutsScreen}
         options={{
+          headerShown: false,
+          title: "Past Workouts",
+        }}
+      />
+      <BottomTabs.Screen
+        name="Drawer"
+        component={CurrentWorkoutScreen}
+        options={{
+          headerShown: false,
           title: "Start Workout",
         }}
       />
-      <Drawer.Screen name="Profile" component={ProfileScreen} />
-    </Drawer.Navigator>
+    </BottomTabs.Navigator>
   );
 }
 
@@ -33,30 +41,16 @@ export default function App() {
     <>
       <StatusBar style="auto" />
       <NavigationContainer>
-        <BottomTabs.Navigator initialRouteName="Drawer">
-          <BottomTabs.Screen
-            name="PastWorkouts"
-            component={PastWorkoutsScreen}
+        <Drawer.Navigator>
+          <Drawer.Screen
+            name="BottomTabs"
+            component={BottomTabsNavigator}
             options={{
-              title: "Past Workouts",
+              title: "RyFit",
             }}
           />
-          <BottomTabs.Screen
-            name="Drawer"
-            component={DrawerNavigator}
-            options={{
-              headerShown: false,
-              title: "Start Workout",
-            }}
-          />
-          <BottomTabs.Screen
-            name="CurrentWorkout"
-            component={CurrentWorkoutScreen}
-            options={{
-              title: "Current Workout",
-            }}
-          />
-        </BottomTabs.Navigator>
+          <Drawer.Screen name="Profile" component={ProfileScreen} />
+        </Drawer.Navigator>
       </NavigationContainer>
     </>
   );
