@@ -1,0 +1,20 @@
+A Workout consists of Exercises
+
+An Exercise consists of a 
+- name
+- notes
+- Sets
+
+A Set consists of a
+- set number
+- weight done
+- reps completed
+- type ("WORKING", "WARMUP", "DROPSET")
+- status ("COMPLETED", "FAILED", "IN PROGRESS")
+
+Initialize newly picked exercise with one set with empty
+weight and reps.
+Set number starts with one and increments every time 
+'Add Set' is pressed.
+Type and status are initialized with values 'WORKING'
+and 'IN PROGRESS' until the user possibly changes them.
