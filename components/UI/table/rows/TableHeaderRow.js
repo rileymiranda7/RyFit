@@ -12,7 +12,7 @@ export default function TableHeaderRow() {
       <Text style={styles.lbs}>lbs</Text>
       <Text style={styles.reps}>Reps</Text>
       <View style={styles.completed}>
-        <Ionicons name="checkbox" size={24} color="white" />
+        <Ionicons name="checkbox" size={24} color={Colors.neonGreen} />
       </View>
     </View>
   );
@@ -25,31 +25,41 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     minWidth: "100%",
     backgroundColor: Colors.gray0,
-    marginVertical: 4,
+    borderRadius: 6,
   },
   set: {
     textAlign: "center",
     flex: 2,
-    backgroundColor: "red",
+    color: "white",
+    fontSize: 16,
+    fontWeight: "bold",
   },
   previous: {
     textAlign: "center",
     flex: 3,
-    backgroundColor: "blue",
+    color: "white",
+    fontSize: 16,
+    fontWeight: "bold",
   },
   lbs: {
     flex: 2,
     textAlign: "center",
-    backgroundColor: "orange",
+    color: "white",
+    fontSize: 16,
+    fontWeight: "bold",
   },
   reps: {
     flex: 2,
     textAlign: "center",
-    backgroundColor: "green",
+    color: "white",
+    fontSize: 16,
+    fontWeight: "bold",
   },
   completed: {
     flex: 1,
-    backgroundColor: "gold",
     alignItems: "center",
+    color: "white",
+    fontSize: 16,
+    fontWeight: "bold",
   },
 });

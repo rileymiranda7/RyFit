@@ -4,7 +4,7 @@ import { Colors } from "../../../../constants/colors";
 export default function Previous() {
   return (
     <View style={styles.container}>
-      <Text>Previous</Text>
+      <Text style={styles.text}>Previous</Text>
     </View>
   );
 }
@@ -14,7 +14,11 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.gray0,
     padding: 4,
     borderRadius: 6,
-    color: "white",
     minWidth: 100,
+  },
+  text: {
+    textAlign: "center",
+    color: "white",
+    fontSize: 16,
   },
 });

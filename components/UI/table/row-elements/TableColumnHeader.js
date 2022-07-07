@@ -11,8 +11,8 @@ export default function TableColumnHeader({ children }) {
 const styles = StyleSheet.create({
   container: {},
   text: {
-    color: "white",
     textAlign: "center",
+    color: "white",
     fontSize: 16,
     fontWeight: "bold",
     paddingVertical: 4,

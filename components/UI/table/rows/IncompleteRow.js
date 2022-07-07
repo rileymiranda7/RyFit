@@ -13,7 +13,7 @@ export default function IncompleteRow({ setNumber }) {
         <IncompleteSetNumber>{setNumber}</IncompleteSetNumber>
       </Col>
       <Col style={styles.previous}>
-        <Text>prev</Text>
+        <Previous />
       </Col>
       <Col style={styles.lbs}>
         <NumberInput />
@@ -22,7 +22,7 @@ export default function IncompleteRow({ setNumber }) {
         <NumberInput />
       </Col>
       <Col style={styles.completed}>
-        <Text>completed</Text>
+        <Ionicons name="checkbox" size={28} color="white" />
       </Col>
     </>
   );
@@ -31,31 +31,26 @@ export default function IncompleteRow({ setNumber }) {
 const styles = StyleSheet.create({
   set: {
     flex: 2,
-    backgroundColor: "red",
     alignItems: "center",
     justifyContent: "center",
   },
   previous: {
     flex: 3,
-    backgroundColor: "blue",
     alignItems: "center",
     justifyContent: "center",
   },
   lbs: {
     flex: 2,
-    backgroundColor: "orange",
     alignItems: "center",
     justifyContent: "center",
   },
   reps: {
     flex: 2,
-    backgroundColor: "green",
     alignItems: "center",
     justifyContent: "center",
   },
   completed: {
     flex: 1,
-    backgroundColor: "gold",
     alignItems: "center",
     justifyContent: "center",
   },
