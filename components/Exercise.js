@@ -18,7 +18,14 @@ export default function Exercise({ exerciseName }) {
 
   return (
     <View style={styles.container}>
-      <Text style={{ color: "white" }}>{exerciseName}</Text>
+      <Text
+        style={{
+          color: "white",
+          fontSize: 30,
+        }}
+      >
+        {exerciseName}
+      </Text>
       <TableHeaderRow />
       <Grid>
         {rowArr.map((element, index) => {
@@ -29,7 +36,6 @@ export default function Exercise({ exerciseName }) {
                 borderWidth: 2,
                 borderColor: "white",
                 height: 40,
-                marginVertical: 10,
               }}
               key={index + 1}
             >
@@ -38,13 +44,13 @@ export default function Exercise({ exerciseName }) {
           );
         })}
       </Grid>
-      <Button title="Add row" onPress={addRowButtonPressedHandler}></Button>
+      <Button title="Add row" onPress={addRowButtonPressedHandler} />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    marginVertical: 5,
   },
 });

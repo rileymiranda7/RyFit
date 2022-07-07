@@ -1,7 +1,7 @@
 class Exercise {
   constructor(
-    id,
-    title,
+    name,
     notes,
+    sets
   )
 }

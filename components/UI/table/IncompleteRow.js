@@ -30,6 +30,7 @@ export default function IncompleteRow({ setNumber }) {
 
 const styles = StyleSheet.create({
   col: {
+    flex: 1,
     backgroundColor: "green",
     marginHorizontal: 10,
     alignItems: "center",
