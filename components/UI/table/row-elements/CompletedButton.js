@@ -1,10 +1,10 @@
 import { View, Text } from "react-native";
 import React from "react";
 
-export default function TableCell() {
+export default function CompletedButton() {
   return (
     <View>
-      <Text>TableCell</Text>
+      <Text>CompletedButton</Text>
     </View>
   );
 }

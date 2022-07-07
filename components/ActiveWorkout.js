@@ -90,17 +90,13 @@ export default function ActiveWorkout() {
 
 const styles = StyleSheet.create({
   exerciseList: {
-    flex: 3,
+    flex: 1,
     backgroundColor: "pink",
+    paddingHorizontal: 9,
   },
   container: {
     flex: 1,
     paddingVertical: 0,
-  },
-  centeredView: {
-    flex: 1,
-    alignItems: "center",
-    marginTop: 22,
   },
   modalView: {
     margin: 20,

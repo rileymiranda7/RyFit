@@ -2,8 +2,8 @@ import { View, Button, StyleSheet, Text } from "react-native";
 import { useState } from "react";
 import { Col, Row, Grid } from "react-native-easy-grid";
 
-import IncompleteRow from "./UI/table/IncompleteRow";
-import TableHeaderRow from "./UI/table/TableHeaderRow";
+import IncompleteRow from "./UI/table/rows/IncompleteRow";
+import TableHeaderRow from "./UI/table/rows/TableHeaderRow";
 
 export default function Exercise({ exerciseName }) {
   const [i, setI] = useState(1);
@@ -44,7 +44,7 @@ export default function Exercise({ exerciseName }) {
           );
         })}
       </Grid>
-      <Button title="Add row" onPress={addRowButtonPressedHandler} />
+      <Button title="Add Set" onPress={addRowButtonPressedHandler} />
     </View>
   );
 }
