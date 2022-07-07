@@ -1,10 +1,11 @@
-import { View, Text, Button } from "react-native";
+import { View, Text, Button, StyleSheet } from "react-native";
 import React, { useState } from "react";
 
 import ActiveWorkout from "../components/ActiveWorkout";
+import Exercise from "../components/Exercise";
 
-export default function CurrentWorkoutScreen() {
-  const [workoutInProgress, setWorkoutInProgress] = useState(false);
+export default function CurrentWorkoutScreen({ navigation }) {
+  /* const [workoutInProgress, setWorkoutInProgress] = useState(false);
 
   function beginWorkoutPressedHandler() {
     setWorkoutInProgress((workoutInProgress) => !workoutInProgress);
@@ -28,5 +29,19 @@ export default function CurrentWorkoutScreen() {
     <View>
       {workoutInProgress ? workoutInProgressScreen : workoutNotStartedScreen}
     </View>
+  ); */
+
+  return (
+    <View style={styles.container}>
+      <ActiveWorkout />
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    minWidth: "100%",
+    backgroundColor: "black",
+  },
+});

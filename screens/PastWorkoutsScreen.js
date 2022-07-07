@@ -8,7 +8,7 @@ import Exercise from "../components/Exercise";
 export default function PastWorkoutsScreen() {
   return (
     <View style={styles.container}>
-      <Exercise exerciseName={"Barbell Bench Press"} />
+      <Text style={{ color: "white" }}>Past workouts</Text>
     </View>
   );
 }

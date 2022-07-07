@@ -3,22 +3,62 @@ import { StyleSheet, Text, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createDrawerNavigator } from "@react-navigation/drawer";
+import { createStackNavigator } from "@react-navigation/stack";
+import "react-native-gesture-handler";
 
-import StartWorkoutScreen from "./screens/StartWorkoutScreen";
 import PastWorkoutsScreen from "./screens/PastWorkoutsScreen";
 import ProfileScreen from "./screens/ProfileScreen";
 import CurrentWorkoutScreen from "./screens/CurrentWorkoutScreen";
-import "react-native-gesture-handler";
+import PickExerciseScreen from "./screens/PickExerciseScreen";
 
 const BottomTabs = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
+const Stack = createStackNavigator();
+
+// Navigators listed with most nested first
+function CurrentWorkoutStackNavigator() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="CurrentWorkout"
+        component={CurrentWorkoutScreen}
+        title="Current Workout"
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="PickExercise"
+        component={PickExerciseScreen}
+        title="Add Exercise"
+        options={{
+          presentation: "modal",
+        }}
+      />
+    </Stack.Navigator>
+  );
+}
+
+function PastWorkoutsStackNavigator() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="PastWorkoutsStack"
+        component={PastWorkoutsScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+    </Stack.Navigator>
+  );
+}
 
 function BottomTabsNavigator() {
   return (
     <BottomTabs.Navigator initialRouteName="Drawer">
       <BottomTabs.Screen
-        name="PastWorkouts"
-        component={PastWorkoutsScreen}
+        name="PastWorkoutsBottomTabs"
+        component={PastWorkoutsStackNavigator}
         options={{
           headerShown: false,
           title: "Past Workouts",
@@ -26,7 +66,7 @@ function BottomTabsNavigator() {
       />
       <BottomTabs.Screen
         name="Drawer"
-        component={CurrentWorkoutScreen}
+        component={CurrentWorkoutStackNavigator}
         options={{
           headerShown: false,
           title: "Start Workout",
