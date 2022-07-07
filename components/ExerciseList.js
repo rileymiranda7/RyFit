@@ -1,14 +1,6 @@
 import { View, Text, FlatList, StyleSheet } from "react-native";
 
 import Exercise from "./Exercise";
-{
-  /* <View style={styles.container}>
-  <Text style={{ color: "black" }}>ExerciseList</Text>
-  {exerciseList.map((element, index) => {
-    return <Exercise exerciseName={element.name} />;
-  })}
-</View> */
-}
 
 export default function ExerciseList({ exerciseList }) {
   return (
@@ -19,7 +11,6 @@ export default function ExerciseList({ exerciseList }) {
           return <Exercise exerciseName={exercise.item.name} />;
         }}
         keyExtractor={(exercise) => exercise.name}
-        scrollEnabled={false}
       />
     </View>
   );

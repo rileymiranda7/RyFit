@@ -8,10 +8,12 @@ import {
   Pressable,
   TextInput,
   ScrollView,
+  FlatList,
 } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 
 import ExerciseList from "./ExerciseList";
+import Exercise from "./Exercise";
 
 export default function ActiveWorkout() {
   const [exerciseList, setExerciseList] = useState([]);
@@ -27,18 +29,26 @@ export default function ActiveWorkout() {
   }
 
   return (
-    <ScrollView nestedScrollEnabled={true} style={styles.container}>
-      <Text style={styles.textStyle}>Workout</Text>
-      {exerciseList.length !== 0 && (
-        <ExerciseList exerciseList={exerciseList} />
-      )}
-      <Pressable
-        style={[styles.button, styles.buttonOpen]}
-        onPress={() => setModalVisible(true)}
-      >
-        <Text style={styles.textStyle}>Add Exercise</Text>
-      </Pressable>
-      <View style={styles.centeredView}>
+    <View style={styles.container}>
+      <View style={styles.exerciseList}>
+        <FlatList
+          ListHeaderComponent={<Text style={styles.textStyle}>Workout</Text>}
+          data={exerciseList}
+          renderItem={(exercise) => {
+            return <Exercise exerciseName={exercise.item.name} />;
+          }}
+          keyExtractor={(exercise) => exercise.name}
+          ListFooterComponent={
+            <Pressable
+              style={[styles.button, styles.buttonOpen]}
+              onPress={() => setModalVisible(true)}
+            >
+              <Text style={styles.textStyle}>Add Exercise</Text>
+            </Pressable>
+          }
+        />
+      </View>
+      <View>
         <Modal
           animationType="slide"
           transparent={true}
@@ -48,7 +58,7 @@ export default function ActiveWorkout() {
             setModalVisible(!modalVisible);
           }}
         >
-          <View style={styles.centeredView}>
+          <View>
             <View style={styles.modalView}>
               <Text style={styles.modalText}>Select Exercise</Text>
               <View style={styles.inputContainer}>
@@ -74,14 +84,18 @@ export default function ActiveWorkout() {
           </View>
         </Modal>
       </View>
-    </ScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  exerciseList: {
+    flex: 3,
+    backgroundColor: "pink",
+  },
   container: {
     flex: 1,
-    paddingVertical: 10,
+    paddingVertical: 0,
   },
   centeredView: {
     flex: 1,
@@ -90,8 +104,9 @@ const styles = StyleSheet.create({
   },
   modalView: {
     margin: 20,
+    marginTop: "10%",
     width: "90%",
-    height: "90%",
+    height: "88%",
     backgroundColor: "white",
     borderRadius: 20,
     paddingHorizontal: 0,
