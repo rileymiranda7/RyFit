@@ -37,7 +37,6 @@ export default function Exercise({ exerciseName }) {
             margin: 0,
             alignContent: "center",
             justifyContent: "center",
-            width: 70,
           }}
         >
           <Button color="red" onPress={onClick} title="DELETE"></Button>
@@ -82,7 +81,7 @@ export default function Exercise({ exerciseName }) {
     setCurrentNumberOfSets(currentNumberOfSets + 1);
   }
 
-  /*   function deleteSetButtonPressedHandler(setNumberToRemove) {
+  function deleteSetButtonPressedHandler(setNumberToRemove) {
     console.log("set to remove: " + setNumberToRemove);
     console.log("total sets: " + currentNumberOfSets);
     console.log(rowArr);
@@ -113,14 +112,31 @@ export default function Exercise({ exerciseName }) {
       setRowArr(newArr);
     }
     setCurrentNumberOfSets(currentNumberOfSets - 1);
-  } */
+  }
 
   const deleteItem = ({ item, index }) => {
     console.log(item, index);
+    let temp = rowArr;
     let a = rowArr;
+    // this code works in reseting the set numbers
+    // but any nums in fields aren't deleted right
+    /* let a = temp.map((set) => {
+      if (set.setNumber > index + 1) {
+        return {
+          setNumber: set.setNumber - 1,
+          previous: set.previous,
+          lbs: set.lbs,
+          reps: set.reps,
+          status: set.status,
+        };
+      } else {
+        return set;
+      }
+    }); */
     a.splice(index, 1);
     console.log(a);
     setRowArr([...a]);
+    setCurrentNumberOfSets(currentNumberOfSets - 1);
   };
 
   return (
