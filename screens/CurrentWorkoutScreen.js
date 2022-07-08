@@ -3,6 +3,7 @@ import React, { useState } from "react";
 
 import ActiveWorkout from "../components/ActiveWorkout";
 import Exercise from "../components/Exercise";
+import Exercise2 from "../components/Exercise2";
 
 export default function CurrentWorkoutScreen({ navigation }) {
   /* const [workoutInProgress, setWorkoutInProgress] = useState(false);

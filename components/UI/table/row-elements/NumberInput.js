@@ -4,11 +4,7 @@ import { Colors } from "../../../../constants/colors";
 export default function NumberInput() {
   return (
     <View>
-      <TextInput
-        style={styles.input}
-        keyboardType="decimal-pad"
-        placeholder=""
-      />
+      <TextInput style={styles.input} keyboardType="decimal-pad" />
     </View>
   );
 }

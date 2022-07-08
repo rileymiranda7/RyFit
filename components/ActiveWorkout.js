@@ -143,13 +143,13 @@ const styles = StyleSheet.create({
   },
   input: {
     fontSize: 25,
-    backgroundColor: "red",
+    backgroundColor: "#b8bbbe",
     padding: 4,
     minWidth: "78%",
     minHeight: "7%",
   },
   inputContainer: {
-    backgroundColor: "red",
+    backgroundColor: "#b8bbbe",
     minWidth: "80%",
     height: "8%",
     alignItems: "center",
