@@ -1,21 +1,21 @@
 import { View, Text, StyleSheet } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
 import { Col, Row, Grid } from "react-native-easy-grid";
 
-import IncompleteSetNumber from "../row-elements/IncompleteSetNumber";
+import SetNumber from "../row-elements/SetNumber";
 import NumberInput from "../row-elements/NumberInput";
 import Previous from "../row-elements/Previous";
+import CompletedButton from "../row-elements/CompletedButton";
 
 export default function IncompleteRow({
   setNumber,
   lbsValue,
   repsValue,
-  numberInputChangedHandler,
+  inputChangedHandler,
 }) {
   return (
     <>
       <Col style={styles.set}>
-        <IncompleteSetNumber>{setNumber}</IncompleteSetNumber>
+        <SetNumber>{setNumber}</SetNumber>
       </Col>
       <Col style={styles.previous}>
         <Previous />
@@ -24,11 +24,7 @@ export default function IncompleteRow({
         <NumberInput
           textInputConfig={{
             keyboardType: "decimal-pad",
-            onChangeText: numberInputChangedHandler.bind(
-              this,
-              "lbs",
-              setNumber
-            ),
+            onChangeText: inputChangedHandler.bind(this, "lbs", setNumber),
             value: lbsValue,
           }}
         />
@@ -37,17 +33,19 @@ export default function IncompleteRow({
         <NumberInput
           textInputConfig={{
             keyboardType: "decimal-pad",
-            onChangeText: numberInputChangedHandler.bind(
-              this,
-              "reps",
-              setNumber
-            ),
+            onChangeText: inputChangedHandler.bind(this, "reps", setNumber),
             value: repsValue,
           }}
         />
       </Col>
       <Col style={styles.completed}>
-        <Ionicons name="checkbox" size={28} color="white" />
+        <CompletedButton
+          inputChangedHandler={inputChangedHandler.bind(
+            this,
+            "status",
+            setNumber
+          )}
+        />
       </Col>
     </>
   );

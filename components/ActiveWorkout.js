@@ -40,7 +40,11 @@ export default function ActiveWorkout() {
           keyExtractor={(exercise) => exercise.name}
           ListFooterComponent={
             <Pressable
-              style={[styles.button, styles.buttonOpen]}
+              style={({ pressed }) => [
+                styles.button,
+                styles.buttonOpen,
+                pressed && { opacity: 0.75 },
+              ]}
               onPress={() => setModalVisible(true)}
             >
               <Text style={styles.textStyle}>Add Exercise</Text>
@@ -69,13 +73,21 @@ export default function ActiveWorkout() {
                 />
               </View>
               <Pressable
-                style={[styles.button, styles.buttonClose]}
+                style={({ pressed }) => [
+                  styles.button,
+                  styles.buttonClose,
+                  pressed && { opacity: 0.75 },
+                ]}
                 onPress={() => submitPickedExerciseHandler()}
               >
                 <Text style={styles.textStyle}>Add Exercise</Text>
               </Pressable>
               <Pressable
-                style={[styles.button, styles.buttonClose]}
+                style={({ pressed }) => [
+                  styles.button,
+                  styles.buttonClose,
+                  pressed && { opacity: 0.75 },
+                ]}
                 onPress={() => setModalVisible(!modalVisible)}
               >
                 <Text style={styles.textStyle}>Cancel</Text>

@@ -18,7 +18,7 @@ export default function Exercise({ exerciseName }) {
     },
   ]);
 
-  function numberInputChangedHandler(inputIdentifier, setNumber, enteredValue) {
+  function inputChangedHandler(inputIdentifier, setNumber, enteredValue) {
     let temp = rowArr;
     let updatedArr = temp.map((set) => {
       if (set.setNumber === setNumber) {
@@ -30,13 +30,22 @@ export default function Exercise({ exerciseName }) {
             reps: set.reps,
             status: set.status,
           };
-        } else {
+        } else if (inputIdentifier === "reps") {
           return {
             setNumber: set.setNumber,
             previous: set.previous,
             lbs: set.lbs,
             reps: enteredValue,
             status: set.status,
+          };
+        } else {
+          // enteredValue === "status"
+          return {
+            setNumber: set.setNumber,
+            previous: set.previous,
+            lbs: set.lbs,
+            reps: set.reps,
+            status: enteredValue ? "COMPLETED" : "IN PROGRESS",
           };
         }
       }
@@ -93,7 +102,7 @@ export default function Exercise({ exerciseName }) {
             setNumber={item.setNumber}
             lbsValue={item.lbs}
             repsValue={item.reps}
-            numberInputChangedHandler={numberInputChangedHandler}
+            inputChangedHandler={inputChangedHandler}
           />
         </Row>
       </Swipeable>

@@ -1,10 +1,24 @@
+import { useState } from "react";
 import { View, Text } from "react-native";
-import React from "react";
 
-export default function CompletedButton() {
+import IconButton from "../../IconButton";
+import { Colors } from "../../../../constants/colors";
+
+export default function CompletedButton({ inputChangedHandler }) {
+  const [isCompleted, setIsCompleted] = useState(false);
+
+  function onPress() {
+    console.log("completed pressed");
+    inputChangedHandler(!isCompleted);
+    setIsCompleted(!isCompleted);
+  }
+
   return (
-    <View>
-      <Text>CompletedButton</Text>
-    </View>
+    <IconButton
+      icon="checkbox"
+      size={28}
+      color={isCompleted ? Colors.neonGreen : "white"}
+      onPress={onPress}
+    />
   );
 }
