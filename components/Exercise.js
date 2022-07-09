@@ -17,6 +17,36 @@ export default function Exercise({ exerciseName }) {
       status: "IN PROGRESS",
     },
   ]);
+
+  function numberInputChangedHandler(inputIdentifier, setNumber, enteredValue) {
+    let temp = rowArr;
+    let updatedArr = temp.map((set) => {
+      if (set.setNumber === setNumber) {
+        if (inputIdentifier === "lbs") {
+          return {
+            setNumber: set.setNumber,
+            previous: set.previous,
+            lbs: enteredValue,
+            reps: set.reps,
+            status: set.status,
+          };
+        } else {
+          return {
+            setNumber: set.setNumber,
+            previous: set.previous,
+            lbs: set.lbs,
+            reps: enteredValue,
+            status: set.status,
+          };
+        }
+      }
+      return set;
+    });
+    console.log("updated Arr:");
+    console.log(updatedArr);
+    setRowArr(updatedArr);
+  }
+
   let row = [];
   let prevOpenedRow;
 
@@ -59,7 +89,12 @@ export default function Exercise({ exerciseName }) {
             height: 40,
           }}
         >
-          <IncompleteRow setNumber={item.setNumber} />
+          <IncompleteRow
+            setNumber={item.setNumber}
+            lbsValue={item.lbs}
+            repsValue={item.reps}
+            numberInputChangedHandler={numberInputChangedHandler}
+          />
         </Row>
       </Swipeable>
     );
@@ -115,12 +150,19 @@ export default function Exercise({ exerciseName }) {
   }
 
   const deleteItem = ({ item, index }) => {
+    // delete item
     console.log(item, index);
     let temp = rowArr;
     let a = rowArr;
+    a.splice(index, 1);
+    console.log("rowArr after deletion:");
+    console.log(a);
+    setRowArr([...a]);
+    setCurrentNumberOfSets(currentNumberOfSets - 1);
+    // update set numbers of sets after deleted set
     // this code works in reseting the set numbers
     // but any nums in fields aren't deleted right
-    /* let a = temp.map((set) => {
+    let b = a.map((set) => {
       if (set.setNumber > index + 1) {
         return {
           setNumber: set.setNumber - 1,
@@ -132,11 +174,10 @@ export default function Exercise({ exerciseName }) {
       } else {
         return set;
       }
-    }); */
-    a.splice(index, 1);
-    console.log(a);
-    setRowArr([...a]);
-    setCurrentNumberOfSets(currentNumberOfSets - 1);
+    });
+    console.log("b:");
+    console.log(b);
+    setRowArr([...b]);
   };
 
   return (

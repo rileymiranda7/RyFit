@@ -6,7 +6,12 @@ import IncompleteSetNumber from "../row-elements/IncompleteSetNumber";
 import NumberInput from "../row-elements/NumberInput";
 import Previous from "../row-elements/Previous";
 
-export default function IncompleteRow({ setNumber }) {
+export default function IncompleteRow({
+  setNumber,
+  lbsValue,
+  repsValue,
+  numberInputChangedHandler,
+}) {
   return (
     <>
       <Col style={styles.set}>
@@ -16,10 +21,30 @@ export default function IncompleteRow({ setNumber }) {
         <Previous />
       </Col>
       <Col style={styles.lbs}>
-        <NumberInput />
+        <NumberInput
+          textInputConfig={{
+            keyboardType: "decimal-pad",
+            onChangeText: numberInputChangedHandler.bind(
+              this,
+              "lbs",
+              setNumber
+            ),
+            value: lbsValue,
+          }}
+        />
       </Col>
       <Col style={styles.reps}>
-        <NumberInput />
+        <NumberInput
+          textInputConfig={{
+            keyboardType: "decimal-pad",
+            onChangeText: numberInputChangedHandler.bind(
+              this,
+              "reps",
+              setNumber
+            ),
+            value: repsValue,
+          }}
+        />
       </Col>
       <Col style={styles.completed}>
         <Ionicons name="checkbox" size={28} color="white" />

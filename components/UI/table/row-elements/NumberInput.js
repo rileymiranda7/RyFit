@@ -1,10 +1,10 @@
 import { View, TextInput, StyleSheet } from "react-native";
 import { Colors } from "../../../../constants/colors";
 
-export default function NumberInput() {
+export default function NumberInput({ textInputConfig }) {
   return (
     <View>
-      <TextInput style={styles.input} keyboardType="decimal-pad" />
+      <TextInput style={styles.input} {...textInputConfig} />
     </View>
   );
 }
