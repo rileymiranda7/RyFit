@@ -1,0 +1,108 @@
+import {
+  View,
+  Text,
+  Modal,
+  StyleSheet,
+  Pressable,
+  TextInput,
+} from "react-native";
+import React, { useState } from "react";
+
+export default function SetTimerModal({
+  modalVisible,
+  closeModal,
+  handleOnTimerAmountSet,
+}) {
+  const [timerAmount, setTimerAmount] = useState("5");
+
+  return (
+    <View>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          Alert.alert("Modal has been closed.");
+          closeModal();
+        }}
+      >
+        <View>
+          <View style={styles.modalView}>
+            <Text style={styles.textStyle}>Enter Timer Amount In Seconds</Text>
+            <TextInput
+              style={styles.input}
+              onChangeText={setTimerAmount}
+              value={timerAmount}
+            />
+            <Pressable
+              style={({ pressed }) => [
+                styles.button,
+                styles.buttonClose,
+                pressed && { opacity: 0.75 },
+              ]}
+              onPress={() => handleOnTimerAmountSet(timerAmount)}
+            >
+              <Text style={styles.textStyle}>Start Timer</Text>
+            </Pressable>
+            <Pressable
+              style={({ pressed }) => [
+                styles.button,
+                styles.buttonClose,
+                pressed && { opacity: 0.75 },
+              ]}
+              onPress={() => closeModal()}
+            >
+              <Text style={styles.textStyle}>Cancel</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  modalView: {
+    margin: 20,
+    marginTop: "10%",
+    width: "90%",
+    height: "88%",
+    backgroundColor: "white",
+    borderRadius: 20,
+    paddingHorizontal: 0,
+    paddingVertical: 0,
+    alignItems: "center",
+    justifyContent: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  inputContainer: {
+    backgroundColor: "#b8bbbe",
+    minWidth: "80%",
+    height: "8%",
+    alignItems: "center",
+    justifyContent: "center",
+    marginVertical: 20,
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+    marginVertical: 20,
+  },
+  buttonClose: {
+    backgroundColor: "#2196F3",
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
+    fontSize: 20,
+  },
+});
