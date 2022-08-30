@@ -90,8 +90,12 @@ export default function App() {
   };
 
   const handleOnTimerAmountSet = (timerAmount) => {
-    setTimerAmount(timerAmount);
+    setTimerAmount(Number(timerAmount));
     setShowSetTimer(!showSetTimer);
+    setTimerIsRunning(!timerIsRunning);
+  };
+
+  const handleOnTimerEnd = () => {
     setTimerIsRunning(!timerIsRunning);
   };
 
@@ -115,7 +119,10 @@ export default function App() {
                         handleOnTimerAmountSet={handleOnTimerAmountSet}
                       />
                     ) : timerIsRunning ? (
-                      <HeaderTimer timerAmount={timerAmount} />
+                      <HeaderTimer
+                        timerAmount={timerAmount}
+                        onTimerEnd={handleOnTimerEnd}
+                      />
                     ) : (
                       <IconButton
                         onPress={toggleShowSetTimer}

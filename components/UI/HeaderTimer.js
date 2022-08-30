@@ -1,8 +1,8 @@
 import { View, Text } from "react-native";
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 
-export default function HeaderTimer({ timerAmount }) {
-  /*   const deadline = useRef((timerAmount + 1) * 1000 + Date.now());
+export default function HeaderTimer({ timerAmount, onTimerEnd }) {
+  const deadline = useRef((timerAmount + 1) * 1000 + Date.now());
   let interval = useRef();
   const initialDiff = deadline.current - Date.now();
 
@@ -10,11 +10,13 @@ export default function HeaderTimer({ timerAmount }) {
     days: Math.floor(initialDiff / (1000 * 60 * 60 * 24)),
     hours: Math.floor((initialDiff / (1000 * 60 * 60)) % 24),
     minutes: Math.floor((initialDiff / 1000 / 60) % 60),
-    seconds: Math.floor((initialDiff / 1000) % 60) - 1,
+    seconds:
+      Math.floor((initialDiff / 1000) % 60) - 1 < 10
+        ? "0" + (Math.floor((initialDiff / 1000) % 60) - 1)
+        : Math.floor((initialDiff / 1000) % 60) - 1,
   });
 
   const startTimer = () => {
-    console.log("inside starttimer");
     interval = setInterval(() => {
       let difference = deadline.current - Date.now();
 
@@ -28,7 +30,7 @@ export default function HeaderTimer({ timerAmount }) {
       if (difference < 0) {
         console.log("inside if diff");
         clearInterval(interval.current);
-        stopTimer();
+        onTimerEnd();
       } else {
         setTimeLeft({
           days: days,
@@ -45,14 +47,13 @@ export default function HeaderTimer({ timerAmount }) {
     return () => {
       clearInterval(interval);
     };
-  }); */
+  });
   return (
     <View>
-      {/* {timeLeft.days > 0 ? timeLeft.days + ":" : "00: "}
-      {timeLeft.hours > 0 ? timeLeft.hours + ":" : "00:"}
-      {timeLeft.minutes > 0 ? timeLeft.minutes + ":" : "00:"}
-      {timeLeft.seconds > 0 ? timeLeft.seconds : "00"} */}
-      <Text>{timerAmount}</Text>
+      <Text>
+        {timeLeft.minutes > 0 ? timeLeft.minutes + ":" : "00:"}
+        {timeLeft.seconds > 0 ? timeLeft.seconds : "00"}
+      </Text>
     </View>
   );
 }

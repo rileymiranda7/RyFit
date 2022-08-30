@@ -29,11 +29,13 @@ export default function SetTimerModal({
         <View>
           <View style={styles.modalView}>
             <Text style={styles.textStyle}>Enter Timer Amount In Seconds</Text>
-            <TextInput
-              style={styles.input}
-              onChangeText={setTimerAmount}
-              value={timerAmount}
-            />
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={styles.input}
+                onChangeText={setTimerAmount}
+                value={timerAmount}
+              />
+            </View>
             <Pressable
               style={({ pressed }) => [
                 styles.button,
@@ -83,7 +85,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   inputContainer: {
-    backgroundColor: "#b8bbbe",
+    backgroundColor: "#2196F3",
     minWidth: "80%",
     height: "8%",
     alignItems: "center",
@@ -104,5 +106,12 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     fontSize: 20,
+  },
+  input: {
+    fontSize: 25,
+    backgroundColor: "#b8bbbe",
+    padding: 4,
+    minWidth: "78%",
+    minHeight: "7%",
   },
 });
