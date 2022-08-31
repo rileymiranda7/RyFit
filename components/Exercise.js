@@ -5,9 +5,11 @@ import { Col, Row, Grid } from "react-native-easy-grid";
 
 import TableHeaderRow from "./UI/table/rows/TableHeaderRow";
 import IncompleteRow from "./UI/table/rows/IncompleteRow";
+import IconButton from "./UI/IconButton";
 
-export default function Exercise({ exerciseName }) {
+export default function Exercise({ exerciseName, handleOnSetCompleted }) {
   const [currentNumberOfSets, setCurrentNumberOfSets] = useState(1);
+  // array of set rows
   const [rowArr, setRowArr] = useState([
     {
       setNumber: 1,
@@ -17,7 +19,9 @@ export default function Exercise({ exerciseName }) {
       status: "IN PROGRESS",
     },
   ]);
+  const [restTimeAmount, setRestTimeAmount] = useState("180");
 
+  // updates rowArr state when any input on any row is changed
   function inputChangedHandler(inputIdentifier, setNumber, enteredValue) {
     let temp = rowArr;
     let updatedArr = temp.map((set) => {
@@ -40,6 +44,9 @@ export default function Exercise({ exerciseName }) {
           };
         } else {
           // enteredValue === "status"
+          if (enteredValue) {
+            handleOnSetCompleted(restTimeAmount);
+          }
           return {
             setNumber: set.setNumber,
             previous: set.previous,
@@ -51,8 +58,6 @@ export default function Exercise({ exerciseName }) {
       }
       return set;
     });
-    console.log("updated Arr:");
-    console.log(updatedArr);
     setRowArr(updatedArr);
   }
 
@@ -161,7 +166,6 @@ export default function Exercise({ exerciseName }) {
   const deleteItem = ({ item, index }) => {
     // delete item
     console.log(item, index);
-    let temp = rowArr;
     let a = rowArr;
     a.splice(index, 1);
     console.log("rowArr after deletion:");
@@ -190,15 +194,23 @@ export default function Exercise({ exerciseName }) {
   };
 
   return (
-    <View style={styles.container}>
-      <Text
-        style={{
-          color: "white",
-          fontSize: 25,
-        }}
-      >
-        {exerciseName}
-      </Text>
+    <View>
+      <View style={styles.nameAndOptionsRow}>
+        <Text
+          style={{
+            color: "white",
+            fontSize: 25,
+          }}
+        >
+          {exerciseName}
+        </Text>
+        <IconButton
+          icon="ellipsis-horizontal-circle-outline"
+          size={30}
+          color="white"
+          onPress={() => {}}
+        />
+      </View>
       <TableHeaderRow />
 
       {rowArr.map((item, index) =>
@@ -214,7 +226,11 @@ export default function Exercise({ exerciseName }) {
 }
 
 const styles = StyleSheet.create({
-  container: {},
+  nameAndOptionsRow: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
   grid: {
     borderRadius: 6,
     backgroundColor: "white",

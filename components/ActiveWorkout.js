@@ -15,7 +15,7 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import ExerciseList from "./ExerciseList";
 import Exercise from "./Exercise";
 
-export default function ActiveWorkout() {
+export default function ActiveWorkout({ handleOnSetCompleted }) {
   const [exerciseList, setExerciseList] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [exerciseNameInput, onChangeText] = useState();
@@ -35,7 +35,12 @@ export default function ActiveWorkout() {
           ListHeaderComponent={<Text style={styles.textStyle}>Workout</Text>}
           data={exerciseList}
           renderItem={(exercise) => {
-            return <Exercise exerciseName={exercise.item.name} />;
+            return (
+              <Exercise
+                exerciseName={exercise.item.name}
+                handleOnSetCompleted={handleOnSetCompleted}
+              />
+            );
           }}
           keyExtractor={(exercise) => exercise.name}
           ListFooterComponent={

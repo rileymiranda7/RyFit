@@ -2,7 +2,7 @@ import { View, Text } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 
 export default function HeaderTimer({ timerAmount, onTimerEnd }) {
-  const deadline = useRef((timerAmount + 1) * 1000 + Date.now());
+  const deadline = useRef((Number(timerAmount) + 1) * 1000 + Date.now());
   let interval = useRef();
   const initialDiff = deadline.current - Date.now();
 
@@ -28,7 +28,6 @@ export default function HeaderTimer({ timerAmount, onTimerEnd }) {
       seconds = seconds < 10 ? "0" + seconds : seconds;
 
       if (difference < 0) {
-        console.log("inside if diff");
         clearInterval(interval.current);
         onTimerEnd();
       } else {

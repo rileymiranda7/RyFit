@@ -5,9 +5,7 @@ import ActiveWorkout from "../components/ActiveWorkout";
 import Exercise from "../components/Exercise";
 import SetTimerModal from "../components/UI/SetTimerModal";
 
-export default function CurrentWorkoutScreen({ navigation }) {
-  const [modalVisible, setModalVisible] = useState(false);
-
+export default function CurrentWorkoutScreen({ handleOnSetCompleted }) {
   /* const [workoutInProgress, setWorkoutInProgress] = useState(false);
 
   function beginWorkoutPressedHandler() {
@@ -34,19 +32,9 @@ export default function CurrentWorkoutScreen({ navigation }) {
     </View>
   ); */
 
-  const closeModal = () => {
-    setModalVisible(!modalVisible);
-  };
-
   return (
     <View style={styles.container}>
-      {/* <ActiveWorkout /> */}
-      {modalVisible && (
-        <SetTimerModal modalVisible={modalVisible} closeModal={closeModal} />
-      )}
-      <Pressable onPress={() => setModalVisible(!modalVisible)}>
-        <Text style={styles.textStyle}>Set Timer</Text>
-      </Pressable>
+      <ActiveWorkout handleOnSetCompleted={handleOnSetCompleted} />
     </View>
   );
 }
