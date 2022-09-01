@@ -28,7 +28,7 @@ export default function SetTimerModal({
       >
         <View>
           <View style={styles.modalView}>
-            <Text style={styles.textStyle}>Enter Timer Amount In Seconds</Text>
+            <Text style={styles.titleText}>Enter Timer Amount In Seconds</Text>
             <View style={styles.inputContainer}>
               <TextInput
                 style={styles.input}
@@ -106,6 +106,15 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     fontSize: 20,
+  },
+  titleText: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
+    fontSize: 20,
+    backgroundColor: "#2196F3",
+    margin: 10,
+    padding: 4,
   },
   input: {
     fontSize: 25,

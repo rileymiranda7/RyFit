@@ -8,7 +8,6 @@ export default function CompletedButton({ inputChangedHandler }) {
   const [isCompleted, setIsCompleted] = useState(false);
 
   function onPress() {
-    console.log("completed pressed");
     inputChangedHandler(!isCompleted);
     setIsCompleted(!isCompleted);
   }

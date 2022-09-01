@@ -1,7 +1,14 @@
-import { View, Text } from "react-native";
+import { View, Text, Pressable, Modal, StyleSheet } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 
-export default function HeaderTimer({ timerAmount, onTimerEnd }) {
+export default function HeaderTimer({
+  timerAmount,
+  onTimerEnd,
+  resetTimer,
+  onPress,
+  showActiveTimerModal,
+  exitActiveTimerModal,
+}) {
   const deadline = useRef((Number(timerAmount) + 1) * 1000 + Date.now());
   let interval = useRef();
   const initialDiff = deadline.current - Date.now();
@@ -29,7 +36,7 @@ export default function HeaderTimer({ timerAmount, onTimerEnd }) {
 
       if (difference < 0) {
         clearInterval(interval.current);
-        onTimerEnd();
+        onTimerEnd(false);
       } else {
         setTimeLeft({
           days: days,
@@ -47,12 +54,125 @@ export default function HeaderTimer({ timerAmount, onTimerEnd }) {
       clearInterval(interval);
     };
   });
-  return (
-    <View>
+  useEffect(() => {
+    deadline.current = (Number(timerAmount) + 1) * 1000 + Date.now();
+  }, [resetTimer]);
+
+  const headerTimer = (
+    <Pressable onPress={() => onPress()}>
       <Text>
         {timeLeft.minutes > 0 ? timeLeft.minutes + ":" : "00:"}
         {timeLeft.seconds > 0 ? timeLeft.seconds : "00"}
       </Text>
+    </Pressable>
+  );
+
+  const activeTimerModal = (
+    <View>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={true}
+        onRequestClose={() => {
+          /* closeModal(); */
+        }}
+      >
+        <View>
+          <View style={styles.modalView}>
+            <Text style={styles.titleText}>Active Timer Modal</Text>
+            <View style={styles.inputContainer}>
+              <Text style={styles.titleText}>
+                {timeLeft.minutes > 0 ? timeLeft.minutes + ":" : "00:"}
+                {timeLeft.seconds > 0 ? timeLeft.seconds : "00"}
+              </Text>
+            </View>
+            <Pressable
+              style={({ pressed }) => [
+                styles.button,
+                styles.buttonClose,
+                pressed && { opacity: 0.75 },
+              ]}
+              onPress={() => onTimerEnd(true)}
+            >
+              <Text style={styles.textStyle}>Cancel Timer</Text>
+            </Pressable>
+            <Pressable
+              style={({ pressed }) => [
+                styles.button,
+                styles.buttonClose,
+                pressed && { opacity: 0.75 },
+              ]}
+              onPress={() => exitActiveTimerModal()}
+            >
+              <Text style={styles.textStyle}>x</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
+
+  return showActiveTimerModal ? activeTimerModal : headerTimer;
 }
+
+const styles = StyleSheet.create({
+  modalView: {
+    margin: 20,
+    marginTop: "10%",
+    width: "90%",
+    height: "88%",
+    backgroundColor: "white",
+    borderRadius: 20,
+    paddingHorizontal: 0,
+    paddingVertical: 0,
+    alignItems: "center",
+    justifyContent: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  inputContainer: {
+    backgroundColor: "#2196F3",
+    minWidth: "80%",
+    height: "8%",
+    alignItems: "center",
+    justifyContent: "center",
+    marginVertical: 20,
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+    marginVertical: 20,
+  },
+  buttonClose: {
+    backgroundColor: "#2196F3",
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
+    fontSize: 20,
+  },
+  titleText: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
+    fontSize: 20,
+    backgroundColor: "#2196F3",
+    margin: 10,
+    padding: 4,
+  },
+  input: {
+    fontSize: 25,
+    backgroundColor: "#b8bbbe",
+    padding: 4,
+    minWidth: "78%",
+    minHeight: "7%",
+  },
+});

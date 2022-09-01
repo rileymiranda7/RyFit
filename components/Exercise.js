@@ -67,7 +67,6 @@ export default function Exercise({ exerciseName, handleOnSetCompleted }) {
   const renderItem = ({ item, index }, onClick) => {
     //
     const closeRow = (index) => {
-      console.log("closerow");
       if (prevOpenedRow && prevOpenedRow !== row[index]) {
         prevOpenedRow.close();
       }
@@ -165,11 +164,8 @@ export default function Exercise({ exerciseName, handleOnSetCompleted }) {
 
   const deleteItem = ({ item, index }) => {
     // delete item
-    console.log(item, index);
     let a = rowArr;
     a.splice(index, 1);
-    console.log("rowArr after deletion:");
-    console.log(a);
     setRowArr([...a]);
     setCurrentNumberOfSets(currentNumberOfSets - 1);
     // update set numbers of sets after deleted set
@@ -188,8 +184,6 @@ export default function Exercise({ exerciseName, handleOnSetCompleted }) {
         return set;
       }
     });
-    console.log("b:");
-    console.log(b);
     setRowArr([...b]);
   };
 
@@ -215,7 +209,6 @@ export default function Exercise({ exerciseName, handleOnSetCompleted }) {
 
       {rowArr.map((item, index) =>
         renderItem({ item, index }, () => {
-          console.log("pressed delete", { item, index });
           deleteItem({ item, index });
         })
       )}

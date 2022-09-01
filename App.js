@@ -15,6 +15,7 @@ import PickExerciseScreen from "./screens/PickExerciseScreen";
 import IconButton from "./components/UI/IconButton";
 import SetTimerModal from "./components/UI/SetTimerModal";
 import HeaderTimer from "./components/UI/HeaderTimer";
+import Pressable from "react-native/Libraries/Components/Pressable/Pressable";
 
 const BottomTabs = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
@@ -136,6 +137,8 @@ export default function App() {
   const [showSetTimer, setShowSetTimer] = useState(false);
   const [timerIsRunning, setTimerIsRunning] = useState(false);
   const [timerAmount, setTimerAmount] = useState("5");
+  const [resetTimer, setResetTimer] = useState(false);
+  const [showActiveTimerModal, setShowActiveTimerModal] = useState(false);
 
   const toggleShowSetTimer = () => {
     setShowSetTimer(!showSetTimer);
@@ -149,8 +152,9 @@ export default function App() {
 
   const handleOnSetCompleted = (timerAmount) => {
     setTimerAmount(timerAmount);
+    setShowActiveTimerModal(false);
     if (timerIsRunning) {
-      console.log("timerIsRunning");
+      setResetTimer(!resetTimer);
       setShowSetTimer(false);
       setTimerIsRunning(false);
       setTimerIsRunning(true);
@@ -160,10 +164,22 @@ export default function App() {
     }
   };
 
-  const handleOnTimerEnd = () => {
+  const handleTimerPressed = () => {
+    setShowActiveTimerModal(!showActiveTimerModal);
+  };
+
+  const handleOnTimerEnd = (timerWasCanceled) => {
     //scheduleNotificationsHandler();
     setTimerIsRunning(!timerIsRunning);
-    Alert.alert("Time For Next Set!", "", [{ text: "OK", onPress: () => {} }]);
+    if (!timerWasCanceled) {
+      Alert.alert("Time For Next Set!", "", [
+        { text: "OK", onPress: () => {} },
+      ]);
+    }
+  };
+
+  const exitActiveTimerModal = () => {
+    setShowActiveTimerModal(false);
   };
 
   useEffect(() => {
@@ -225,6 +241,10 @@ export default function App() {
                       <HeaderTimer
                         timerAmount={timerAmount}
                         onTimerEnd={handleOnTimerEnd}
+                        resetTimer={resetTimer}
+                        onPress={handleTimerPressed}
+                        showActiveTimerModal={showActiveTimerModal}
+                        exitActiveTimerModal={exitActiveTimerModal}
                       />
                     ) : (
                       <IconButton
