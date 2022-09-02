@@ -66,7 +66,14 @@ async function requestPermissionsAsync() {
 // Navigators listed with most nested first
 function CurrentWorkoutStackNavigator({ handleOnSetCompleted }) {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      screenOptions={({ navigation }) => ({
+        headerStyle: { backgroundColor: "black" },
+        headerTintColor: "white",
+        tabBarStyle: { backgroundColor: "pink" },
+        tabBarActiveTintColor: "pink",
+      })}
+    >
       <Stack.Screen
         name="CurrentWorkout"
         children={() => (
@@ -106,7 +113,15 @@ function PastWorkoutsStackNavigator() {
 
 function BottomTabsNavigator({ handleOnSetCompleted }) {
   return (
-    <BottomTabs.Navigator initialRouteName="Drawer">
+    <BottomTabs.Navigator
+      initialRouteName="Drawer"
+      screenOptions={({ navigation }) => ({
+        headerStyle: { backgroundColor: "brown" },
+        headerTintColor: "gold",
+        tabBarStyle: { backgroundColor: "#2d0689" },
+        tabBarActiveTintColor: "red",
+      })}
+    >
       <BottomTabs.Screen
         name="PastWorkoutsBottomTabs"
         component={PastWorkoutsStackNavigator}
@@ -216,9 +231,17 @@ export default function App() {
 
   return (
     <>
-      <StatusBar style="auto" />
+      <StatusBar style="light" />
       <NavigationContainer>
-        <Drawer.Navigator>
+        <Drawer.Navigator
+          screenOptions={({ navigation }) => ({
+            drawerStyle: {
+              backgroundColor: "#5721d4",
+            },
+            headerStyle: { backgroundColor: "#2d0689" },
+            headerTintColor: "white", // color of elements in header not background
+          })}
+        >
           <Drawer.Screen
             name="BottomTabs"
             children={() => (
@@ -249,8 +272,8 @@ export default function App() {
                     ) : (
                       <IconButton
                         onPress={toggleShowSetTimer}
-                        icon={showSetTimer ? "timer" : "timer-outline"}
-                        color="blue"
+                        icon={"timer-outline"}
+                        color="white"
                         size={30}
                       />
                     )}

@@ -59,8 +59,14 @@ export default function HeaderTimer({
   }, [resetTimer]);
 
   const headerTimer = (
-    <Pressable onPress={() => onPress()}>
-      <Text>
+    <Pressable
+      style={styles.headerTimerStyle}
+      onPress={() => {
+        console.log("timer header pressed");
+        onPress();
+      }}
+    >
+      <Text style={styles.headerTimerText}>
         {timeLeft.minutes > 0 ? timeLeft.minutes + ":" : "00:"}
         {timeLeft.seconds > 0 ? timeLeft.seconds : "00"}
       </Text>
@@ -121,7 +127,7 @@ const styles = StyleSheet.create({
     marginTop: "10%",
     width: "90%",
     height: "88%",
-    backgroundColor: "white",
+    backgroundColor: "#3e04c3",
     borderRadius: 20,
     paddingHorizontal: 0,
     paddingVertical: 0,
@@ -174,5 +180,12 @@ const styles = StyleSheet.create({
     padding: 4,
     minWidth: "78%",
     minHeight: "7%",
+  },
+  headerTimerStyle: {
+    margin: 5,
+  },
+  headerTimerText: {
+    fontSize: 20,
+    color: "white",
   },
 });
