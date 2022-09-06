@@ -16,6 +16,7 @@ import IconButton from "./components/UI/IconButton";
 import SetTimerModal from "./components/UI/SetTimerModal";
 import HeaderTimer from "./components/UI/HeaderTimer";
 import Pressable from "react-native/Libraries/Components/Pressable/Pressable";
+import TestCountdown from "./TestCountdown";
 
 const BottomTabs = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
@@ -149,7 +150,7 @@ function BottomTabsNavigator({ handleOnSetCompleted }) {
 
 export default function App() {
   requestPermissionsAsync();
-  const [showSetTimer, setShowSetTimer] = useState(false);
+  /*   const [showSetTimer, setShowSetTimer] = useState(false);
   const [timerIsRunning, setTimerIsRunning] = useState(false);
   const [timerAmount, setTimerAmount] = useState("5");
   const [resetTimer, setResetTimer] = useState(false);
@@ -195,7 +196,7 @@ export default function App() {
 
   const exitActiveTimerModal = () => {
     setShowActiveTimerModal(false);
-  };
+  }; */
 
   useEffect(() => {
     async function configurePushNotifications() {
@@ -229,7 +230,9 @@ export default function App() {
     configurePushNotifications();
   }, []);
 
-  return (
+  return <TestCountdown />;
+
+  /* return (
     <>
       <StatusBar style="light" />
       <NavigationContainer>
@@ -286,7 +289,7 @@ export default function App() {
         </Drawer.Navigator>
       </NavigationContainer>
     </>
-  );
+  ); */
 }
 
 const styles = StyleSheet.create({

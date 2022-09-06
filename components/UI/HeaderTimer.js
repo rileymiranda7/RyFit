@@ -1,15 +1,17 @@
 import { View, Text, Pressable, Modal, StyleSheet } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 
-export default function HeaderTimer({
-  timerAmount,
+export default function HeaderTimer(
+  {
+    /* timerAmount,
   onTimerEnd,
   resetTimer,
   onPress,
   showActiveTimerModal,
-  exitActiveTimerModal,
-}) {
-  const deadline = useRef((Number(timerAmount) + 1) * 1000 + Date.now());
+  exitActiveTimerModal, */
+  }
+) {
+  /*   const deadline = useRef((Number(timerAmount) + 1) * 1000 + Date.now());
   let interval = useRef();
   const initialDiff = deadline.current - Date.now();
 
@@ -80,7 +82,7 @@ export default function HeaderTimer({
         transparent={true}
         visible={true}
         onRequestClose={() => {
-          /* closeModal(); */
+          //closeModal();
         }}
       >
         <View>
@@ -116,13 +118,12 @@ export default function HeaderTimer({
         </View>
       </Modal>
     </View>
-  );
-
-  return showActiveTimerModal ? activeTimerModal : headerTimer;
+  ); */
+  //return showActiveTimerModal ? activeTimerModal : headerTimer;
 }
 
 const styles = StyleSheet.create({
-  modalView: {
+  /* modalView: {
     margin: 20,
     marginTop: "10%",
     width: "90%",
@@ -187,5 +188,5 @@ const styles = StyleSheet.create({
   headerTimerText: {
     fontSize: 20,
     color: "white",
-  },
+  }, */
 });
