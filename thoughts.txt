@@ -21,3 +21,8 @@ Set number starts with one and increments every time
 'Add Set' is pressed.
 Type and status are initialized with values 'WORKING'
 and 'IN PROGRESS' until the user possibly changes them.
+
+Instead of having multiple components for headerTimer 
+I should just render one from app and then manage what 
+is shown from that one component and create more 
+under that component as needed.
