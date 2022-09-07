@@ -3,7 +3,7 @@ import React, { useState, useLayoutEffect } from "react";
 
 import ActiveWorkout from "../components/ActiveWorkout";
 import Exercise from "../components/Exercise";
-import SetTimerModal from "../components/UI/SetTimerModal";
+import SetTimerModal from "../components/UI/modals/SetTimerModal";
 
 export default function CurrentWorkoutScreen({ handleOnSetCompleted }) {
   /* const [workoutInProgress, setWorkoutInProgress] = useState(false);
