@@ -25,9 +25,23 @@ export default function HeaderTimer(
   };
 
   const handleOnTimerAmountSet = (timerAmount) => {
-    setTimerAmount(Number(timerAmount));
-    setShowSetTimerModal(!showSetTimerModal);
-    setTimerIsRunning(!timerIsRunning);
+    if (timerAmount > 10) {
+      alert("Timer cannot be over 10 minutes!");
+    } else if (timerAmount <= 0) {
+      alert("Timer cannot be 0 minutes!");
+    } else {
+      setTimerAmount(Number(timerAmount));
+      setShowSetTimerModal(!showSetTimerModal);
+      setTimerIsRunning(!timerIsRunning);
+    }
+  };
+
+  const onTimerEnd = (wasCanceled) => {
+    setTimerIsRunning(false);
+    setShowSetTimerModal(false);
+    if (!wasCanceled) {
+      alert("Time for next set!");
+    }
   };
 
   let renderThis;
@@ -44,7 +58,7 @@ export default function HeaderTimer(
     renderThis = (
       <RunningTimer
         timeInMinutes={timerAmount}
-        onTimerEnd={() => {}}
+        onTimerEnd={onTimerEnd}
         resetTimer={() => {}}
       />
     );

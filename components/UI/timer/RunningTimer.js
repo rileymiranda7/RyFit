@@ -1,32 +1,24 @@
 import { View, Text, StyleSheet, Pressable, Modal } from "react-native";
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import useCountDown from "react-countdown-hook";
 import IconButton from "../IconButton";
-import { add } from "react-native-reanimated";
 
 // 1 hour
 const initialTime = 1 * 60 * 60 * 1000; // initial time in milliseconds
 const interval = 1000; // interval to change remaining time amount, defaults to 1000
 
-export default function RunningTimer({ timeInMinutes }) {
-  const initialRender = useRef(true);
-
+export default function RunningTimer({ timeInMinutes, onTimerEnd }) {
+  /**COMPONENT STATE */
+  const [initialRender, setInitialRender] = useState(true);
   const [showActiveTimerModal, setShowActiveTimerModal] = useState(false);
-
-  const [timeLeft, { start, pause, resume, reset }] = useCountDown(
-    initialTime,
-    interval
-  );
-
-  const [minDigit1, setMinDigit1] = useState(timeInMinutes < 10 ? 0 : 1);
-  const [minDigit2, setMinDigit2] = useState(
-    timeInMinutes < 10 ? timeInMinutes : 0
-  );
-  const [secDigit1, setSecDigit1] = useState(0);
-  const [secDigit2, setSecDigit2] = useState(0);
-
+  const [timeLeft, { start, reset }] = useCountDown(initialTime, interval);
+  const [minDigit1, setMinDigit1] = useState();
+  const [minDigit2, setMinDigit2] = useState();
+  const [secDigit1, setSecDigit1] = useState();
+  const [secDigit2, setSecDigit2] = useState();
   const [deficit, setDeficit] = useState((60 - timeInMinutes) * 60 * 1000);
 
+  /**COMPONENT FUNCTIONS */
   // returns when updated timer should end at
   // start with 59 minute deficit between real timer
   // and user timer
@@ -34,57 +26,10 @@ export default function RunningTimer({ timeInMinutes }) {
     return timeLeft - deficit;
   };
 
-  // start the timer during the first render
-  useEffect(() => {
-    if (timeInMinutes < 10) {
-      setMinDigit2(timeInMinutes);
-    } else {
-      setMinDigit1(1);
-    }
-    start();
-  }, []);
-
-  useEffect(() => {
-    // greater than or equal to a minute
-    if (getTimeLeft() >= 60 * 1000) {
-      // greater than or equal to 10 minutes
-      if (getTimeLeft() >= 600 * 1000) {
-        setMinDigit1(1);
-        setMinDigit2(0);
-        // between 1 and 10 minutes
-      } else {
-        setMinDigit1(0);
-        setMinDigit2(Math.floor((getTimeLeft() / 60000) % 60));
-      }
-      // less than a minute
-    } else {
-      setMinDigit1(0);
-      setMinDigit2(0);
-    }
-    // if equal to any whole minute number
-    if (Math.floor((getTimeLeft() / 10000) % 60) === 60) {
-      setSecDigit1(0);
-      setSecDigit2(0);
-    } else {
-      setSecDigit1(Math.floor(((getTimeLeft() / 1000) % 60) / 10));
-      setSecDigit2(Math.floor((getTimeLeft() / 1000) % 10));
-    }
-  }, [timeLeft]);
-
-  useEffect(() => {
-    if (initialRender.current) {
-      initialRender.current = false;
-      return;
-    } else if (
-      (minDigit1 * 10 + minDigit2) * 60 + secDigit1 * 10 + secDigit2 <= 0 &&
-      !initialRender.current
-    ) {
-      reset();
-      //alert("Time for Next Set!");
-    }
-  }, [minDigit1, minDigit2, secDigit1, secDigit2]);
-
   const sub10 = () => {
+    if (getTimeLeft() <= 10 * 1000) {
+      onTimerEnd();
+    }
     // timer under a minute
     if (getTimeLeft() < 60 * 1000) {
       // under 10 seconds
@@ -122,18 +67,61 @@ export default function RunningTimer({ timeInMinutes }) {
     setDeficit(deficit - 10000);
   };
 
-  const restart = useCallback(() => {
-    // you can start existing timer with an arbitrary value
-    // if new value is not passed timer will start with initial value
-    const newTime = 42 * 1000;
-    start(newTime);
+  /**COMPONENT USEEFFECTS */
+  // start the timer during the first render
+  useEffect(() => {
+    if (timeInMinutes < 10) {
+      setMinDigit2(timeInMinutes);
+    } else {
+      setMinDigit1(1);
+    }
+    start();
   }, []);
 
-  const pauseTimer = () => {
-    pause();
-    return getTimeLeft();
-  };
+  useEffect(() => {
+    if (
+      minDigit1 === 0 &&
+      minDigit2 === 0 &&
+      secDigit1 === 0 &&
+      secDigit2 === 1
+    ) {
+      setInitialRender(false);
+    }
+  }, [minDigit1, minDigit2, secDigit1, secDigit2]);
 
+  useEffect(() => {
+    if (getTimeLeft() <= 0 && !initialRender) {
+      reset();
+      onTimerEnd();
+    }
+
+    // greater than or equal to a minute
+    if (getTimeLeft() >= 60 * 1000) {
+      // greater than or equal to 10 minutes
+      if (getTimeLeft() >= 600 * 1000) {
+        setMinDigit1(1);
+        setMinDigit2(0);
+        // between 1 and 10 minutes
+      } else {
+        setMinDigit1(0);
+        setMinDigit2(Math.floor((getTimeLeft() / 60000) % 60));
+      }
+      // less than a minute
+    } else {
+      setMinDigit1(0);
+      setMinDigit2(0);
+    }
+    // if equal to any whole minute number
+    if (Math.floor((getTimeLeft() / 10000) % 60) === 60) {
+      setSecDigit1(0);
+      setSecDigit2(0);
+    } else {
+      setSecDigit1(Math.floor(((getTimeLeft() / 1000) % 60) / 10));
+      setSecDigit2(Math.floor((getTimeLeft() / 1000) % 10));
+    }
+  }, [timeLeft]);
+
+  /**COMPONENT RENDER */
   let renderThis;
 
   if (showActiveTimerModal) {
@@ -195,13 +183,16 @@ export default function RunningTimer({ timeInMinutes }) {
           onPress={() => {
             setShowActiveTimerModal(!showActiveTimerModal);
           }}
-          style={({ pressed }) => pressed && styles.pressed}
+          style={({ pressed }) => [
+            pressed && styles.pressed,
+            styles.timerContainer,
+          ]}
         >
-          <Text style={styles.timerText}>
-            {minDigit1}
-            {minDigit2}:{secDigit1}
-            {secDigit2}
-          </Text>
+          <Text style={styles.timerDigit}>{minDigit1}</Text>
+          <Text style={styles.timerDigit}>{minDigit2}</Text>
+          <Text style={styles.colon}>:</Text>
+          <Text style={styles.timerDigit}>{secDigit1}</Text>
+          <Text style={styles.timerDigit}>{secDigit2}</Text>
         </Pressable>
         <IconButton
           onPress={() => add10()}
@@ -241,6 +232,9 @@ const styles = StyleSheet.create({
   timerText: {
     fontSize: 22,
     color: "white",
+    minWidth: "45%",
+    backgroundColor: "orange",
+    textAlign: "left",
   },
   pressed: {
     opacity: 0.75,
@@ -275,12 +269,8 @@ const styles = StyleSheet.create({
     padding: 4,
   },
   timerContainer: {
-    backgroundColor: "#2196F3",
-    minWidth: "80%",
-    height: "8%",
-    alignItems: "center",
-    justifyContent: "center",
-    marginVertical: 20,
+    flexDirection: "row",
+    maxWidth: "50%",
   },
   button: {
     borderRadius: 20,
@@ -296,5 +286,22 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     fontSize: 20,
+  },
+  timerDigit: {
+    fontSize: 22,
+    color: "white",
+    minWidth: "11%",
+    padding: 0,
+    margin: 0,
+    textAlign: "center",
+  },
+  colon: {
+    fontSize: 22,
+    color: "white",
+    minWidth: "6%",
+    padding: 0,
+    margin: 0,
+    textAlign: "center",
+    fontWeight: "bold",
   },
 });

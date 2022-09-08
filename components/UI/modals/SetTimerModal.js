@@ -7,6 +7,7 @@ import {
   TextInput,
 } from "react-native";
 import React, { useState } from "react";
+import TimerInput from "../timer/input-timer/TimerInput";
 
 export default function SetTimerModal({
   modalVisible,
@@ -14,6 +15,16 @@ export default function SetTimerModal({
   handleOnTimerAmountSet,
 }) {
   const [timerAmount, setTimerAmount] = useState("5");
+
+  const convertToMinutes = (input) => {
+    const minutes = Number(input.substring(0, 2));
+    const seconds = Number(input.substring(2, 4));
+    return minutes + seconds / 60;
+  };
+
+  const handleOnChange = (updatedText) => {
+    setTimerAmount(convertToMinutes(updatedText));
+  };
 
   return (
     <View>
@@ -28,14 +39,10 @@ export default function SetTimerModal({
       >
         <View>
           <View style={styles.modalView}>
-            <Text style={styles.titleText}>Enter Timer Amount In Seconds</Text>
-            <View style={styles.inputContainer}>
-              <TextInput
-                style={styles.input}
-                onChangeText={setTimerAmount}
-                value={timerAmount}
-              />
-            </View>
+            <Text style={styles.titleText}>
+              Enter Timer Amount{"\n"}(Max 10 min)
+            </Text>
+            <TimerInput handleTimerAmountChanged={handleOnChange} />
             <Pressable
               style={({ pressed }) => [
                 styles.button,
@@ -122,5 +129,6 @@ const styles = StyleSheet.create({
     padding: 4,
     minWidth: "78%",
     minHeight: "7%",
+    textAlign: "center",
   },
 });
