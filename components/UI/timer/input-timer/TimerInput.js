@@ -70,6 +70,9 @@ export default function TimerInput({ handleTimerAmountChanged }) {
         maxLength={CODE_LENGTH}
         style={style.hiddenCodeInput}
       />
+      <View style={style.colon}>
+        <Text style={style.colonText}>:</Text>
+      </View>
     </SafeAreaView>
   );
 }
@@ -90,18 +93,34 @@ const style = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 4,
     padding: 12,
+    minWidth: "14%",
+    marginHorizontal: 10,
+    alignItems: "center",
+    justifyContent: "center",
   },
   inputContainerFocused: {
     borderColor: "#0f5181",
   },
   inputText: {
     fontSize: 24,
-    fontFamily: "Menlo-Regular",
+    color: "#ffffff",
+    textAlign: "center",
   },
   hiddenCodeInput: {
     position: "absolute",
     height: 0,
     width: 0,
     opacity: 0,
+  },
+  colon: {
+    position: "absolute",
+    top: "34%",
+    left: "37.25%",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  colonText: {
+    color: "#ffffff",
+    fontSize: 40,
   },
 });

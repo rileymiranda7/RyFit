@@ -230,11 +230,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   timerText: {
-    fontSize: 22,
+    fontSize: 30,
     color: "white",
     minWidth: "45%",
-    backgroundColor: "orange",
-    textAlign: "left",
+    textAlign: "center",
   },
   pressed: {
     opacity: 0.75,

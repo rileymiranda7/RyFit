@@ -45,18 +45,105 @@ export default function SetTimerModal({
             <TimerInput handleTimerAmountChanged={handleOnChange} />
             <Pressable
               style={({ pressed }) => [
-                styles.button,
-                styles.buttonClose,
+                styles.startButton,
                 pressed && { opacity: 0.75 },
               ]}
               onPress={() => handleOnTimerAmountSet(timerAmount)}
             >
               <Text style={styles.textStyle}>Start Timer</Text>
             </Pressable>
+            <View style={styles.timerButtonsContainer}>
+              <View style={styles.timerButtonsRow1}>
+                <Pressable
+                  style={({ pressed }) => [
+                    styles.timerButton,
+                    pressed && { opacity: 0.75 },
+                  ]}
+                  onPress={() => handleOnTimerAmountSet(1)}
+                >
+                  <Text style={styles.textStyle}>1:00</Text>
+                </Pressable>
+                <Pressable
+                  style={({ pressed }) => [
+                    styles.timerButton,
+                    pressed && { opacity: 0.75 },
+                  ]}
+                  onPress={() => handleOnTimerAmountSet(1.5)}
+                >
+                  <Text style={styles.textStyle}>1:30</Text>
+                </Pressable>
+                <Pressable
+                  style={({ pressed }) => [
+                    styles.timerButton,
+                    pressed && { opacity: 0.75 },
+                  ]}
+                  onPress={() => handleOnTimerAmountSet(2)}
+                >
+                  <Text style={styles.textStyle}>2:00</Text>
+                </Pressable>
+              </View>
+              <View style={styles.timerButtonsRow2}>
+                <Pressable
+                  style={({ pressed }) => [
+                    styles.timerButton,
+                    pressed && { opacity: 0.75 },
+                  ]}
+                  onPress={() => handleOnTimerAmountSet(3)}
+                >
+                  <Text style={styles.textStyle}>3:00</Text>
+                </Pressable>
+                <Pressable
+                  style={({ pressed }) => [
+                    styles.timerButton,
+                    pressed && { opacity: 0.75 },
+                  ]}
+                  onPress={() => handleOnTimerAmountSet(3.5)}
+                >
+                  <Text style={styles.textStyle}>3:30</Text>
+                </Pressable>
+                <Pressable
+                  style={({ pressed }) => [
+                    styles.timerButton,
+                    pressed && { opacity: 0.75 },
+                  ]}
+                  onPress={() => handleOnTimerAmountSet(4)}
+                >
+                  <Text style={styles.textStyle}>4:00</Text>
+                </Pressable>
+              </View>
+              <View style={styles.timerButtonsRow3}>
+                <Pressable
+                  style={({ pressed }) => [
+                    styles.timerButton,
+                    pressed && { opacity: 0.75 },
+                  ]}
+                  onPress={() => handleOnTimerAmountSet(4.5)}
+                >
+                  <Text style={styles.textStyle}>4:30</Text>
+                </Pressable>
+                <Pressable
+                  style={({ pressed }) => [
+                    styles.timerButton,
+                    pressed && { opacity: 0.75 },
+                  ]}
+                  onPress={() => handleOnTimerAmountSet(5)}
+                >
+                  <Text style={styles.textStyle}>5:00</Text>
+                </Pressable>
+                <Pressable
+                  style={({ pressed }) => [
+                    styles.timerButton,
+                    pressed && { opacity: 0.75 },
+                  ]}
+                  onPress={() => handleOnTimerAmountSet(7)}
+                >
+                  <Text style={styles.textStyle}>7:00</Text>
+                </Pressable>
+              </View>
+            </View>
             <Pressable
               style={({ pressed }) => [
-                styles.button,
-                styles.buttonClose,
+                styles.cancelButton,
                 pressed && { opacity: 0.75 },
               ]}
               onPress={() => closeModal()}
@@ -99,14 +186,35 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginVertical: 20,
   },
-  button: {
+  startButton: {
     borderRadius: 20,
     padding: 10,
     elevation: 2,
     marginVertical: 20,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#1db643",
   },
-  buttonClose: {
+  timerButton: {
+    borderRadius: 26,
+    borderWidth: 3,
+    borderColor: "#ffffff",
+    minWidth: "22%",
+    padding: 10,
+    elevation: 2,
+    marginVertical: 20,
+    alignItems: "center",
+    justifyContent: "center",
     backgroundColor: "#2196F3",
+  },
+  cancelButton: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+    marginVertical: 20,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#f32121",
   },
   textStyle: {
     color: "white",
@@ -118,10 +226,8 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "bold",
     textAlign: "center",
-    fontSize: 20,
-    backgroundColor: "#2196F3",
-    margin: 10,
-    padding: 4,
+    fontSize: 25,
+    marginTop: 30,
   },
   input: {
     fontSize: 25,
@@ -130,5 +236,28 @@ const styles = StyleSheet.create({
     minWidth: "78%",
     minHeight: "7%",
     textAlign: "center",
+  },
+  timerButtonsContainer: {
+    flex: 1,
+    minWidth: "80%",
+    minHeight: "10%",
+  },
+  timerButtonsRow1: {
+    minHeight: "13%",
+    minWidth: "4%",
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  timerButtonsRow2: {
+    minHeight: "13%",
+    minWidth: "4%",
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  timerButtonsRow3: {
+    minHeight: "13%",
+    minWidth: "4%",
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
 });
