@@ -9,27 +9,42 @@ export default function HeaderTimer({ restTimerAmount, rndm }) {
   const [timerIsRunning, setTimerIsRunning] = useState(false);
   const [showSetTimerModal, setShowSetTimerModal] = useState(false);
   const [timerAmount, setTimerAmount] = useState("5");
+  const [restTime, setRestTime] = useState(3);
+  const [useRestTime, setUseRestTime] = useState(false);
+  const [initialRender, setInitialRender] = useState(true);
 
   const toggleShowSetTimer = () => {
     setShowSetTimerModal(!showSetTimerModal);
   };
 
   const handleOnTimerAmountSet = (amount) => {
-    console.log("handleOnTimerAmountSet: amount: " + amount);
     if (amount > 10) {
       alert("Timer cannot be over 10 minutes!");
     } else if (amount <= 0) {
       alert("Timer cannot be 0 minutes!");
     } else {
-      console.log("handleOnTimerAmountSet: timerAmount: " + timerAmount);
       setTimerAmount(Number(amount));
       setShowSetTimerModal(false);
-      console.log("handleOnTimerAmountSet: timerAmount: " + timerAmount);
+      setTimerIsRunning(true);
+    }
+  };
+
+  const handleOnRestTimeSet = (amount) => {
+    if (Number(amount) > 10) {
+      alert("Timer cannot be over 10 minutes!");
+    } else if (Number(amount) <= 0) {
+      alert("Timer cannot be 0 minutes!");
+    } else {
+      setRestTime(Number(amount));
+      setShowSetTimerModal(false);
       setTimerIsRunning(true);
     }
   };
 
   const onTimerEnd = (wasCanceled) => {
+    if (useRestTime) {
+      setUseRestTime(false);
+    }
     setTimerIsRunning(false);
     setShowSetTimerModal(false);
     if (!wasCanceled) {
@@ -38,12 +53,14 @@ export default function HeaderTimer({ restTimerAmount, rndm }) {
   };
 
   useEffect(() => {
-    if (Number(restTimerAmount) > 0) {
-      console.log("header timer");
-      console.log("restTimerAmount: " + Number(restTimerAmount));
-      setTimerAmount(Number(restTimerAmount));
-      console.log("timerAmount: " + timerAmount);
-      handleOnTimerAmountSet(restTimerAmount);
+    if (initialRender) {
+      setInitialRender(false);
+    } else {
+      setUseRestTime(true);
+      if (Number(restTimerAmount) > 0) {
+        setRestTime(Number(restTimerAmount));
+        handleOnRestTimeSet(restTimerAmount);
+      }
     }
   }, [rndm]);
 
@@ -63,6 +80,8 @@ export default function HeaderTimer({ restTimerAmount, rndm }) {
         timeInMinutes={timerAmount}
         onTimerEnd={onTimerEnd}
         rndm={rndm}
+        restTime={restTime}
+        useRestTime={useRestTime}
       />
     );
   } else {
