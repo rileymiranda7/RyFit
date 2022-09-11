@@ -7,7 +7,7 @@ import IconButton from "../IconButton";
 const initialTime = 1 * 60 * 60 * 1000; // initial time in milliseconds
 const interval = 1000; // interval to change remaining time amount, defaults to 1000
 
-export default function RunningTimer({ timeInMinutes, onTimerEnd }) {
+export default function RunningTimer({ timeInMinutes, onTimerEnd, rndm }) {
   /**COMPONENT STATE */
   const [initialRender, setInitialRender] = useState(true);
   const [showActiveTimerModal, setShowActiveTimerModal] = useState(false);
@@ -125,14 +125,12 @@ export default function RunningTimer({ timeInMinutes, onTimerEnd }) {
 
   useEffect(() => {
     if (timeInMinutes !== getTimeLeft()) {
-      console.log("here");
       reset();
       setDeficit((60 - Number(timeInMinutes)) * 60 * 1000);
       start();
     }
     console.log("timeInMinutes: " + timeInMinutes);
-  }, [timeInMinutes]);
-
+  }, [rndm]);
   /**COMPONENT RENDER */
   let renderThis;
 

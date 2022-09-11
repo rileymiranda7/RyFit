@@ -154,9 +154,12 @@ export default function App() {
   const [restTimerAmount, setRestTimerAmount] = useState("0");
   const [resetTimer, setResetTimer] = useState(false);
   const [showActiveTimerModal, setShowActiveTimerModal] = useState(false);
+  const [rndm, setRndm] = useState(0.5);
 
   const handleOnSetCompleted = (restTimerAmount) => {
+    console.log("app: restTimerAmount: " + restTimerAmount);
     setRestTimerAmount(restTimerAmount);
+    setRndm(Math.random());
   };
 
   const handleTimerPressed = () => {
@@ -232,7 +235,7 @@ export default function App() {
             options={{
               title: "RyFit",
               headerRight: () => {
-                return <HeaderTimer restTimerAmount={restTimerAmount} />;
+                return <HeaderTimer restTimerAmount={restTimerAmount} rndm={rndm}/>;
               },
             }}
           />

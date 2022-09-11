@@ -5,7 +5,7 @@ import IconButton from "../IconButton";
 import RunningTimer from "./RunningTimer";
 import SetTimerModal from "../modals/SetTimerModal";
 
-export default function HeaderTimer({ restTimerAmount }) {
+export default function HeaderTimer({ restTimerAmount, rndm }) {
   const [timerIsRunning, setTimerIsRunning] = useState(false);
   const [showSetTimerModal, setShowSetTimerModal] = useState(false);
   const [timerAmount, setTimerAmount] = useState("5");
@@ -14,14 +14,17 @@ export default function HeaderTimer({ restTimerAmount }) {
     setShowSetTimerModal(!showSetTimerModal);
   };
 
-  const handleOnTimerAmountSet = (timerAmount) => {
-    if (timerAmount > 10) {
+  const handleOnTimerAmountSet = (amount) => {
+    console.log("handleOnTimerAmountSet: amount: " + amount);
+    if (amount > 10) {
       alert("Timer cannot be over 10 minutes!");
-    } else if (timerAmount <= 0) {
+    } else if (amount <= 0) {
       alert("Timer cannot be 0 minutes!");
     } else {
-      setTimerAmount(Number(timerAmount));
+      console.log("handleOnTimerAmountSet: timerAmount: " + timerAmount);
+      setTimerAmount(Number(amount));
       setShowSetTimerModal(false);
+      console.log("handleOnTimerAmountSet: timerAmount: " + timerAmount);
       setTimerIsRunning(true);
     }
   };
@@ -35,10 +38,14 @@ export default function HeaderTimer({ restTimerAmount }) {
   };
 
   useEffect(() => {
-    if (restTimerAmount > 0) {
+    if (Number(restTimerAmount) > 0) {
+      console.log("header timer");
+      console.log("restTimerAmount: " + Number(restTimerAmount));
+      setTimerAmount(Number(restTimerAmount));
+      console.log("timerAmount: " + timerAmount);
       handleOnTimerAmountSet(restTimerAmount);
     }
-  }, [restTimerAmount]);
+  }, [rndm]);
 
   let renderThis;
 
@@ -55,7 +62,7 @@ export default function HeaderTimer({ restTimerAmount }) {
       <RunningTimer
         timeInMinutes={timerAmount}
         onTimerEnd={onTimerEnd}
-        resetTimer={() => {}}
+        rndm={rndm}
       />
     );
   } else {
