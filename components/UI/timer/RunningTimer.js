@@ -16,7 +16,9 @@ export default function RunningTimer({ timeInMinutes, onTimerEnd }) {
   const [minDigit2, setMinDigit2] = useState();
   const [secDigit1, setSecDigit1] = useState();
   const [secDigit2, setSecDigit2] = useState();
-  const [deficit, setDeficit] = useState((60 - timeInMinutes) * 60 * 1000);
+  const [deficit, setDeficit] = useState(
+    (60 - Number(timeInMinutes)) * 60 * 1000
+  );
 
   /**COMPONENT FUNCTIONS */
   // returns when updated timer should end at
@@ -120,6 +122,16 @@ export default function RunningTimer({ timeInMinutes, onTimerEnd }) {
       setSecDigit2(Math.floor((getTimeLeft() / 1000) % 10));
     }
   }, [timeLeft]);
+
+  useEffect(() => {
+    if (timeInMinutes !== getTimeLeft()) {
+      console.log("here");
+      reset();
+      setDeficit((60 - Number(timeInMinutes)) * 60 * 1000);
+      start();
+    }
+    console.log("timeInMinutes: " + timeInMinutes);
+  }, [timeInMinutes]);
 
   /**COMPONENT RENDER */
   let renderThis;

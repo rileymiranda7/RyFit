@@ -19,7 +19,7 @@ export default function Exercise({ exerciseName, handleOnSetCompleted }) {
       status: "IN PROGRESS",
     },
   ]);
-  const [restTimeAmount, setRestTimeAmount] = useState("180");
+  const [restTimeAmount, setRestTimeAmount] = useState("3");
 
   // updates rowArr state when any input on any row is changed
   function inputChangedHandler(inputIdentifier, setNumber, enteredValue) {

@@ -4,18 +4,8 @@ import React, { useEffect, useRef, useState } from "react";
 import IconButton from "../IconButton";
 import RunningTimer from "./RunningTimer";
 import SetTimerModal from "../modals/SetTimerModal";
-import { render } from "react-dom";
 
-export default function HeaderTimer(
-  {
-    /* timerAmount,
-  onTimerEnd,
-  resetTimer,
-  onPress,
-  showActiveTimerModal,
-  exitActiveTimerModal, */
-  }
-) {
+export default function HeaderTimer({ restTimerAmount }) {
   const [timerIsRunning, setTimerIsRunning] = useState(false);
   const [showSetTimerModal, setShowSetTimerModal] = useState(false);
   const [timerAmount, setTimerAmount] = useState("5");
@@ -31,8 +21,8 @@ export default function HeaderTimer(
       alert("Timer cannot be 0 minutes!");
     } else {
       setTimerAmount(Number(timerAmount));
-      setShowSetTimerModal(!showSetTimerModal);
-      setTimerIsRunning(!timerIsRunning);
+      setShowSetTimerModal(false);
+      setTimerIsRunning(true);
     }
   };
 
@@ -43,6 +33,12 @@ export default function HeaderTimer(
       alert("Time for next set!");
     }
   };
+
+  useEffect(() => {
+    if (restTimerAmount > 0) {
+      handleOnTimerAmountSet(restTimerAmount);
+    }
+  }, [restTimerAmount]);
 
   let renderThis;
 

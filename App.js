@@ -151,32 +151,12 @@ export default function App() {
   requestPermissionsAsync();
   const [showSetTimer, setShowSetTimer] = useState(false);
   const [timerIsRunning, setTimerIsRunning] = useState(false);
-  const [timerAmount, setTimerAmount] = useState("5");
+  const [restTimerAmount, setRestTimerAmount] = useState("0");
   const [resetTimer, setResetTimer] = useState(false);
   const [showActiveTimerModal, setShowActiveTimerModal] = useState(false);
 
-  const toggleShowSetTimer = () => {
-    setShowSetTimer(!showSetTimer);
-  };
-
-  const handleOnTimerAmountSet = (timerAmount) => {
-    setTimerAmount(timerAmount);
-    setShowSetTimer(!showSetTimer);
-    setTimerIsRunning(!timerIsRunning);
-  };
-
-  const handleOnSetCompleted = (timerAmount) => {
-    setTimerAmount(timerAmount);
-    setShowActiveTimerModal(false);
-    if (timerIsRunning) {
-      setResetTimer(!resetTimer);
-      setShowSetTimer(false);
-      setTimerIsRunning(false);
-      setTimerIsRunning(true);
-    } else {
-      setShowSetTimer(false);
-      setTimerIsRunning(true);
-    }
+  const handleOnSetCompleted = (restTimerAmount) => {
+    setRestTimerAmount(restTimerAmount);
   };
 
   const handleTimerPressed = () => {
@@ -252,34 +232,7 @@ export default function App() {
             options={{
               title: "RyFit",
               headerRight: () => {
-                {
-                  /* <>
-                  {showSetTimer ? (
-                    <SetTimerModal
-                      modalVisible={showSetTimer}
-                      closeModal={toggleShowSetTimer}
-                      handleOnTimerAmountSet={handleOnTimerAmountSet}
-                    />
-                  ) : timerIsRunning ? (
-                    <HeaderTimer
-                      timerAmount={timerAmount}
-                      onTimerEnd={handleOnTimerEnd}
-                      resetTimer={resetTimer}
-                      onPress={handleTimerPressed}
-                      showActiveTimerModal={showActiveTimerModal}
-                      exitActiveTimerModal={exitActiveTimerModal}
-                    />
-                  ) : (
-                    <IconButton
-                      onPress={toggleShowSetTimer}
-                      icon={"timer-outline"}
-                      color="white"
-                      size={30}
-                    />
-                  )}
-                </> */
-                }
-                return <HeaderTimer />;
+                return <HeaderTimer restTimerAmount={restTimerAmount} />;
               },
             }}
           />
