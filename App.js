@@ -16,6 +16,8 @@ import IconButton from "./components/UI/IconButton";
 import SetTimerModal from "./components/UI/modals/SetTimerModal";
 import HeaderTimer from "./components/UI/timer/HeaderTimer";
 import TestCountdown from "./TestCountdown";
+import { init } from "./utils/database";
+import AppLoading from "expo-app-loading";
 
 const BottomTabs = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
@@ -155,6 +157,7 @@ export default function App() {
   const [resetTimer, setResetTimer] = useState(false);
   const [showActiveTimerModal, setShowActiveTimerModal] = useState(false);
   const [rndm, setRndm] = useState(0.5);
+  const [dbInitialized, setDbInitialized] = useState(false);
 
   const handleOnSetCompleted = (restTimerAmount) => {
     console.log("app: restTimerAmount: " + restTimerAmount);
@@ -181,6 +184,17 @@ export default function App() {
   };
 
   useEffect(() => {
+    init()
+      .then(() => {
+        setDbInitialized(true);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    if (!dbInitialized) {
+      return <AppLoading />;
+    }
+
     async function configurePushNotifications() {
       const { status } = await Notifications.getPermissionsAsync();
       let finalStatus = status;
@@ -235,7 +249,9 @@ export default function App() {
             options={{
               title: "RyFit",
               headerRight: () => {
-                return <HeaderTimer restTimerAmount={restTimerAmount} rndm={rndm}/>;
+                return (
+                  <HeaderTimer restTimerAmount={restTimerAmount} rndm={rndm} />
+                );
               },
             }}
           />
