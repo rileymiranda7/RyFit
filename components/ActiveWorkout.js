@@ -15,7 +15,7 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import ExerciseList from "./ExerciseList";
 import Exercise from "./Exercise";
 
-export default function ActiveWorkout({ handleOnSetCompleted }) {
+export default function ActiveWorkout({ handleOnSetCompleted, endWorkout }) {
   const [exerciseList, setExerciseList] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [exerciseNameInput, onChangeText] = useState();
@@ -44,16 +44,28 @@ export default function ActiveWorkout({ handleOnSetCompleted }) {
           }}
           keyExtractor={(exercise) => exercise.name}
           ListFooterComponent={
-            <Pressable
-              style={({ pressed }) => [
-                styles.button,
-                styles.buttonOpen,
-                pressed && { opacity: 0.75 },
-              ]}
-              onPress={() => setModalVisible(true)}
-            >
-              <Text style={styles.textStyle}>Add Exercise</Text>
-            </Pressable>
+            <>
+              <Pressable
+                style={({ pressed }) => [
+                  styles.button,
+                  styles.buttonOpen,
+                  pressed && { opacity: 0.75 },
+                ]}
+                onPress={() => setModalVisible(true)}
+              >
+                <Text style={styles.textStyle}>Add Exercise</Text>
+              </Pressable>
+              <Pressable
+                style={({ pressed }) => [
+                  styles.button,
+                  styles.endWorkoutButton,
+                  pressed && { opacity: 0.75 },
+                ]}
+                onPress={() => endWorkout()}
+              >
+                <Text style={styles.textStyle}>End Workout</Text>
+              </Pressable>
+            </>
           }
         />
       </View>
@@ -143,6 +155,9 @@ const styles = StyleSheet.create({
   },
   buttonOpen: {
     backgroundColor: "#F194FF",
+  },
+  endWorkoutButton: {
+    backgroundColor: "#ff0000",
   },
   buttonClose: {
     backgroundColor: "#2196F3",

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View, Alert } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
@@ -7,6 +7,7 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createStackNavigator } from "@react-navigation/stack";
 import "react-native-gesture-handler";
 import * as Notifications from "expo-notifications";
+import * as SplashScreen from "expo-splash-screen";
 
 import PastWorkoutsScreen from "./screens/PastWorkoutsScreen";
 import ProfileScreen from "./screens/ProfileScreen";
@@ -17,7 +18,6 @@ import SetTimerModal from "./components/UI/modals/SetTimerModal";
 import HeaderTimer from "./components/UI/timer/HeaderTimer";
 import TestCountdown from "./TestCountdown";
 import { init } from "./utils/database";
-import AppLoading from "expo-app-loading";
 
 const BottomTabs = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
@@ -149,6 +149,8 @@ function BottomTabsNavigator({ handleOnSetCompleted }) {
   );
 }
 
+SplashScreen.preventAutoHideAsync();
+
 export default function App() {
   requestPermissionsAsync();
   const [showSetTimer, setShowSetTimer] = useState(false);
@@ -191,9 +193,6 @@ export default function App() {
       .catch((err) => {
         console.log(err);
       });
-    if (!dbInitialized) {
-      return <AppLoading />;
-    }
 
     async function configurePushNotifications() {
       const { status } = await Notifications.getPermissionsAsync();
@@ -226,8 +225,23 @@ export default function App() {
     configurePushNotifications();
   }, []);
 
+  const onLayoutRootView = useCallback(async () => {
+    if (dbInitialized) {
+      // This tells the splash screen to hide immediately! If we call this after
+      // `setAppIsReady`, then we may see a blank screen while the app is
+      // loading its initial state and rendering its first pixels. So instead,
+      // we hide the splash screen once we know the root view has already
+      // performed layout.
+      await SplashScreen.hideAsync();
+    }
+  }, [dbInitialized]);
+
+  if (!dbInitialized) {
+    return null;
+  }
+
   return (
-    <>
+    <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
       <StatusBar style="light" />
       <NavigationContainer>
         <Drawer.Navigator
@@ -258,7 +272,7 @@ export default function App() {
           <Drawer.Screen name="Profile" component={ProfileScreen} />
         </Drawer.Navigator>
       </NavigationContainer>
-    </>
+    </View>
   );
 }
 

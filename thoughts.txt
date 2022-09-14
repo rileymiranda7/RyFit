@@ -26,3 +26,16 @@ Instead of having multiple components for headerTimer
 I should just render one from app and then manage what 
 is shown from that one component and create more 
 under that component as needed.
+
+
+When to insert/modify data in database:
+- When user starts a new blank workout or routine
+- When a user creates/deletes a routine
+- When a user adds/deletes an exerciseInstance
+- When a user creates/deletes an exercise
+- When a user changes the status of a set
+- When the user ends/cancels a workout
+- When a user looks at their workout history
+- When a user looks at the history of an exercise
+
+Need to add screens for these first

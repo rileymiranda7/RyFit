@@ -1,28 +1,50 @@
 import { View, Text, Button, StyleSheet, Pressable } from "react-native";
-import React, { useState, useLayoutEffect } from "react";
+import React, { useState, useLayoutEffect, useEffect } from "react";
+import { useIsFocused } from "@react-navigation/native";
 
 import ActiveWorkout from "../components/ActiveWorkout";
 import Exercise from "../components/Exercise";
 import SetTimerModal from "../components/UI/modals/SetTimerModal";
+import { fetchRoutines } from "../utils/database";
 
 export default function CurrentWorkoutScreen({ handleOnSetCompleted }) {
-  /* const [workoutInProgress, setWorkoutInProgress] = useState(false);
+  const [workoutInProgress, setWorkoutInProgress] = useState(false);
 
-  function beginWorkoutPressedHandler() {
-    setWorkoutInProgress((workoutInProgress) => !workoutInProgress);
-  }
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    async function loadRoutines() {
+      await fetchRoutines();
+    }
+
+    if (isFocused) {
+      loadRoutines();
+    }
+  }, [isFocused]);
+
+  const beginWorkoutPressedHandler = () => {
+    setWorkoutInProgress(true);
+  };
+
+  const onEndedWorkout = () => {
+    setWorkoutInProgress(false);
+  };
 
   let workoutNotStartedScreen = (
-    <View>
-      <Text>No workout in progress.</Text>
-      <Button title="Begin Workout" onPress={beginWorkoutPressedHandler} />
+    <View style={styles.container}>
+      <Text style={styles.textStyle}>
+        Choose Routine or Start Empty Workout
+      </Text>
+      <Button title="Begin Empy Workout" onPress={beginWorkoutPressedHandler} />
     </View>
   );
 
   let workoutInProgressScreen = (
-    <View>
-      <Text>Workout in progress</Text>
-      <ActiveWorkout />
+    <View style={styles.activeWorkoutContainer}>
+      <ActiveWorkout
+        handleOnSetCompleted={handleOnSetCompleted}
+        endWorkout={onEndedWorkout}
+      />
     </View>
   );
 
@@ -30,20 +52,22 @@ export default function CurrentWorkoutScreen({ handleOnSetCompleted }) {
     <View>
       {workoutInProgress ? workoutInProgressScreen : workoutNotStartedScreen}
     </View>
-  ); */
-
-  return (
-    <View style={styles.container}>
-      <ActiveWorkout handleOnSetCompleted={handleOnSetCompleted} />
-    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  activeWorkoutContainer: {
     flex: 1,
     minWidth: "100%",
+    minHeight: "100%",
     backgroundColor: "black",
+  },
+  container: {
+    flex: 1,
+    padding: 10,
+    backgroundColor: "black",
+    minWidth: "100%",
+    minHeight: "100%",
   },
   textStyle: {
     color: "white",
