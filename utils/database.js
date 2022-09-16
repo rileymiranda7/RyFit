@@ -1,5 +1,7 @@
 import * as SQLite from "expo-sqlite";
 
+import { Exercise } from "../models/exercise";
+
 const database = SQLite.openDatabase("RyFit.db");
 
 export function init() {
@@ -45,7 +47,7 @@ export function init() {
       );
        `);
       tx.executeSql(`
-      INSERT INTO exercises VALUES('Chest Fly', '2:00', null, 'Push A');
+      INSERT INTO exercises VALUES('Bicep Curl', '2:00', null, 'Pull B');
        `);
     });
   });
@@ -76,8 +78,6 @@ export function fetchPastWorkouts() {
             );
           }
           resolve(places); */
-          console.log("Past Workouts:");
-          console.log(result);
         },
         (_, error) => {
           reject(error);
@@ -112,8 +112,61 @@ export function fetchRoutines() {
             );
           }
           resolve(places); */
-          console.log("Exercises: ");
-          console.log(result);
+        },
+        (_, error) => {
+          reject(error);
+        }
+      );
+    });
+  });
+
+  return promise;
+}
+
+export function fetchExercises() {
+  const promise = new Promise((resolve, reject) => {
+    database.transaction((tx) => {
+      tx.executeSql(
+        `SELECT * FROM exercises;`,
+        [],
+        (_, result) => {
+          const exercises = [];
+          for (const e of result.rows._array) {
+            exercises.push(
+              new Exercise(
+                e.exerciseName,
+                e.restTime,
+                e.exerciseNotes,
+                e.routineName
+              )
+            );
+          }
+          resolve(exercises);
+        },
+        (_, error) => {
+          reject(error);
+        }
+      );
+    });
+  });
+
+  return promise;
+}
+
+export function insertExercise(exercise) {
+  const promise = new Promise((resolve, reject) => {
+    database.transaction((tx) => {
+      tx.executeSql(
+        `INSERT INTO places (title, imageUri, address, lat, lng) VALUES (?, ?, ?, ?, ?)`,
+        [
+          place.title,
+          place.imageUri,
+          place.address,
+          place.location.lat,
+          place.location.lng,
+        ],
+        (_, result) => {
+          resolve(result);
         },
         (_, error) => {
           reject(error);

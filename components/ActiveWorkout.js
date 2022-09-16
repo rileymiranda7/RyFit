@@ -14,19 +14,22 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 
 import ExerciseList from "./ExerciseList";
 import Exercise from "./Exercise";
+import PickExerciseModal from "./UI/modals/PickExerciseModal";
 
 export default function ActiveWorkout({ handleOnSetCompleted, endWorkout }) {
   const [exerciseList, setExerciseList] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
-  const [exerciseNameInput, onChangeText] = useState();
 
-  function submitPickedExerciseHandler() {
+  function submitPickedExerciseHandler(exerciseName) {
     setExerciseList((curExerciseList) => {
-      return [...curExerciseList, { name: exerciseNameInput }];
+      return [...curExerciseList, { name: exerciseName }];
     });
-    onChangeText(null);
-    setModalVisible(!modalVisible);
+    setModalVisible(false);
   }
+
+  const closeModal = () => {
+    setModalVisible(false);
+  };
 
   return (
     <View style={styles.container}>
@@ -70,48 +73,12 @@ export default function ActiveWorkout({ handleOnSetCompleted, endWorkout }) {
         />
       </View>
       <View>
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => {
-            Alert.alert("Modal has been closed.");
-            setModalVisible(!modalVisible);
-          }}
-        >
-          <View>
-            <View style={styles.modalView}>
-              <Text style={styles.modalText}>Select Exercise</Text>
-              <View style={styles.inputContainer}>
-                <TextInput
-                  style={styles.input}
-                  onChangeText={onChangeText}
-                  value={exerciseNameInput}
-                />
-              </View>
-              <Pressable
-                style={({ pressed }) => [
-                  styles.button,
-                  styles.buttonClose,
-                  pressed && { opacity: 0.75 },
-                ]}
-                onPress={() => submitPickedExerciseHandler()}
-              >
-                <Text style={styles.textStyle}>Add Exercise</Text>
-              </Pressable>
-              <Pressable
-                style={({ pressed }) => [
-                  styles.button,
-                  styles.buttonClose,
-                  pressed && { opacity: 0.75 },
-                ]}
-                onPress={() => setModalVisible(!modalVisible)}
-              >
-                <Text style={styles.textStyle}>Cancel</Text>
-              </Pressable>
-            </View>
-          </View>
-        </Modal>
+        {modalVisible && (
+          <PickExerciseModal
+            submitPickedExerciseHandler={submitPickedExerciseHandler}
+            closeModal={closeModal}
+          />
+        )}
       </View>
     </View>
   );

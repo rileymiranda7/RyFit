@@ -75,4 +75,19 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 20,
   },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
+    fontSize: 20,
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+    marginVertical: 20,
+  },
+  buttonClose: {
+    backgroundColor: "#2196F3",
+  },
 });
