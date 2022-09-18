@@ -162,7 +162,6 @@ export default function App() {
   const [dbInitialized, setDbInitialized] = useState(false);
 
   const handleOnSetCompleted = (restTimerAmount) => {
-    console.log("app: restTimerAmount: " + restTimerAmount);
     setRestTimerAmount(restTimerAmount);
     setRndm(Math.random());
   };

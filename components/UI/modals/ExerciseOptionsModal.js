@@ -53,9 +53,9 @@ export default function ExerciseOptionsModal() {
 const styles = StyleSheet.create({
   modalView: {
     margin: 20,
-    marginTop: "10%",
+    marginTop: "14%",
     width: "90%",
-    height: "88%",
+    height: "87%",
     backgroundColor: "white",
     borderRadius: 20,
     paddingHorizontal: 0,

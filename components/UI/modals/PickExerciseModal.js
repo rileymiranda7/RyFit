@@ -10,20 +10,41 @@ import {
 import React, { useState, useEffect } from "react";
 import { useIsFocused } from "@react-navigation/native";
 import { fetchExercises } from "../../../utils/database";
+import ExerciseOption from "../ExerciseOption";
 
 export default function PickExerciseModal({
   submitPickedExerciseHandler,
   closeModal,
 }) {
-  const [exerciseNameInput, onChangeText] = useState();
+  const [exerciseNamesArr, setExerciseNamesArr] = useState([]);
+  const [exerciseNameInput, setExerciseNameInput] = useState("");
   const [loadedExercises, setLoadedExercises] = useState([]);
 
   const isFocused = useIsFocused();
 
+  const exerciseSelected = (exerciseName) => {
+    setExerciseNamesArr((currArr) => {
+      return [...currArr, exerciseName];
+    });
+  };
+
+  const exerciseDeselected = (exerciseName) => {
+    setExerciseNamesArr(
+      exerciseNamesArr.filter((exercise) => exercise !== exerciseName)
+    );
+  };
+
+  const combineExercises = () => {
+    if (exerciseNameInput !== "") {
+      submitPickedExerciseHandler([...exerciseNamesArr, exerciseNameInput]);
+    } else {
+      submitPickedExerciseHandler(exerciseNamesArr);
+    }
+  };
+
   useEffect(() => {
     async function loadExercises() {
       const exercises = await fetchExercises();
-      console.log(exercises);
       setLoadedExercises(exercises);
     }
 
@@ -42,14 +63,11 @@ export default function PickExerciseModal({
           data={loadedExercises}
           renderItem={(e) => {
             return (
-              <Pressable
-                style={({ pressed }) => [
-                  styles.exerciseInList,
-                  pressed && { opacity: 0.75 },
-                ]}
-              >
-                <Text style={styles.exerciseItemText}>{e.item.name}</Text>
-              </Pressable>
+              <ExerciseOption
+                exerciseName={e.item.name}
+                exerciseSelected={exerciseSelected}
+                exerciseDeselected={exerciseDeselected}
+              />
             );
           }}
           keyExtractor={(e) => e.name}
@@ -76,7 +94,7 @@ export default function PickExerciseModal({
           <View style={styles.inputContainer}>
             <TextInput
               style={styles.input}
-              onChangeText={onChangeText}
+              onChangeText={setExerciseNameInput}
               value={exerciseNameInput}
               placeholder="Enter an Exercise"
             />
@@ -88,7 +106,7 @@ export default function PickExerciseModal({
               styles.buttonClose,
               pressed && { opacity: 0.75 },
             ]}
-            onPress={() => submitPickedExerciseHandler(exerciseNameInput)}
+            onPress={() => combineExercises()}
           >
             <Text style={styles.textStyle}>Add Exercise</Text>
           </Pressable>
@@ -110,13 +128,8 @@ export default function PickExerciseModal({
 
 const styles = StyleSheet.create({
   exerciseList: {
-    backgroundColor: "yellow",
     minHeight: "45%",
     minWidth: "80%",
-  },
-  exerciseInList: {
-    backgroundColor: "red",
-    marginVertical: 5,
   },
   exerciseItemText: {
     fontSize: 20,
@@ -127,10 +140,10 @@ const styles = StyleSheet.create({
   },
   modalView: {
     margin: 20,
-    marginTop: "10%",
+    marginTop: "14%",
     width: "90%",
-    height: "88%",
-    backgroundColor: "white",
+    height: "87%",
+    backgroundColor: "#3e04c3",
     borderRadius: 20,
     paddingHorizontal: 0,
     paddingVertical: 0,

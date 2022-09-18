@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Pressable,
   TextInput,
+  SafeAreaView,
 } from "react-native";
 import React, { useState } from "react";
 import TimerInput from "../timer/input-timer/TimerInput";
@@ -27,7 +28,7 @@ export default function SetTimerModal({
   };
 
   return (
-    <View>
+    <SafeAreaView>
       <Modal
         animationType="slide"
         transparent={true}
@@ -153,16 +154,16 @@ export default function SetTimerModal({
           </View>
         </View>
       </Modal>
-    </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   modalView: {
     margin: 20,
-    marginTop: "10%",
+    marginTop: "14%",
     width: "90%",
-    height: "88%",
+    height: "87%",
     backgroundColor: "#3e04c3",
     borderRadius: 20,
     paddingHorizontal: 0,
@@ -240,7 +241,7 @@ const styles = StyleSheet.create({
   timerButtonsContainer: {
     flex: 1,
     minWidth: "80%",
-    minHeight: "10%",
+    minHeight: "15%",
   },
   timerButtonsRow1: {
     minHeight: "13%",

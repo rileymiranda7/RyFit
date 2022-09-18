@@ -130,15 +130,10 @@ export default function Exercise({ exerciseName, handleOnSetCompleted }) {
   }
 
   function deleteSetButtonPressedHandler(setNumberToRemove) {
-    console.log("set to remove: " + setNumberToRemove);
-    console.log("total sets: " + currentNumberOfSets);
-    console.log(rowArr);
     // remove last set
     let temp = [...rowArr];
     if (setNumberToRemove === currentNumberOfSets) {
       temp.pop();
-      console.log("temp:");
-      console.log(temp);
       setRowArr(temp);
     } else {
       let newArr = temp.map((set) => {
@@ -155,8 +150,6 @@ export default function Exercise({ exerciseName, handleOnSetCompleted }) {
         }
       });
       newArr.splice(setNumberToRemove - 1, 1);
-      console.log("newArr:");
-      console.log(newArr);
       setRowArr(newArr);
     }
     setCurrentNumberOfSets(currentNumberOfSets - 1);
