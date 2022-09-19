@@ -6,48 +6,118 @@ import {
   Pressable,
   TextInput,
   FlatList,
+  Alert,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import { useIsFocused } from "@react-navigation/native";
-import { fetchExercises } from "../../../utils/database";
+
+import { fetchExercises, insertExercise } from "../../../utils/database";
 import ExerciseOption from "../ExerciseOption";
+import { Exercise } from "../../../models/exercise";
 
 export default function PickExerciseModal({
   submitPickedExerciseHandler,
   closeModal,
 }) {
-  const [exerciseNamesArr, setExerciseNamesArr] = useState([]);
+  const [selectedExercises, setSelectedExercises] = useState([]);
   const [exerciseNameInput, setExerciseNameInput] = useState("");
   const [loadedExercises, setLoadedExercises] = useState([]);
 
   const isFocused = useIsFocused();
 
-  const exerciseSelected = (exerciseName) => {
-    setExerciseNamesArr((currArr) => {
-      return [...currArr, exerciseName];
+  async function loadExercises() {
+    const exercises = await fetchExercises();
+    console.log("loadedExercises: ");
+    console.log(JSON.stringify(exercises));
+    setLoadedExercises(exercises);
+  }
+
+  /* const isInSelectedExercises = (exercise) => {
+    selectedExercises.forEach((e) => {
+      if (e.name === exercise.name) {
+        return true;
+      }
+    })
+    return false;
+  }
+ */
+  const exerciseSelected = (exercise) => {
+    setSelectedExercises((currArr) => {
+      return [...currArr, exercise];
     });
   };
 
-  const exerciseDeselected = (exerciseName) => {
-    setExerciseNamesArr(
-      exerciseNamesArr.filter((exercise) => exercise !== exerciseName)
+  const exerciseDeselected = (exercise) => {
+    setSelectedExercises(
+      selectedExercises.filter((e) => e.name !== exercise.name)
     );
   };
 
+  async function addExercise() {
+    const newExercise = new Exercise(exerciseNameInput, "3:00", null, null);
+    await insertExercise(newExercise);
+    submitPickedExerciseHandler([...selectedExercises, newExercise]);
+    //loadExercises();
+  }
+
+  function shouldAddExercise() {
+    Alert.alert(
+      "Create New Exercise",
+      `${exerciseNameInput} not found. Create and add to workout?`,
+      [
+        {
+          text: "Cancel",
+          onPress: () => {},
+          style: "cancel",
+        },
+        {
+          text: "Add",
+          onPress: () => {
+            if (exerciseNameInput !== "") {
+              addExercise();
+            } else {
+              submitPickedExerciseHandler(selectedExercises);
+            }
+          },
+        },
+      ]
+    );
+  }
+
   const combineExercises = () => {
-    if (exerciseNameInput !== "") {
-      submitPickedExerciseHandler([...exerciseNamesArr, exerciseNameInput]);
+    // get arr of loaded exercise names
+    let loadedNamesArr = [];
+    loadedExercises.forEach((exercise) => {
+      loadedNamesArr.push(exercise.name);
+    });
+    // get arr of selected exercise names
+    let selectedNamesArr = [];
+    selectedExercises.forEach((exercise) => {
+      selectedNamesArr.push(exercise.name);
+    });
+    // if exercise not in db
+    if (
+      exerciseNameInput !== "" &&
+      !loadedNamesArr.includes(exerciseNameInput)
+    ) {
+      shouldAddExercise();
     } else {
-      submitPickedExerciseHandler(exerciseNamesArr);
+      // if inputted exercise not already selected
+      if (
+        exerciseNameInput !== "" &&
+        !selectedNamesArr.includes(exerciseNameInput)
+      ) {
+        submitPickedExerciseHandler([
+          ...selectedExercises,
+          new Exercise(exerciseNameInput, "3:00", null, null),
+        ]);
+      } else {
+        submitPickedExerciseHandler(selectedExercises);
+      }
     }
   };
 
   useEffect(() => {
-    async function loadExercises() {
-      const exercises = await fetchExercises();
-      setLoadedExercises(exercises);
-    }
-
     if (isFocused) {
       loadExercises();
     }
@@ -64,7 +134,7 @@ export default function PickExerciseModal({
           renderItem={(e) => {
             return (
               <ExerciseOption
-                exerciseName={e.item.name}
+                exercise={e.item}
                 exerciseSelected={exerciseSelected}
                 exerciseDeselected={exerciseDeselected}
               />

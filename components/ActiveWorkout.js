@@ -20,10 +20,10 @@ export default function ActiveWorkout({ handleOnSetCompleted, endWorkout }) {
   const [exerciseList, setExerciseList] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
 
-  function submitPickedExerciseHandler(exerciseNames) {
-    exerciseNames.forEach((exerciseName) => {
+  function submitPickedExerciseHandler(exercises) {
+    exercises.forEach((exercise) => {
       setExerciseList((curExerciseList) => {
-        return [...curExerciseList, { name: exerciseName }];
+        return [...curExerciseList, exercise];
       });
     });
     setModalVisible(false);

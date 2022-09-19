@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Pressable } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
 export default function ExerciseOption({
-  exerciseName,
+  exercise,
   exerciseSelected,
   exerciseDeselected,
 }) {
@@ -11,9 +11,9 @@ export default function ExerciseOption({
 
   const onPress = () => {
     if (!isSelected) {
-      exerciseSelected(exerciseName);
+      exerciseSelected(exercise);
     } else if (isSelected) {
-      exerciseDeselected(exerciseName);
+      exerciseDeselected(exercise);
     }
     setIsSelected(!isSelected);
   };
@@ -30,7 +30,7 @@ export default function ExerciseOption({
         onPress={onPress}
       >
         <Ionicons name={"radio-button-on-outline"} size={24} color={"white"} />
-        <Text style={styles.exerciseItemText}>{exerciseName}</Text>
+        <Text style={styles.exerciseItemText}>{exercise.name}</Text>
       </Pressable>
     );
   } else {
@@ -43,7 +43,7 @@ export default function ExerciseOption({
         onPress={onPress}
       >
         <Ionicons name={"radio-button-off-outline"} size={24} color={"white"} />
-        <Text style={styles.exerciseItemText}>{exerciseName}</Text>
+        <Text style={styles.exerciseItemText}>{exercise.name}</Text>
       </Pressable>
     );
   }

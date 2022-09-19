@@ -154,16 +154,16 @@ export function fetchExercises() {
 }
 
 export function insertExercise(exercise) {
+  console.log("inside insertExercise");
   const promise = new Promise((resolve, reject) => {
     database.transaction((tx) => {
       tx.executeSql(
-        `INSERT INTO places (title, imageUri, address, lat, lng) VALUES (?, ?, ?, ?, ?)`,
+        `INSERT INTO exercises (exerciseName, restTime, exerciseNotes, routineName) VALUES (?, ?, ?, ?)`,
         [
-          place.title,
-          place.imageUri,
-          place.address,
-          place.location.lat,
-          place.location.lng,
+          exercise.name,
+          exercise.restTime,
+          exercise.notes,
+          exercise.routineName,
         ],
         (_, result) => {
           resolve(result);
