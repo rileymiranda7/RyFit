@@ -1,6 +1,7 @@
 import * as SQLite from "expo-sqlite";
 
 import { Exercise } from "../models/exercise";
+import { Routine } from "../models/routine";
 
 const database = SQLite.openDatabase("RyFit.db");
 
@@ -89,29 +90,20 @@ export function fetchPastWorkouts() {
   return promise;
 }
 
-export function fetchRoutines() {
+export function fetchRoutineNamesList() {
   const promise = new Promise((resolve, reject) => {
     database.transaction((tx) => {
+      // get list of routine names
+      let routineNames = [];
       tx.executeSql(
-        `SELECT * FROM exercises;`,
+        `SELECT DISTINCT routineName FROM exercises WHERE routineName IS NOT NULL;`,
         [],
         (_, result) => {
-          /* const places = [];
-          for (const dp of result.rows._array) {
-            places.push(
-              new Place(
-                dp.title,
-                dp.imageUri,
-                {
-                  address: dp.address,
-                  lat: dp.lat,
-                  lng: dp.lng,
-                },
-                dp.id
-              )
-            );
+          for (const rt of result.rows._array) {
+            routineNames.push(rt.routineName);
           }
-          resolve(places); */
+          console.log("routineNames: " + routineNames);
+          resolve(routineNames);
         },
         (_, error) => {
           reject(error);
@@ -119,8 +111,38 @@ export function fetchRoutines() {
       );
     });
   });
-
   return promise;
+}
+
+export function fetchRoutine(routineName) {
+  const promise = new Promise((resolve, reject) => {
+    database.transaction((tx) => {
+      tx.executeSql(
+        `SELECT * FROM exercises WHERE routineName = ?`,
+        [routineName],
+        (_, result) => {
+          const routine = new Routine(routineName, result.rows._array);
+          resolve(routine);
+        },
+        (_, error) => {
+          reject(error);
+        }
+      );
+    });
+  });
+  return promise;
+}
+
+export async function fetchRoutines() {
+  const routineNames = await fetchRoutineNamesList();
+  let routines = [];
+  await Promise.all(
+    routineNames.map(async (routineName) => {
+      const routine = await fetchRoutine(routineName);
+      routines.push(routine);
+    })
+  );
+  return routines;
 }
 
 export function fetchExercises() {

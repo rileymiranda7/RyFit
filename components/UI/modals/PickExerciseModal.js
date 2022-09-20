@@ -32,15 +32,6 @@ export default function PickExerciseModal({
     setLoadedExercises(exercises);
   }
 
-  /* const isInSelectedExercises = (exercise) => {
-    selectedExercises.forEach((e) => {
-      if (e.name === exercise.name) {
-        return true;
-      }
-    })
-    return false;
-  }
- */
   const exerciseSelected = (exercise) => {
     setSelectedExercises((currArr) => {
       return [...currArr, exercise];
@@ -57,7 +48,6 @@ export default function PickExerciseModal({
     const newExercise = new Exercise(exerciseNameInput, "3:00", null, null);
     await insertExercise(newExercise);
     submitPickedExerciseHandler([...selectedExercises, newExercise]);
-    //loadExercises();
   }
 
   function shouldAddExercise() {
