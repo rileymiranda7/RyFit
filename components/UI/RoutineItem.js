@@ -4,9 +4,9 @@ import React from "react";
 export default function RoutineItem({ routineName, exercises }) {
   return (
     <View style={styles.container}>
-      <Text>{routineName}</Text>
-      {exercises.map((exercise) => {
-        return <Text>{exercise.exerciseName}</Text>;
+      <Text style={styles.routineNameStyle}>{routineName}</Text>
+      {exercises.map((exercise, index) => {
+        return <Text key={index}>{exercise.exerciseName}</Text>;
       })}
     </View>
   );
@@ -14,8 +14,16 @@ export default function RoutineItem({ routineName, exercises }) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "red",
-    margin: 5,
-    minWidth: "50%",
+    backgroundColor: "#4e1fbb",
+    margin: 10,
+    minWidth: "45%",
+    minHeight: "45%",
+    padding: 4,
+    borderRadius: 8,
+  },
+  routineNameStyle: {
+    color: "white",
+    fontSize: 16,
+    fontWeight: "bold",
   },
 });

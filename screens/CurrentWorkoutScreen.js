@@ -56,25 +56,23 @@ export default function CurrentWorkoutScreen({ handleOnSetCompleted }) {
       </Text>
       <Button title="Begin Empy Workout" onPress={beginWorkoutPressedHandler} />
       {loadedRoutines !== undefined && loadedRoutines.length > 0 && (
-        <FlatList
-          data={loadedRoutines}
-          keyExtractor={(e) => e.name}
-          renderItem={(routine) => {
-            return (
-              <RoutineItem
-                routineName={routine.item.name}
-                exercises={routine.item.exercises}
-              />
-              /* <>
-                <Text style={{ color: "white" }}>{routine.item.name}</Text>
-                <Text style={{ color: "white" }}>
-                  {routine.item.exercises[0].exerciseName}
-                </Text>
-              </> */
-            );
-          }}
-          numColumns={2}
-        />
+        <View style={styles.routinesContainer}>
+          <FlatList
+            data={loadedRoutines}
+            contentContainerStyle={styles.list}
+            columnWrapperStyle={{ justifyContent: "space-between" }}
+            keyExtractor={(e) => e.name}
+            renderItem={(routine) => {
+              return (
+                <RoutineItem
+                  routineName={routine.item.name}
+                  exercises={routine.item.exercises}
+                />
+              );
+            }}
+            numColumns={2}
+          />
+        </View>
       )}
     </View>
   );
@@ -96,15 +94,20 @@ export default function CurrentWorkoutScreen({ handleOnSetCompleted }) {
 }
 
 const styles = StyleSheet.create({
+  list: {
+    backgroundColor: "green",
+  },
   activeWorkoutContainer: {
     flex: 1,
     minWidth: "100%",
     minHeight: "100%",
     backgroundColor: "black",
   },
-  container: {
+  routinesContainer: {
     flex: 1,
-    padding: 10,
+    backgroundColor: "orange",
+  },
+  container: {
     backgroundColor: "black",
     minWidth: "100%",
     minHeight: "100%",
