@@ -6,7 +6,7 @@ export default function RoutineItem({ routineName, exercises }) {
     <View style={styles.container}>
       <Text style={styles.routineNameStyle}>{routineName}</Text>
       {exercises.map((exercise, index) => {
-        return <Text key={index}>{exercise.exerciseName}</Text>;
+        return <Text key={index}>{exercise.name}</Text>;
       })}
     </View>
   );

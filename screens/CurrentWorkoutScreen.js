@@ -12,8 +12,9 @@ import { useIsFocused } from "@react-navigation/native";
 import ActiveWorkout from "../components/ActiveWorkout";
 import Exercise from "../components/Exercise";
 import SetTimerModal from "../components/UI/modals/SetTimerModal";
-import { fetchRoutines, fetchRoutine } from "../utils/database";
+import { fetchRoutines } from "../utils/database";
 import RoutineItem from "../components/UI/RoutineItem";
+import { RoutineExercise } from "../models/routineExercise";
 
 export default function CurrentWorkoutScreen({ handleOnSetCompleted }) {
   const [workoutInProgress, setWorkoutInProgress] = useState(false);
@@ -23,6 +24,9 @@ export default function CurrentWorkoutScreen({ handleOnSetCompleted }) {
 
   useEffect(() => {
     async function loadRoutines() {
+      /* insertIntoRoutineExerciseBridge(
+        new RoutineExercise("Calf Raise", "Lower A")
+      ); */
       const routines = await fetchRoutines();
       console.log(routines);
       setLoadedRoutines(routines);
@@ -44,7 +48,7 @@ export default function CurrentWorkoutScreen({ handleOnSetCompleted }) {
   if (!loadedRoutines || loadedRoutines.length === 0) {
     return (
       <View>
-        <Text style={{ color: "white" }}>No routines found</Text>
+        <Text style={{ color: "black" }}>No routines found</Text>
       </View>
     );
   }

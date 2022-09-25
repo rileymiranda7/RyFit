@@ -10,13 +10,41 @@ export function init() {
     database.transaction((tx) => {
       tx.executeSql(
         `
+        CREATE TABLE IF NOT EXISTS routineExerciseBridge (
+          exerciseName TEXT NOT NULL,
+          routineName TEXT NOT NULL,
+          PRIMARY KEY (exerciseName, routineName),
+          FOREIGN KEY(exerciseName) REFERENCES exercises(exerciseName),
+          FOREIGN KEY(routineName) REFERENCES routines(routineName)
+        );
+        CREATE TABLE IF NOT EXISTS exercises (
+          exerciseName TEXT PRIMARY KEY NOT NULL,
+          restTime TEXT,
+          exerciseNotes TEXT
+        );
+        CREATE TABLE IF NOT EXISTS routines (
+          routineName TEXT PRIMARY KEY NOT NULL,
+          dateCreated DATE NOT NULL
+        );
         CREATE TABLE IF NOT EXISTS workouts (
           workoutId INTEGER PRIMARY KEY NOT NULL,
           startTime DATE NOT NULL,
           duration INTEGER NOT NULL,
           name TEXT NOT NULL
         );
-        `,
+        CREATE TABLE IF NOT EXISTS sets (
+          setNumber INTEGER PRIMARY KEY NOT NULL,
+          exerciseInstanceId INTEGER NOT NULL,
+          weight INTEGER NOT NULL,
+          reps INTEGER NOT NULL,
+          type TEXT NOT NULL
+        );
+        CREATE TABLE IF NOT EXISTS exerciseInstances (
+          exerciseInstanceId INTEGER PRIMARY KEY NOT NULL,
+          exerciseName TEXT NOT NULL,
+          workoutId INT NOT NULL
+        );
+      `,
         [],
         () => {
           resolve();
@@ -25,31 +53,96 @@ export function init() {
           reject(error);
         }
       );
-      tx.executeSql(`CREATE TABLE IF NOT EXISTS sets (
-        setNumber INTEGER PRIMARY KEY NOT NULL,
-        exerciseInstanceId INTEGER NOT NULL,
-        weight INTEGER NOT NULL,
-        reps INTEGER NOT NULL,
-        type TEXT NOT NULL
-       );`);
-      tx.executeSql(`
-       CREATE TABLE IF NOT EXISTS exerciseInstances (
-        exerciseInstanceId INTEGER PRIMARY KEY NOT NULL,
-        exerciseName TEXT NOT NULL,
-        workoutId INT NOT NULL
+    });
+  });
+
+  return promise;
+}
+
+export async function fetchRoutines() {
+  const routineNames = await fetchRoutineNamesList();
+  const getExercise = async (exerciseName) => {
+    let exercise = await fetchExercise(exerciseName);
+    return exercise;
+  };
+  const getRoutines = async (result) => {
+    let routines = [];
+    await Promise.all(
+      routineNames.map(async (routineName) => {
+        let routine = new Routine(routineName.routineName, []);
+        await Promise.all(
+          result.rows._array.map(async (routineExercise) => {
+            if (routineExercise.routineName === routineName.routineName) {
+              const exercise = await getExercise(routineExercise.exerciseName);
+              routine.exercises.push(exercise);
+            }
+          })
+        );
+        routines.push(routine);
+      })
+    );
+    return routines;
+  };
+  const result = await fetchRoutineExercises();
+  const routines = await getRoutines(result);
+  console.log("routines");
+  return routines;
+}
+
+export async function fetchRoutineExercises() {
+  const promise = new Promise((resolve, reject) => {
+    database.transaction((tx) => {
+      tx.executeSql(
+        `SELECT * FROM routineExerciseBridge;`,
+        [],
+        (_, result) => {
+          resolve(result);
+        },
+        (_, error) => {
+          reject(error);
+        }
       );
-       `);
-      tx.executeSql(`
-       CREATE TABLE IF NOT EXISTS exercises (
-        exerciseName TEXT PRIMARY KEY NOT NULL,
-        restTime TEXT,
-        exerciseNotes TEXT,
-        routineName TEXT
+    });
+  });
+  return promise;
+}
+
+export async function fetchExercise(exerciseName) {
+  const promise = new Promise((resolve, reject) => {
+    database.transaction((tx) => {
+      tx.executeSql(
+        `SELECT * FROM exercises WHERE exerciseName = ?`,
+        [exerciseName],
+        (_, result) => {
+          const exercise = new Exercise(
+            result.rows._array[0].exerciseName,
+            result.rows._array[0].restTime,
+            result.rows._array[0].exerciseNotes
+          );
+          resolve(exercise);
+        },
+        (_, error) => {
+          reject(error);
+        }
       );
-       `);
-      tx.executeSql(`
-      INSERT INTO exercises VALUES('Bicep Curl', '2:00', null, 'Pull B');
-       `);
+    });
+  });
+  return promise;
+}
+
+export function insertIntoRoutineExerciseBridge(routineExercise) {
+  const promise = new Promise((resolve, reject) => {
+    database.transaction((tx) => {
+      tx.executeSql(
+        `INSERT INTO routineExerciseBridge (exerciseName, routineName) VALUES (?, ?);`,
+        [routineExercise.exerciseName, routineExercise.routineName],
+        (_, result) => {
+          resolve(result);
+        },
+        (_, error) => {
+          reject(error);
+        }
+      );
     });
   });
 
@@ -93,17 +186,11 @@ export function fetchPastWorkouts() {
 export function fetchRoutineNamesList() {
   const promise = new Promise((resolve, reject) => {
     database.transaction((tx) => {
-      // get list of routine names
-      let routineNames = [];
       tx.executeSql(
-        `SELECT DISTINCT routineName FROM exercises WHERE routineName IS NOT NULL;`,
+        `SELECT * FROM routines;`,
         [],
         (_, result) => {
-          for (const rt of result.rows._array) {
-            routineNames.push(rt.routineName);
-          }
-          console.log("routineNames: " + routineNames);
-          resolve(routineNames);
+          resolve(result.rows._array);
         },
         (_, error) => {
           reject(error);
@@ -131,18 +218,6 @@ export function fetchRoutine(routineName) {
     });
   });
   return promise;
-}
-
-export async function fetchRoutines() {
-  const routineNames = await fetchRoutineNamesList();
-  let routines = [];
-  await Promise.all(
-    routineNames.map(async (routineName) => {
-      const routine = await fetchRoutine(routineName);
-      routines.push(routine);
-    })
-  );
-  return routines;
 }
 
 export function fetchExercises() {
@@ -180,13 +255,8 @@ export function insertExercise(exercise) {
   const promise = new Promise((resolve, reject) => {
     database.transaction((tx) => {
       tx.executeSql(
-        `INSERT INTO exercises (exerciseName, restTime, exerciseNotes, routineName) VALUES (?, ?, ?, ?)`,
-        [
-          exercise.name,
-          exercise.restTime,
-          exercise.notes,
-          exercise.routineName,
-        ],
+        `INSERT INTO exercises (exerciseName, restTime, exerciseNotes) VALUES (?, ?, ?);`,
+        [exercise.name, exercise.restTime, exercise.notes],
         (_, result) => {
           resolve(result);
         },
