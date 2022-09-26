@@ -86,12 +86,14 @@ export default function HeaderTimer({ restTimerAmount, rndm }) {
     );
   } else {
     renderThis = (
-      <IconButton
-        onPress={() => setShowSetTimerModal(true)}
-        icon={"timer-outline"}
-        color="white"
-        size={30}
-      />
+      <View style={{ margin: 7 }}>
+        <IconButton
+          onPress={() => setShowSetTimerModal(true)}
+          icon={"timer-outline"}
+          color="white"
+          size={30}
+        />
+      </View>
     );
   }
 

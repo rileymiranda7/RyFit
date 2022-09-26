@@ -269,3 +269,24 @@ export function insertExercise(exercise) {
 
   return promise;
 }
+
+export function deleteExerciseFromRoutine(exerciseName, routineName) {
+  console.log("inside deleteExerciseFromRoutine");
+  const promise = new Promise((resolve, reject) => {
+    database.transaction((tx) => {
+      tx.executeSql(
+        `DELETE FROM routineExerciseBridge WHERE exerciseName = ? AND routineName = ?`,
+        [exerciseName, routineName],
+        (_, result) => {
+          console.log("exercise removed from routine");
+          resolve(result);
+        },
+        (_, error) => {
+          reject(error);
+        }
+      );
+    });
+  });
+
+  return promise;
+}

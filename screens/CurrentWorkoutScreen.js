@@ -12,7 +12,10 @@ import { useIsFocused } from "@react-navigation/native";
 import ActiveWorkout from "../components/ActiveWorkout";
 import Exercise from "../components/Exercise";
 import SetTimerModal from "../components/UI/modals/SetTimerModal";
-import { fetchRoutines } from "../utils/database";
+import {
+  fetchRoutines,
+  insertIntoRoutineExerciseBridge,
+} from "../utils/database";
 import RoutineItem from "../components/UI/RoutineItem";
 import { RoutineExercise } from "../models/routineExercise";
 
@@ -22,16 +25,16 @@ export default function CurrentWorkoutScreen({ handleOnSetCompleted }) {
 
   const isFocused = useIsFocused();
 
-  useEffect(() => {
-    async function loadRoutines() {
-      /* insertIntoRoutineExerciseBridge(
-        new RoutineExercise("Calf Raise", "Lower A")
-      ); */
-      const routines = await fetchRoutines();
-      console.log(routines);
-      setLoadedRoutines(routines);
-    }
+  const loadRoutines = async () => {
+    /* insertIntoRoutineExerciseBridge(
+      new RoutineExercise("Lateral Raise", "Lower A")
+    ); */
+    const routines = await fetchRoutines();
+    console.log(routines);
+    setLoadedRoutines(routines);
+  };
 
+  useEffect(() => {
     if (isFocused) {
       loadRoutines();
     }
@@ -71,6 +74,7 @@ export default function CurrentWorkoutScreen({ handleOnSetCompleted }) {
                 <RoutineItem
                   routineName={routine.item.name}
                   exercises={routine.item.exercises}
+                  refreshRoutines={loadRoutines}
                 />
               );
             }}
@@ -98,9 +102,7 @@ export default function CurrentWorkoutScreen({ handleOnSetCompleted }) {
 }
 
 const styles = StyleSheet.create({
-  list: {
-    backgroundColor: "green",
-  },
+  list: {},
   activeWorkoutContainer: {
     flex: 1,
     minWidth: "100%",
@@ -109,7 +111,6 @@ const styles = StyleSheet.create({
   },
   routinesContainer: {
     flex: 1,
-    backgroundColor: "orange",
   },
   container: {
     backgroundColor: "black",
@@ -127,6 +128,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     fontSize: 20,
+    marginVertical: 5,
   },
   button: {
     borderRadius: 20,

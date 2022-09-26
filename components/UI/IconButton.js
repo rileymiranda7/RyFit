@@ -7,7 +7,7 @@ export default function IconButton({ icon, size, color, onPress }) {
       onPress={onPress}
       style={({ pressed }) => pressed && styles.pressed}
     >
-      <View style={styles.buttonContainer}>
+      <View>
         <Ionicons name={icon} size={size} color={color} />
       </View>
     </Pressable>
@@ -15,9 +15,6 @@ export default function IconButton({ icon, size, color, onPress }) {
 }
 
 const styles = StyleSheet.create({
-  buttonContainer: {
-    margin: 5,
-  },
   pressed: {
     opacity: 0.75,
   },
