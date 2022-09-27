@@ -59,12 +59,13 @@ export function init() {
   return promise;
 }
 
+export const getExercise = async (exerciseName) => {
+  let exercise = await fetchExercise(exerciseName);
+  return exercise;
+};
+
 export async function fetchRoutines() {
   const routineNames = await fetchRoutineNamesList();
-  const getExercise = async (exerciseName) => {
-    let exercise = await fetchExercise(exerciseName);
-    return exercise;
-  };
   const getRoutines = async (result) => {
     let routines = [];
     await Promise.all(
@@ -85,8 +86,27 @@ export async function fetchRoutines() {
   };
   const result = await fetchRoutineExercises();
   const routines = await getRoutines(result);
-  console.log("routines");
   return routines;
+}
+
+export async function fetchRoutine(routineName) {
+  const getRoutine = async (result) => {
+    let routine = new Routine(routineName, []);
+    await Promise.all(
+      result.rows._array.map(async (routineExercise) => {
+        if (routineExercise.routineName === routineName) {
+          const exercise = await getExercise(routineExercise.exerciseName);
+          routine.exercises.push(exercise);
+        }
+      })
+    );
+    return routine;
+  };
+  const result = await fetchRoutineExercises();
+  const routine = await getRoutine(result);
+  console.log("routine " + routineName + ":");
+  console.log(routine);
+  return routine;
 }
 
 export async function fetchRoutineExercises() {
@@ -191,25 +211,6 @@ export function fetchRoutineNamesList() {
         [],
         (_, result) => {
           resolve(result.rows._array);
-        },
-        (_, error) => {
-          reject(error);
-        }
-      );
-    });
-  });
-  return promise;
-}
-
-export function fetchRoutine(routineName) {
-  const promise = new Promise((resolve, reject) => {
-    database.transaction((tx) => {
-      tx.executeSql(
-        `SELECT * FROM exercises WHERE routineName = ?`,
-        [routineName],
-        (_, result) => {
-          const routine = new Routine(routineName, result.rows._array);
-          resolve(routine);
         },
         (_, error) => {
           reject(error);

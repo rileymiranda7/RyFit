@@ -4,11 +4,7 @@ import { Exercise } from "../../models/exercise";
 import IconButton from "./IconButton";
 import RoutineModal from "./modals/RoutineModal";
 
-export default function RoutineItem({
-  routineName,
-  exercises,
-  refreshRoutines,
-}) {
+export default function RoutineItem({ routineName, exercises }) {
   let exerciseList;
 
   const navigation = useNavigation();
@@ -21,13 +17,6 @@ export default function RoutineItem({
     exerciseList = exercises;
   }
 
-  /* 
-        <RoutineModal
-          closeModal={closeModal}
-          routineName={routineName}
-          exercises={exercises}
-        /> */
-
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
@@ -39,7 +28,6 @@ export default function RoutineItem({
           onPress={() => {
             navigation.navigate("RoutineModal", {
               routineName: routineName,
-              exercises: exercises,
             });
           }}
         />

@@ -10,16 +10,31 @@ import {
 import React, { useState, useEffect } from "react";
 import { useIsFocused } from "@react-navigation/native";
 
-import { fetchExercises, insertExercise } from "../utils/database";
+import {
+  fetchExercises,
+  insertExercise,
+  insertIntoRoutineExerciseBridge,
+} from "../utils/database";
 import ExerciseOption from "../components/UI/ExerciseOption";
 import { Exercise } from "../models/exercise";
+import { RoutineExercise } from "../models/routineExercise";
 
-export default function PickExerciseScreen({}) {
+export default function PickExerciseScreen({ navigation: { goBack }, route }) {
   const [selectedExercises, setSelectedExercises] = useState([]);
   const [exerciseNameInput, setExerciseNameInput] = useState("");
   const [loadedExercises, setLoadedExercises] = useState([]);
 
-  const submitPickedExerciseHandler = () => {};
+  const { routineName } = route.params;
+
+  const submitPickedExerciseHandler = async (exercises) => {
+    await Promise.all(
+      exercises.map(async (exercise) => {
+        const routineExercise = new RoutineExercise(exercise.name, routineName);
+        await insertIntoRoutineExerciseBridge(routineExercise);
+      })
+    );
+    goBack();
+  };
 
   const isFocused = useIsFocused();
 
@@ -130,16 +145,28 @@ export default function PickExerciseScreen({}) {
           }}
           keyExtractor={(e) => e.name}
           ListFooterComponent={
-            <Pressable
-              style={({ pressed }) => [
-                styles.button,
-                styles.buttonClose,
-                pressed && { opacity: 0.75 },
-              ]}
-              onPress={() => combineExercises()}
-            >
-              <Text style={styles.textStyle}>Add Exercise</Text>
-            </Pressable>
+            <View>
+              <Pressable
+                style={({ pressed }) => [
+                  styles.button,
+                  styles.buttonClose,
+                  pressed && { opacity: 0.75 },
+                ]}
+                onPress={() => combineExercises()}
+              >
+                <Text style={styles.textStyle}>Add Exercise</Text>
+              </Pressable>
+              <Pressable
+                style={({ pressed }) => [
+                  styles.button,
+                  styles.buttonCancel,
+                  pressed && { opacity: 0.75 },
+                ]}
+                onPress={() => goBack()}
+              >
+                <Text style={styles.textStyle}>Cancel</Text>
+              </Pressable>
+            </View>
           }
         />
       </View>
@@ -182,7 +209,6 @@ const styles = StyleSheet.create({
     minHeight: "100%",
     minWidth: "100%",
     backgroundColor: "#3e04c3",
-    borderRadius: 20,
     paddingHorizontal: 0,
     paddingVertical: 0,
     alignItems: "center",
@@ -199,6 +225,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 10,
     elevation: 2,
+    margin: 10,
   },
   buttonOpen: {
     backgroundColor: "#F194FF",
@@ -208,6 +235,10 @@ const styles = StyleSheet.create({
   },
   buttonClose: {
     backgroundColor: "#2196F3",
+  },
+  buttonCancel: {
+    borderWidth: 2,
+    borderColor: "white",
   },
   textStyle: {
     color: "white",

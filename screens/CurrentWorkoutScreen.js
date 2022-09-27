@@ -30,7 +30,6 @@ export default function CurrentWorkoutScreen({ handleOnSetCompleted }) {
       new RoutineExercise("Lateral Raise", "Lower A")
     ); */
     const routines = await fetchRoutines();
-    console.log(routines);
     setLoadedRoutines(routines);
   };
 

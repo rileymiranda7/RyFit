@@ -101,7 +101,7 @@ function CurrentWorkoutStackNavigator({ handleOnSetCompleted }) {
         component={PickExerciseScreen}
         title="Pick Exercise"
         options={{
-          presentation: "modal",
+          //presentation: "modal",
           headerShown: false,
         }}
       />

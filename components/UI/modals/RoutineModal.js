@@ -8,15 +8,32 @@ import {
   SafeAreaView,
   Alert,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 
 import CloseButton from "../CloseButton";
 import IconButton from "../IconButton";
-import { deleteExerciseFromRoutine } from "../../../utils/database";
-import PickExerciseModal from "./PickExerciseModal";
+import {
+  deleteExerciseFromRoutine,
+  fetchRoutine,
+} from "../../../utils/database";
 
 export default function RoutineModal({ navigation, route }) {
-  const { routineName, exercises } = route.params;
+  const [loadedExercises, setLoadedExercises] = useState([]);
+
+  const isFocused = useIsFocused();
+  const { routineName } = route.params;
+
+  const loadRoutine = async (routineName) => {
+    const routine = await fetchRoutine(routineName);
+    setLoadedExercises(routine.exercises);
+  };
+
+  useEffect(() => {
+    if (isFocused && routineName) {
+      loadRoutine(routineName);
+    }
+  }, [routineName, isFocused]);
 
   const removeExerciseFromRoutine = async (exerciseName, routineName) => {
     await deleteExerciseFromRoutine(exerciseName, routineName);
@@ -38,6 +55,10 @@ export default function RoutineModal({ navigation, route }) {
     ]);
   }
 
+  if (!loadedExercises || loadedExercises.length === 0) {
+    return <Text>Loading...</Text>;
+  }
+
   return (
     <SafeAreaView>
       <View style={styles.modalView}>
@@ -56,7 +77,7 @@ export default function RoutineModal({ navigation, route }) {
           />
         </View>
         <View style={styles.exercises}>
-          {exercises.map((exercise, index) => {
+          {loadedExercises.map((exercise, index) => {
             return (
               <View style={styles.exerciseRow} key={index}>
                 <Pressable
@@ -85,10 +106,23 @@ export default function RoutineModal({ navigation, route }) {
             styles.buttonColor,
             pressed && { opacity: 0.75 },
           ]}
-          onPress={() => navigation.navigate("PickExerciseModal")}
+          onPress={() =>
+            navigation.navigate("PickExerciseModal", {
+              routineName: routineName,
+            })
+          }
         >
           <View style={styles.addButtonRow}>
-            <IconButton icon="add-circle" size={40} color={"green"} />
+            <IconButton
+              onPress={() =>
+                navigation.navigate("PickExerciseModal", {
+                  routineName: routineName,
+                })
+              }
+              icon="add-circle"
+              size={40}
+              color={"green"}
+            />
             <Text style={styles.textStyle}>Add Exercise</Text>
           </View>
         </Pressable>
