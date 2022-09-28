@@ -36,6 +36,7 @@ export default function RoutineModal({ navigation, route }) {
 
   const removeExerciseFromRoutine = async (exerciseName, routineName) => {
     await deleteExerciseFromRoutine(exerciseName, routineName);
+    loadRoutine(routineName);
   };
 
   function shouldRemoveExerciseFromRoutine(exerciseName, routineName) {

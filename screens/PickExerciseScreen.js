@@ -13,6 +13,7 @@ import { useIsFocused, useNavigation } from "@react-navigation/native";
 
 import {
   fetchExercises,
+  fetchRoutine,
   insertExercise,
   insertIntoRoutineExerciseBridge,
 } from "../utils/database";
@@ -26,28 +27,38 @@ export default function PickExerciseScreen({ route }) {
   const [selectedExercises, setSelectedExercises] = useState([]);
   const [exerciseNameInput, setExerciseNameInput] = useState("");
   const [loadedExercises, setLoadedExercises] = useState([]);
+  const [loadedRoutineExercises, setLoadedRoutineExercises] = useState([]);
 
   const { routineName } = route.params;
   const navigation = useNavigation();
 
   const submitPickedExerciseHandler = async (exercises) => {
+    const loadedRoutineExerNames = loadedRoutineExercises.map((exer) => {
+      return exer.name;
+    });
+    const filteredExercises = exercises.filter(
+      (exer) => !loadedRoutineExerNames.includes(exer.name)
+    );
     await Promise.all(
-      exercises.map(async (exercise) => {
+      filteredExercises.map(async (exercise) => {
         const routineExercise = new RoutineExercise(exercise.name, routineName);
         await insertIntoRoutineExerciseBridge(routineExercise);
       })
     );
-    goBack();
+    navigation.goBack();
   };
 
   const isFocused = useIsFocused();
 
   async function loadExercises() {
     const exercises = await fetchExercises();
-    console.log("loadedExercises: ");
-    console.log(JSON.stringify(exercises));
     setLoadedExercises(exercises);
   }
+
+  const loadRoutine = async (routineName) => {
+    const routine = await fetchRoutine(routineName);
+    setLoadedRoutineExercises(routine.exercises);
+  };
 
   const exerciseSelected = (exercise) => {
     setSelectedExercises((currArr) => {
@@ -125,10 +136,11 @@ export default function PickExerciseScreen({ route }) {
   };
 
   useEffect(() => {
-    if (isFocused) {
+    if (isFocused && routineName) {
       loadExercises();
+      loadRoutine(routineName);
     }
-  }, [isFocused]);
+  }, [isFocused, routineName]);
 
   let pickExerciseList;
 
@@ -148,22 +160,6 @@ export default function PickExerciseScreen({ route }) {
             );
           }}
           keyExtractor={(e) => e.name}
-          /* ListFooterComponent={
-            <View>
-              <Pressable
-                style={({ pressed }) => [
-                  styles.button,
-                  styles.buttonClose,
-                  pressed && { opacity: 0.75 },
-                ]}
-                onPress={() => combineExercises()}
-              >
-                <Text style={styles.textStyle}>
-                  {routineName ? "Add to " + routineName : "Add to Workout"}
-                </Text>
-              </Pressable>
-            </View>
-          } */
         />
       </View>
     );

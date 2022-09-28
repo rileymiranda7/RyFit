@@ -104,8 +104,6 @@ export async function fetchRoutine(routineName) {
   };
   const result = await fetchRoutineExercises();
   const routine = await getRoutine(result);
-  console.log("routine " + routineName + ":");
-  console.log(routine);
   return routine;
 }
 
@@ -252,7 +250,6 @@ export function fetchExercises() {
 }
 
 export function insertExercise(exercise) {
-  console.log("inside insertExercise");
   const promise = new Promise((resolve, reject) => {
     database.transaction((tx) => {
       tx.executeSql(
@@ -272,14 +269,12 @@ export function insertExercise(exercise) {
 }
 
 export function deleteExerciseFromRoutine(exerciseName, routineName) {
-  console.log("inside deleteExerciseFromRoutine");
   const promise = new Promise((resolve, reject) => {
     database.transaction((tx) => {
       tx.executeSql(
         `DELETE FROM routineExerciseBridge WHERE exerciseName = ? AND routineName = ?`,
         [exerciseName, routineName],
         (_, result) => {
-          console.log("exercise removed from routine");
           resolve(result);
         },
         (_, error) => {

@@ -27,8 +27,6 @@ export default function PickExerciseModal({
 
   async function loadExercises() {
     const exercises = await fetchExercises();
-    console.log("loadedExercises: ");
-    console.log(JSON.stringify(exercises));
     setLoadedExercises(exercises);
   }
 
