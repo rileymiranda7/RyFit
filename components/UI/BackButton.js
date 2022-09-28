@@ -3,10 +3,10 @@ import React from "react";
 
 import IconButton from "./IconButton";
 
-export default function CloseButton({ onPress, size, color }) {
+export default function BackButton({ onPress, size, color }) {
   return (
     <IconButton
-      icon="close-circle"
+      icon="arrow-back-circle-outline"
       onPress={onPress}
       size={size}
       color={color}

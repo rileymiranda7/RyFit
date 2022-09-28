@@ -92,7 +92,7 @@ function CurrentWorkoutStackNavigator({ handleOnSetCompleted }) {
         component={RoutineModal}
         title="Routine"
         options={{
-          presentation: "modal",
+          //presentation: "modal",
           headerShown: false,
         }}
       />

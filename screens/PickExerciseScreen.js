@@ -6,9 +6,10 @@ import {
   TextInput,
   FlatList,
   Alert,
+  SafeAreaView,
 } from "react-native";
 import React, { useState, useEffect } from "react";
-import { useIsFocused } from "@react-navigation/native";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 
 import {
   fetchExercises,
@@ -18,13 +19,16 @@ import {
 import ExerciseOption from "../components/UI/ExerciseOption";
 import { Exercise } from "../models/exercise";
 import { RoutineExercise } from "../models/routineExercise";
+import IconButton from "../components/UI/IconButton";
+import BackButton from "../components/UI/BackButton";
 
-export default function PickExerciseScreen({ navigation: { goBack }, route }) {
+export default function PickExerciseScreen({ route }) {
   const [selectedExercises, setSelectedExercises] = useState([]);
   const [exerciseNameInput, setExerciseNameInput] = useState("");
   const [loadedExercises, setLoadedExercises] = useState([]);
 
   const { routineName } = route.params;
+  const navigation = useNavigation();
 
   const submitPickedExerciseHandler = async (exercises) => {
     await Promise.all(
@@ -131,7 +135,7 @@ export default function PickExerciseScreen({ navigation: { goBack }, route }) {
   if (loadedExercises && loadedExercises.length > 0) {
     pickExerciseList = (
       <View style={styles.exerciseList}>
-        <Text>Pick Exercise Below</Text>
+        <Text style={styles.smallTitle}>Pick Exercises Below</Text>
         <FlatList
           data={loadedExercises}
           renderItem={(e) => {
@@ -144,7 +148,7 @@ export default function PickExerciseScreen({ navigation: { goBack }, route }) {
             );
           }}
           keyExtractor={(e) => e.name}
-          ListFooterComponent={
+          /* ListFooterComponent={
             <View>
               <Pressable
                 style={({ pressed }) => [
@@ -154,20 +158,12 @@ export default function PickExerciseScreen({ navigation: { goBack }, route }) {
                 ]}
                 onPress={() => combineExercises()}
               >
-                <Text style={styles.textStyle}>Add Exercise</Text>
-              </Pressable>
-              <Pressable
-                style={({ pressed }) => [
-                  styles.button,
-                  styles.buttonCancel,
-                  pressed && { opacity: 0.75 },
-                ]}
-                onPress={() => goBack()}
-              >
-                <Text style={styles.textStyle}>Cancel</Text>
+                <Text style={styles.textStyle}>
+                  {routineName ? "Add to " + routineName : "Add to Workout"}
+                </Text>
               </Pressable>
             </View>
-          }
+          } */
         />
       </View>
     );
@@ -176,9 +172,22 @@ export default function PickExerciseScreen({ navigation: { goBack }, route }) {
   }
 
   return (
-    <View>
-      <View style={styles.modalView}>
-        <Text style={styles.modalText}>Select Exercise</Text>
+    <SafeAreaView>
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <IconButton
+            icon="trash"
+            onPress={() => {}}
+            size={40}
+            color={"#3e04c3"}
+          />
+          <Text style={styles.title}>Select Exercises</Text>
+          <BackButton
+            onPress={() => navigation.goBack()}
+            size={40}
+            color={"#7145eb"}
+          />
+        </View>
         <View style={styles.inputContainer}>
           <TextInput
             style={styles.input}
@@ -188,38 +197,57 @@ export default function PickExerciseScreen({ navigation: { goBack }, route }) {
           />
         </View>
         {pickExerciseList}
+        <View style={styles.addButtonContainer}>
+          <Pressable
+            style={({ pressed }) => [
+              styles.button,
+              styles.buttonClose,
+              pressed && { opacity: 0.75 },
+            ]}
+            onPress={() => combineExercises()}
+          >
+            <Text style={styles.textStyle}>
+              {routineName ? "Add to " + routineName : "Add to Workout"}
+            </Text>
+          </Pressable>
+        </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  exerciseList: {
-    minWidth: "80%",
+  addButtonContainer: {
+    marginVertical: 10,
   },
-  exerciseItemText: {
+  title: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
+    fontSize: 25,
+  },
+  smallTitle: {
+    color: "white",
+    fontWeight: "bold",
     fontSize: 20,
   },
-  container: {
-    flex: 1,
-    paddingVertical: 5,
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginHorizontal: 8,
+    marginVertical: 12,
   },
-  modalView: {
+  exerciseList: {
+    flex: 1,
+    minWidth: "100%",
+    padding: 10,
+  },
+  container: {
     flex: 1,
     minHeight: "100%",
     minWidth: "100%",
     backgroundColor: "#3e04c3",
-    paddingHorizontal: 0,
-    paddingVertical: 0,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
   },
   button: {
     borderRadius: 20,
@@ -227,29 +255,14 @@ const styles = StyleSheet.create({
     elevation: 2,
     margin: 10,
   },
-  buttonOpen: {
-    backgroundColor: "#F194FF",
-  },
-  endWorkoutButton: {
-    backgroundColor: "#ff0000",
-  },
   buttonClose: {
     backgroundColor: "#2196F3",
-  },
-  buttonCancel: {
-    borderWidth: 2,
-    borderColor: "white",
   },
   textStyle: {
     color: "white",
     fontWeight: "bold",
     textAlign: "center",
     fontSize: 20,
-  },
-  modalText: {
-    marginBottom: 20,
-    textAlign: "center",
-    fontSize: 30,
   },
   input: {
     fontSize: 25,
@@ -260,10 +273,10 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     backgroundColor: "#b8bbbe",
-    minWidth: "80%",
     height: "8%",
     alignItems: "center",
     justifyContent: "center",
     marginVertical: 20,
+    marginHorizontal: 35,
   },
 });
