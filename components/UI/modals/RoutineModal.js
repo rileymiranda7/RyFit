@@ -55,10 +55,6 @@ export default function RoutineModal({ navigation, route }) {
     ]);
   }
 
-  if (!loadedExercises || loadedExercises.length === 0) {
-    return <Text>Loading...</Text>;
-  }
-
   return (
     <SafeAreaView>
       <View style={styles.container}>
@@ -77,28 +73,32 @@ export default function RoutineModal({ navigation, route }) {
           />
         </View>
         <View style={styles.exercises}>
-          {loadedExercises.map((exercise, index) => {
-            return (
-              <View style={styles.exerciseRow} key={index}>
-                <Pressable
-                  style={({ pressed }) => [pressed && { opacity: 0.75 }]}
-                >
-                  <IconButton
-                    icon="trash"
-                    onPress={() => {
-                      shouldRemoveExerciseFromRoutine(
-                        exercise.name,
-                        routineName
-                      );
-                    }}
-                    size={30}
-                    color={"#1f0263"}
-                  />
-                </Pressable>
-                <Text style={styles.exerciseTextStyle}>{exercise.name}</Text>
-              </View>
-            );
-          })}
+          {(!loadedExercises || loadedExercises.length === 0) && (
+            <Text>No exercises found in routine. Click Add Exercise</Text>
+          )}
+          {(loadedExercises || loadedExercises.length > 0) &&
+            loadedExercises.map((exercise, index) => {
+              return (
+                <View style={styles.exerciseRow} key={index}>
+                  <Pressable
+                    style={({ pressed }) => [pressed && { opacity: 0.75 }]}
+                  >
+                    <IconButton
+                      icon="trash"
+                      onPress={() => {
+                        shouldRemoveExerciseFromRoutine(
+                          exercise.name,
+                          routineName
+                        );
+                      }}
+                      size={30}
+                      color={"#1f0263"}
+                    />
+                  </Pressable>
+                  <Text style={styles.exerciseTextStyle}>{exercise.name}</Text>
+                </View>
+              );
+            })}
         </View>
         <Pressable
           style={({ pressed }) => [

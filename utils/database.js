@@ -75,7 +75,7 @@ export async function fetchRoutines() {
           result.rows._array.map(async (routineExercise) => {
             if (routineExercise.routineName === routineName.routineName) {
               const exercise = await getExercise(routineExercise.exerciseName);
-              routine.exercises.push(exercise);
+              routine?.exercises?.push(exercise);
             }
           })
         );
@@ -154,6 +154,25 @@ export function insertIntoRoutineExerciseBridge(routineExercise) {
       tx.executeSql(
         `INSERT INTO routineExerciseBridge (exerciseName, routineName) VALUES (?, ?);`,
         [routineExercise.exerciseName, routineExercise.routineName],
+        (_, result) => {
+          resolve(result);
+        },
+        (_, error) => {
+          reject(error);
+        }
+      );
+    });
+  });
+
+  return promise;
+}
+
+export async function insertEmptyRoutine(routineName) {
+  const promise = new Promise((resolve, reject) => {
+    database.transaction((tx) => {
+      tx.executeSql(
+        `INSERT INTO routines (routineName, dateCreated) VALUES (?, DATETIME('now'));`,
+        [routineName],
         (_, result) => {
           resolve(result);
         },

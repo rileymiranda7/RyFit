@@ -5,30 +5,24 @@ import {
   StyleSheet,
   Pressable,
   FlatList,
+  TextInput,
 } from "react-native";
 import React, { useState, useLayoutEffect, useEffect } from "react";
 import { useIsFocused } from "@react-navigation/native";
 
-import ActiveWorkout from "../components/ActiveWorkout";
-import Exercise from "../components/Exercise";
-import SetTimerModal from "../components/UI/modals/SetTimerModal";
-import {
-  fetchRoutines,
-  insertIntoRoutineExerciseBridge,
-} from "../utils/database";
+import { fetchRoutines, insertEmptyRoutine } from "../utils/database";
 import RoutineItem from "../components/UI/RoutineItem";
-import { RoutineExercise } from "../models/routineExercise";
+import ActiveWorkout from "../components/ActiveWorkout";
 
 export default function CurrentWorkoutScreen({ handleOnSetCompleted }) {
   const [workoutInProgress, setWorkoutInProgress] = useState(false);
   const [loadedRoutines, setLoadedRoutines] = useState();
+  const [addingRoutine, setAddingRoutine] = useState(false);
+  const [routineName, setRoutineName] = useState("");
 
   const isFocused = useIsFocused();
 
   const loadRoutines = async () => {
-    /* insertIntoRoutineExerciseBridge(
-      new RoutineExercise("Lateral Raise", "Lower A")
-    ); */
     const routines = await fetchRoutines();
     setLoadedRoutines(routines);
   };
@@ -43,6 +37,18 @@ export default function CurrentWorkoutScreen({ handleOnSetCompleted }) {
     setWorkoutInProgress(true);
   };
 
+  const showRoutineInput = () => {
+    setAddingRoutine(!addingRoutine);
+  };
+
+  const createRoutine = async () => {
+    if (routineName != "") {
+      await insertEmptyRoutine(routineName);
+      loadRoutines();
+      setAddingRoutine(false);
+    }
+  };
+
   const onEndedWorkout = () => {
     setWorkoutInProgress(false);
   };
@@ -55,17 +61,50 @@ export default function CurrentWorkoutScreen({ handleOnSetCompleted }) {
     );
   }
 
+  let createRoutineRender;
+
+  if (addingRoutine) {
+    createRoutineRender = (
+      <View>
+        <TextInput
+          style={styles.input}
+          onChangeText={setRoutineName}
+          value={routineName}
+          placeholder="Enter Routine Name"
+        />
+        <View style={styles.routineInputRow}>
+          <Pressable
+            style={styles.routineButton}
+            onPress={() => setAddingRoutine(false)}
+          >
+            <Text style={styles.routineButtonText}>Cancel</Text>
+          </Pressable>
+          <Pressable
+            style={styles.routineButton}
+            onPress={() => createRoutine()}
+          >
+            <Text style={styles.routineButtonText}>Add</Text>
+          </Pressable>
+        </View>
+      </View>
+    );
+  } else {
+    createRoutineRender = (
+      <Button title="Create New Routine" onPress={showRoutineInput} />
+    );
+  }
+
   let workoutNotStartedScreen = (
     <View style={styles.container}>
       <Text style={styles.textStyle}>
         Choose Routine or Start Empty Workout
       </Text>
       <Button title="Begin Empy Workout" onPress={beginWorkoutPressedHandler} />
+      {createRoutineRender}
       {loadedRoutines !== undefined && loadedRoutines.length > 0 && (
         <View style={styles.routinesContainer}>
           <FlatList
             data={loadedRoutines}
-            contentContainerStyle={styles.list}
             columnWrapperStyle={{ justifyContent: "space-between" }}
             keyExtractor={(e) => e.name}
             renderItem={(routine) => {
@@ -101,7 +140,21 @@ export default function CurrentWorkoutScreen({ handleOnSetCompleted }) {
 }
 
 const styles = StyleSheet.create({
-  list: {},
+  routineButton: {
+    padding: 6,
+    margin: 5,
+    minWidth: "20%",
+    borderRadius: 20,
+  },
+  routineButtonText: {
+    color: "#007AFF",
+    fontSize: 20,
+    textAlign: "center",
+  },
+  routineInputRow: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+  },
   activeWorkoutContainer: {
     flex: 1,
     minWidth: "100%",
@@ -137,5 +190,12 @@ const styles = StyleSheet.create({
   },
   buttonClose: {
     backgroundColor: "#2196F3",
+  },
+  input: {
+    fontSize: 20,
+    backgroundColor: "#b8bbbe",
+    padding: 4,
+    minWidth: "70%",
+    minHeight: "7%",
   },
 });
