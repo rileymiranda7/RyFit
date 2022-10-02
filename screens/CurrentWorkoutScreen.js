@@ -52,15 +52,6 @@ export default function CurrentWorkoutScreen({ handleOnSetCompleted }) {
   const onEndedWorkout = () => {
     setWorkoutInProgress(false);
   };
-
-  if (!loadedRoutines || loadedRoutines.length === 0) {
-    return (
-      <View>
-        <Text style={{ color: "black" }}>No routines found</Text>
-      </View>
-    );
-  }
-
   let createRoutineRender;
 
   if (addingRoutine) {

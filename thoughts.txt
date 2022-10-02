@@ -39,3 +39,17 @@ When to insert/modify data in database:
 - When a user looks at the history of an exercise
 
 Need to add screens for these first
+
+run on iphone simulator on mac: 
+xcode > xcode tab > simulator
+run expo start + i
+
+
+// database.js init function not executing all
+sql statements?
+
+maybe just not working because routines saved on different
+device
+
+order of routines gets changed after exercise added:
+  -  routine with exercise added get put at the bottom

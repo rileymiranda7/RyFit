@@ -5,7 +5,15 @@ import { Routine } from "../models/routine";
 
 const database = SQLite.openDatabase("RyFit.db");
 
-export function init() {
+export async function init() {
+  await initRoutineExerciseBridge();
+  await initExercises();
+  await initRoutines();
+  await initWorkouts();
+  await initSets();
+  await initExerciseInstances();
+}
+export function initRoutineExerciseBridge() {
   const promise = new Promise((resolve, reject) => {
     database.transaction((tx) => {
       tx.executeSql(
@@ -17,21 +25,97 @@ export function init() {
           FOREIGN KEY(exerciseName) REFERENCES exercises(exerciseName),
           FOREIGN KEY(routineName) REFERENCES routines(routineName)
         );
+      `,
+        [],
+        () => {
+          resolve();
+        },
+        (_, error) => {
+          reject(error);
+        }
+      );
+    });
+  });
+
+  return promise;
+}
+export function initExercises() {
+  const promise = new Promise((resolve, reject) => {
+    database.transaction((tx) => {
+      tx.executeSql(
+        `
         CREATE TABLE IF NOT EXISTS exercises (
           exerciseName TEXT PRIMARY KEY NOT NULL,
           restTime TEXT,
           exerciseNotes TEXT
         );
+      `,
+        [],
+        () => {
+          resolve();
+        },
+        (_, error) => {
+          reject(error);
+        }
+      );
+    });
+  });
+
+  return promise;
+}
+export function initRoutines() {
+  const promise = new Promise((resolve, reject) => {
+    database.transaction((tx) => {
+      tx.executeSql(
+        `
         CREATE TABLE IF NOT EXISTS routines (
           routineName TEXT PRIMARY KEY NOT NULL,
           dateCreated DATE NOT NULL
         );
+      `,
+        [],
+        () => {
+          resolve();
+        },
+        (_, error) => {
+          reject(error);
+        }
+      );
+    });
+  });
+
+  return promise;
+}
+export function initWorkouts() {
+  const promise = new Promise((resolve, reject) => {
+    database.transaction((tx) => {
+      tx.executeSql(
+        `
         CREATE TABLE IF NOT EXISTS workouts (
           workoutId INTEGER PRIMARY KEY NOT NULL,
           startTime DATE NOT NULL,
           duration INTEGER NOT NULL,
           name TEXT NOT NULL
         );
+      `,
+        [],
+        () => {
+          resolve();
+        },
+        (_, error) => {
+          reject(error);
+        }
+      );
+    });
+  });
+
+  return promise;
+}
+export function initSets() {
+  const promise = new Promise((resolve, reject) => {
+    database.transaction((tx) => {
+      tx.executeSql(
+        `
         CREATE TABLE IF NOT EXISTS sets (
           setNumber INTEGER PRIMARY KEY NOT NULL,
           exerciseInstanceId INTEGER NOT NULL,
@@ -39,6 +123,25 @@ export function init() {
           reps INTEGER NOT NULL,
           type TEXT NOT NULL
         );
+      `,
+        [],
+        () => {
+          resolve();
+        },
+        (_, error) => {
+          reject(error);
+        }
+      );
+    });
+  });
+
+  return promise;
+}
+export function initExerciseInstances() {
+  const promise = new Promise((resolve, reject) => {
+    database.transaction((tx) => {
+      tx.executeSql(
+        `
         CREATE TABLE IF NOT EXISTS exerciseInstances (
           exerciseInstanceId INTEGER PRIMARY KEY NOT NULL,
           exerciseName TEXT NOT NULL,
@@ -58,6 +161,8 @@ export function init() {
 
   return promise;
 }
+
+
 
 export const getExercise = async (exerciseName) => {
   let exercise = await fetchExercise(exerciseName);
