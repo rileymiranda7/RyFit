@@ -96,7 +96,6 @@ export default function CurrentWorkoutScreen({ handleOnSetCompleted }) {
         <View style={styles.routinesContainer}>
           <FlatList
             data={loadedRoutines}
-            columnWrapperStyle={{ justifyContent: "space-between" }}
             keyExtractor={(e) => e.name}
             renderItem={(routine) => {
               return (

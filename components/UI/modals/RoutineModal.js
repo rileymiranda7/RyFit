@@ -15,6 +15,7 @@ import IconButton from "../IconButton";
 import {
   deleteExerciseFromRoutine,
   fetchRoutine,
+  deleteRoutine,
 } from "../../../utils/database";
 
 export default function RoutineModal({ navigation, route }) {
@@ -39,6 +40,11 @@ export default function RoutineModal({ navigation, route }) {
     loadRoutine(routineName);
   };
 
+  const removeRoutine = async (routineName) => {
+    await deleteRoutine(routineName);
+    navigation.goBack();
+  };
+
   function shouldRemoveExerciseFromRoutine(exerciseName, routineName) {
     Alert.alert("Remove Exercise", "Remove exercise from routine?", [
       {
@@ -55,13 +61,31 @@ export default function RoutineModal({ navigation, route }) {
     ]);
   }
 
+  function shouldRemoveRoutine(routineName) {
+    Alert.alert("Remove Routine", "Delete Routine?", [
+      {
+        text: "Cancel",
+        onPress: () => {},
+        style: "cancel",
+      },
+      {
+        text: "Delete",
+        onPress: () => {
+          removeRoutine(routineName);
+        },
+      },
+    ]);
+  }
+
   return (
     <SafeAreaView>
       <View style={styles.container}>
         <View style={styles.header}>
           <IconButton
             icon="trash"
-            onPress={() => {}}
+            onPress={() => {
+              shouldRemoveRoutine(routineName);
+            }}
             size={40}
             color={"#1f0263"}
           />

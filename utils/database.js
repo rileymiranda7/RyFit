@@ -162,8 +162,6 @@ export function initExerciseInstances() {
   return promise;
 }
 
-
-
 export const getExercise = async (exerciseName) => {
   let exercise = await fetchExercise(exerciseName);
   return exercise;
@@ -173,20 +171,16 @@ export async function fetchRoutines() {
   const routineNames = await fetchRoutineNamesList();
   const getRoutines = async (result) => {
     let routines = [];
-    await Promise.all(
-      routineNames.map(async (routineName) => {
-        let routine = new Routine(routineName.routineName, []);
-        await Promise.all(
-          result.rows._array.map(async (routineExercise) => {
-            if (routineExercise.routineName === routineName.routineName) {
-              const exercise = await getExercise(routineExercise.exerciseName);
-              routine?.exercises?.push(exercise);
-            }
-          })
-        );
-        routines.push(routine);
-      })
-    );
+    for (const routineName of routineNames) {
+      let routine = new Routine(routineName.routineName, []);
+      for (const routineExercise of result.rows._array) {
+        if (routineExercise.routineName === routineName.routineName) {
+          const exercise = await getExercise(routineExercise.exerciseName);
+          routine?.exercises?.push(exercise);
+        }
+      }
+      routines.push(routine);
+    }
     return routines;
   };
   const result = await fetchRoutineExercises();
@@ -329,7 +323,7 @@ export function fetchRoutineNamesList() {
   const promise = new Promise((resolve, reject) => {
     database.transaction((tx) => {
       tx.executeSql(
-        `SELECT * FROM routines;`,
+        `SELECT * FROM routines ORDER BY dateCreated ASC;`,
         [],
         (_, result) => {
           resolve(result.rows._array);
@@ -409,4 +403,47 @@ export function deleteExerciseFromRoutine(exerciseName, routineName) {
   });
 
   return promise;
+}
+
+export function deleteRoutineFromRoutineExerciseBridge(routineName) {
+  const promise = new Promise((resolve, reject) => {
+    database.transaction((tx) => {
+      tx.executeSql(
+        `DELETE FROM routineExerciseBridge WHERE routineName = ?`,
+        [routineName],
+        (_, result) => {
+          resolve(result);
+        },
+        (_, error) => {
+          reject(error);
+        }
+      );
+    });
+  });
+
+  return promise;
+}
+
+export function deleteRoutineFromRoutines(routineName) {
+  const promise = new Promise((resolve, reject) => {
+    database.transaction((tx) => {
+      tx.executeSql(
+        `DELETE FROM routines WHERE routineName = ?`,
+        [routineName],
+        (_, result) => {
+          resolve(result);
+        },
+        (_, error) => {
+          reject(error);
+        }
+      );
+    });
+  });
+
+  return promise;
+}
+
+export async function deleteRoutine(routineName) {
+  await deleteRoutineFromRoutineExerciseBridge(routineName);
+  await deleteRoutineFromRoutines(routineName);
 }
