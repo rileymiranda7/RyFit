@@ -1,15 +1,5 @@
 import { useState } from "react";
-import {
-  View,
-  Text,
-  Button,
-  Modal,
-  StyleSheet,
-  Pressable,
-  TextInput,
-  ScrollView,
-  FlatList,
-} from "react-native";
+import { View, Text, StyleSheet, Pressable, FlatList } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 
 import ExerciseList from "./ExerciseList";

@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Pressable, Alert } from "react-native";
 import { Exercise } from "../../models/exercise";
 import IconButton from "./IconButton";
 import RoutineModal from "./modals/RoutineModal";
@@ -8,6 +8,24 @@ export default function RoutineItem({ routineName, exercises }) {
   let exerciseList;
 
   const navigation = useNavigation();
+
+  function shouldBeginRoutine(routineName) {
+    Alert.alert(
+      `Begin ${routineName} ?`,
+      "Start workout with this exercise routine?",
+      [
+        {
+          text: "Cancel",
+          onPress: () => {},
+          style: "cancel",
+        },
+        {
+          text: "Start",
+          onPress: () => {},
+        },
+      ]
+    );
+  }
 
   if (exercises.length > 4) {
     let shortenedList = exercises.slice(0, 4);
@@ -18,7 +36,12 @@ export default function RoutineItem({ routineName, exercises }) {
   }
 
   return (
-    <View style={styles.container}>
+    <Pressable
+      style={({ pressed }) => [pressed && styles.pressed, styles.container]}
+      onPress={() => {
+        shouldBeginRoutine(routineName);
+      }}
+    >
       <View style={styles.headerContainer}>
         <Text style={styles.routineNameStyle}>{routineName}</Text>
         <IconButton
@@ -39,7 +62,7 @@ export default function RoutineItem({ routineName, exercises }) {
           </Text>
         );
       })}
-    </View>
+    </Pressable>
   );
 }
 
@@ -66,5 +89,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+  },
+  pressed: {
+    opacity: 0.75,
   },
 });
