@@ -21,7 +21,11 @@ export default function RoutineItem({ routineName, exercises }) {
         },
         {
           text: "Start",
-          onPress: () => {},
+          onPress: () => {
+            navigation.navigate("ActivateWorkout", {
+              routineName: routineName,
+            });
+          },
         },
       ]
     );

@@ -1,14 +1,35 @@
 import { useState } from "react";
 import { View, Text, StyleSheet, Pressable, FlatList } from "react-native";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import {
+  useNavigation,
+  useRoute,
+  useIsFocused,
+} from "@react-navigation/native";
 
-import ExerciseList from "./ExerciseList";
-import Exercise from "./Exercise";
-import PickExerciseModal from "./UI/modals/PickExerciseModal";
+import Exercise from "../components/Exercise";
+import PickExerciseModal from "../components/UI/modals/PickExerciseModal";
 
-export default function ActiveWorkout({ handleOnSetCompleted, endWorkout }) {
+export default function ActiveWorkoutScreen({
+  handleOnSetCompleted,
+  endWorkout,
+}) {
   const [exerciseList, setExerciseList] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
+
+  const route = useRoute();
+  const isFocused = useIsFocused();
+
+  const { routineName } = route.params;
+
+  const loadRoutine = async (routineName) => {};
+
+  useEffect(() => {
+    if (isFocused && routineName) {
+      if (routineName !== "BLANK") {
+        loadRoutine(routineName);
+      }
+    }
+  }, [isFocused, routineName]);
 
   function submitPickedExerciseHandler(exercises) {
     exercises.forEach((exercise) => {

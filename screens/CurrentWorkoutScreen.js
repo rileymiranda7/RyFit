@@ -8,19 +8,19 @@ import {
   TextInput,
 } from "react-native";
 import React, { useState, useLayoutEffect, useEffect } from "react";
-import { useIsFocused } from "@react-navigation/native";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 
 import { fetchRoutines, insertEmptyRoutine } from "../utils/database";
 import RoutineItem from "../components/UI/RoutineItem";
-import ActiveWorkout from "../components/ActiveWorkout";
 
-export default function CurrentWorkoutScreen({ handleOnSetCompleted }) {
-  const [workoutInProgress, setWorkoutInProgress] = useState(false);
+export default function CurrentWorkoutScreen() {
   const [loadedRoutines, setLoadedRoutines] = useState();
   const [addingRoutine, setAddingRoutine] = useState(false);
   const [routineName, setRoutineName] = useState("");
 
   const isFocused = useIsFocused();
+
+  const navigation = useNavigation();
 
   const loadRoutines = async () => {
     const routines = await fetchRoutines();
@@ -32,10 +32,6 @@ export default function CurrentWorkoutScreen({ handleOnSetCompleted }) {
       loadRoutines();
     }
   }, [isFocused]);
-
-  const beginWorkoutPressedHandler = () => {
-    setWorkoutInProgress(true);
-  };
 
   const showRoutineInput = () => {
     setAddingRoutine(!addingRoutine);
@@ -49,9 +45,6 @@ export default function CurrentWorkoutScreen({ handleOnSetCompleted }) {
     }
   };
 
-  const onEndedWorkout = () => {
-    setWorkoutInProgress(false);
-  };
   let createRoutineRender;
 
   if (addingRoutine) {
@@ -90,7 +83,14 @@ export default function CurrentWorkoutScreen({ handleOnSetCompleted }) {
       <Text style={styles.textStyle}>
         Choose Routine or Start Empty Workout
       </Text>
-      <Button title="Begin Empy Workout" onPress={beginWorkoutPressedHandler} />
+      <Button
+        title="Begin Empy Workout"
+        onPress={() => {
+          navigation.navigate("ActiveWorkout", {
+            routineName: "BLANK",
+          });
+        }}
+      />
       {createRoutineRender}
       {loadedRoutines !== undefined && loadedRoutines.length > 0 && (
         <View style={styles.routinesContainer}>
@@ -113,20 +113,7 @@ export default function CurrentWorkoutScreen({ handleOnSetCompleted }) {
     </View>
   );
 
-  let workoutInProgressScreen = (
-    <View style={styles.activeWorkoutContainer}>
-      <ActiveWorkout
-        handleOnSetCompleted={handleOnSetCompleted}
-        endWorkout={onEndedWorkout}
-      />
-    </View>
-  );
-
-  return (
-    <View>
-      {workoutInProgress ? workoutInProgressScreen : workoutNotStartedScreen}
-    </View>
-  );
+  return workoutNotStartedScreen;
 }
 
 const styles = StyleSheet.create({

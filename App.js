@@ -18,6 +18,7 @@ import TestCountdown from "./TestCountdown";
 import { init } from "./utils/database";
 import RoutineModal from "./components/UI/modals/RoutineModal";
 import PickExerciseModal from "./components/UI/modals/PickExerciseModal";
+import ActiveWorkoutScreen from "./screens/ActiveWorkoutScreen";
 
 const BottomTabs = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
@@ -78,9 +79,7 @@ function CurrentWorkoutStackNavigator({ handleOnSetCompleted }) {
     >
       <Stack.Screen
         name="CurrentWorkout"
-        children={() => (
-          <CurrentWorkoutScreen handleOnSetCompleted={handleOnSetCompleted} />
-        )}
+        component={CurrentWorkoutScreen}
         //component={CurrentWorkoutScreen}
         title="Current Workout"
         options={{
@@ -99,6 +98,17 @@ function CurrentWorkoutStackNavigator({ handleOnSetCompleted }) {
       <Stack.Screen
         name="PickExerciseModal"
         component={PickExerciseScreen}
+        title="Pick Exercise"
+        options={{
+          //presentation: "modal",
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="ActiveWorkout"
+        children={() => (
+          <ActiveWorkoutScreen handleOnSetCompleted={handleOnSetCompleted} />
+        )}
         title="Pick Exercise"
         options={{
           //presentation: "modal",
