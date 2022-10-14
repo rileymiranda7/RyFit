@@ -8,6 +8,7 @@ import {
 
 import Exercise from "../components/Exercise";
 import PickExerciseModal from "../components/UI/modals/PickExerciseModal";
+import { fetchRoutine } from "../utils/database";
 
 export default function ActiveWorkoutScreen({
   handleOnSetCompleted,
@@ -21,7 +22,11 @@ export default function ActiveWorkoutScreen({
 
   const { routineName } = route.params;
 
-  const loadRoutine = async (routineName) => {};
+  const loadRoutine = async (routineName) => {
+    const routine = await fetchRoutine(routineName);
+    console.log(routine);
+    setExerciseList(routine.exercises);
+  };
 
   useEffect(() => {
     if (isFocused && routineName) {
