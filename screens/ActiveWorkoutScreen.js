@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { View, Text, StyleSheet, Pressable, FlatList } from "react-native";
 import {
   useNavigation,
@@ -100,32 +100,13 @@ export default function ActiveWorkoutScreen({
 const styles = StyleSheet.create({
   exerciseList: {
     flex: 1,
+    minHeight: "100%",
+    minWidth: "100%",
     backgroundColor: "black",
     paddingHorizontal: 9,
   },
   container: {
     flex: 1,
-    paddingVertical: 5,
-  },
-  modalView: {
-    margin: 20,
-    marginTop: "10%",
-    width: "90%",
-    height: "88%",
-    backgroundColor: "white",
-    borderRadius: 20,
-    paddingHorizontal: 0,
-    paddingVertical: 0,
-    alignItems: "center",
-    justifyContent: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
   },
   button: {
     borderRadius: 20,
