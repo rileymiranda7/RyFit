@@ -1,7 +1,7 @@
 import { View, Button, StyleSheet, Text } from "react-native";
 import { useState } from "react";
 import { Swipeable } from "react-native-gesture-handler";
-import { Col, Row, Grid } from "react-native-easy-grid";
+import { Row } from "react-native-easy-grid";
 
 import TableHeaderRow from "./UI/table/rows/TableHeaderRow";
 import IncompleteRow from "./UI/table/rows/IncompleteRow";
@@ -186,7 +186,7 @@ export default function Exercise({ exerciseName, handleOnSetCompleted }) {
         <Text
           style={{
             color: "white",
-            fontSize: 25,
+            fontSize: 20,
           }}
         >
           {exerciseName}

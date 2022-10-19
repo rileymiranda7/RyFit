@@ -1,5 +1,12 @@
 import { useState, useEffect } from "react";
-import { View, Text, StyleSheet, Pressable, FlatList } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Pressable,
+  FlatList,
+  TextInput,
+} from "react-native";
 import {
   useNavigation,
   useRoute,
@@ -9,6 +16,7 @@ import {
 import Exercise from "../components/Exercise";
 import PickExerciseModal from "../components/UI/modals/PickExerciseModal";
 import { fetchRoutine } from "../utils/database";
+import IconButton from "../components/UI/IconButton";
 
 export default function ActiveWorkoutScreen({
   handleOnSetCompleted,
@@ -16,6 +24,9 @@ export default function ActiveWorkoutScreen({
 }) {
   const [exerciseList, setExerciseList] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
+  const [workoutName, setWorkoutName] = useState(
+    routineName ? routineName : "Today's Workout"
+  );
 
   const route = useRoute();
   const isFocused = useIsFocused();
@@ -32,6 +43,7 @@ export default function ActiveWorkoutScreen({
     if (isFocused && routineName) {
       if (routineName !== "BLANK") {
         loadRoutine(routineName);
+        setWorkoutName(routineName);
       }
     }
   }, [isFocused, routineName]);
@@ -53,7 +65,22 @@ export default function ActiveWorkoutScreen({
     <View style={styles.container}>
       <View style={styles.exerciseList}>
         <FlatList
-          ListHeaderComponent={<Text style={styles.textStyle}>Workout</Text>}
+          ListHeaderComponent={
+            <View style={styles.row}>
+              <TextInput
+                style={styles.textStyle}
+                onChangeText={setWorkoutName}
+                value={workoutName}
+                maxLength={12}
+              />
+              <IconButton
+                icon="create"
+                size={25}
+                color={"white"}
+                onPress={() => {}}
+              />
+            </View>
+          }
           data={exerciseList}
           renderItem={(exercise) => {
             return (
@@ -103,12 +130,16 @@ export default function ActiveWorkoutScreen({
 }
 
 const styles = StyleSheet.create({
+  row: {
+    flexDirection: "row",
+  },
   exerciseList: {
     flex: 1,
     minHeight: "100%",
     minWidth: "100%",
     backgroundColor: "black",
     paddingHorizontal: 9,
+    paddingTop: 5,
   },
   container: {
     flex: 1,

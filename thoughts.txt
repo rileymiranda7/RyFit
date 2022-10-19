@@ -44,12 +44,11 @@ run on iphone simulator on mac:
 xcode > xcode tab > simulator
 run expo start + i
 
+only save an exercise and its data when at least one
+set has its status changed to completed
 
-// database.js init function not executing all
-sql statements?
+when workout started generate workoutId and start stopwatch
+need to put stopwatch somewhere
 
-maybe just not working because routines saved on different
-device
-
-order of routines gets changed after exercise added:
-  -  routine with exercise added get put at the bottom
+if user tries to end workout under a minute after the workout
+was started then cancel workout don't save
