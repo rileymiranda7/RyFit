@@ -12,6 +12,7 @@ import {
   useRoute,
   useIsFocused,
 } from "@react-navigation/native";
+import Timer from "react-compound-timerv2/build";
 
 import Exercise from "../components/Exercise";
 import PickExerciseModal from "../components/UI/modals/PickExerciseModal";
@@ -66,19 +67,39 @@ export default function ActiveWorkoutScreen({
       <View style={styles.exerciseList}>
         <FlatList
           ListHeaderComponent={
-            <View style={styles.row}>
-              <TextInput
-                style={styles.textStyle}
-                onChangeText={setWorkoutName}
-                value={workoutName}
-                maxLength={12}
-              />
-              <IconButton
-                icon="create"
-                size={25}
-                color={"white"}
-                onPress={() => {}}
-              />
+            <View style={styles.rowSpread}>
+              <View style={styles.rowTogether}>
+                <TextInput
+                  style={styles.textStyle}
+                  onChangeText={setWorkoutName}
+                  value={workoutName}
+                  maxLength={12}
+                />
+                <IconButton
+                  icon="create"
+                  size={25}
+                  color={"white"}
+                  onPress={() => {}}
+                />
+              </View>
+              <Timer
+                checkpoints={[
+                  {
+                    time: 6000,
+                    callback: () => console.log("Checkpoint A"),
+                  },
+                  {
+                    time: 60000,
+                    callback: () => console.log("Checkpoint B"),
+                  },
+                ]}
+              >
+                <Text style={styles.textStyle}>
+                  <Timer.Hours />
+                  <Timer.Minutes />
+                  <Timer.Seconds />
+                </Text>
+              </Timer>
             </View>
           }
           data={exerciseList}
@@ -130,8 +151,12 @@ export default function ActiveWorkoutScreen({
 }
 
 const styles = StyleSheet.create({
-  row: {
+  rowTogether: {
     flexDirection: "row",
+  },
+  rowSpread: {
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   exerciseList: {
     flex: 1,
