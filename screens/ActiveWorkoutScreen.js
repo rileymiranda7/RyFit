@@ -12,7 +12,7 @@ import {
   useRoute,
   useIsFocused,
 } from "@react-navigation/native";
-import Timer from "react-compound-timerv2/build";
+import { useStopwatch } from 'react-timer-hook';
 
 import Exercise from "../components/Exercise";
 import PickExerciseModal from "../components/UI/modals/PickExerciseModal";
@@ -28,6 +28,17 @@ export default function ActiveWorkoutScreen({
   const [workoutName, setWorkoutName] = useState(
     routineName ? routineName : "Today's Workout"
   );
+
+  const {
+    seconds,
+    minutes,
+    hours,
+    days,
+    isRunning,
+    start,
+    pause,
+    reset,
+  } = useStopwatch({ autoStart: true });
 
   const route = useRoute();
   const isFocused = useIsFocused();
@@ -82,24 +93,28 @@ export default function ActiveWorkoutScreen({
                   onPress={() => {}}
                 />
               </View>
-              <Timer
-                checkpoints={[
-                  {
-                    time: 6000,
-                    callback: () => console.log("Checkpoint A"),
-                  },
-                  {
-                    time: 60000,
-                    callback: () => console.log("Checkpoint B"),
-                  },
-                ]}
-              >
-                <Text style={styles.textStyle}>
-                  <Timer.Hours />
-                  <Timer.Minutes />
-                  <Timer.Seconds />
-                </Text>
-              </Timer>
+              <View style={styles.timerContainer}>
+                <Text style={styles.timerDigit}>{
+                  hours < 10 ? 0 : hours % 10
+                }</Text>
+                <Text style={styles.timerDigit}>{
+                  hours >= 10 ? Math.floor(hours / 10) : hours
+                }</Text>
+                <Text style={styles.colon}>:</Text>
+                <Text style={styles.timerDigit}>{
+                  minutes < 10 ? 0 : minutes % 10
+                }</Text>
+                <Text style={styles.timerDigit}>{
+                  minutes >= 10 ? Math.floor(minutes / 10) : minutes
+                }</Text>
+                <Text style={styles.colon}>:</Text>
+                <Text style={styles.timerDigit}>{
+                  seconds < 10 ? 0 : Math.floor(seconds / 10)
+                }</Text>
+                <Text style={styles.timerDigit}>{
+                  seconds >= 10 ? seconds % 10 : seconds
+                }</Text>
+              </View>
             </View>
           }
           data={exerciseList}
@@ -209,5 +224,31 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginVertical: 20,
+  },
+  timerContainer: {
+    flexDirection: 'row',
+    marginRight: 0
+  },
+  timerText: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
+    fontSize: 20,
+  },
+  timerDigit: {
+    fontSize: 18,
+    color: "white",
+    minWidth: "4%",
+    padding: 0,
+    margin: 0,
+    textAlign: "center",
+  },
+  colon: {
+    fontSize: 18,
+    color: "white",
+    padding: 0,
+    margin: 0,
+    textAlign: "center",
+    fontWeight: "bold",
   },
 });
