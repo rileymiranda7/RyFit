@@ -51,4 +51,5 @@ when workout started generate workoutId and start stopwatch
 need to put stopwatch somewhere
 
 if user tries to end workout under a minute after the workout
-was started then cancel workout don't save
+was started or if workout has no exercises or if no completed sets
+then cancel workout don't save

@@ -6,6 +6,7 @@ import {
   Pressable,
   FlatList,
   TextInput,
+  Alert
 } from "react-native";
 import {
   useNavigation,
@@ -21,7 +22,6 @@ import IconButton from "../components/UI/IconButton";
 
 export default function ActiveWorkoutScreen({
   handleOnSetCompleted,
-  endWorkout,
 }) {
   const [exerciseList, setExerciseList] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
@@ -42,6 +42,7 @@ export default function ActiveWorkoutScreen({
 
   const route = useRoute();
   const isFocused = useIsFocused();
+  const navigation = useNavigation();
 
   const { routineName } = route.params;
 
@@ -72,6 +73,69 @@ export default function ActiveWorkoutScreen({
   const closeModal = () => {
     setModalVisible(false);
   };
+
+  const endWorkout = () => {
+    if (hours < 1 && minutes < 1) {
+      Alert.alert(
+        `End Current Workout?`,
+        "Workouts under a minute long will not be saved!",
+        [
+          {
+            text: "Cancel",
+            onPress: () => {},
+            style: "cancel",
+          },
+          {
+            text: "End Workout",
+            onPress: () => {
+              navigation.navigate("CurrentWorkout");
+            },
+          },
+        ]
+      );
+      return;
+    }
+    // insert check here for completed sets
+    /* else if (noSetsCompleted) {
+      Alert.alert(
+        `End Current Workout?`,
+        "Workouts with no completed sets will not be saved!",
+        [
+          {
+            text: "Cancel",
+            onPress: () => {},
+            style: "cancel",
+          },
+          {
+            text: "End Workout",
+            onPress: () => {
+              navigation.navigate("CurrentWorkout");
+            },
+          },
+        ]
+      );
+      return;
+    } */
+    else {
+      Alert.alert(
+        `End Current Workout?`,
+        "",
+        [
+          {
+            text: "Cancel",
+            onPress: () => {},
+            style: "cancel",
+          },
+          {
+            text: "End Workout",
+            onPress: () => {
+              navigation.navigate("CurrentWorkout");
+            },
+          },
+        ]
+      );
+    }
+  }
 
   return (
     <View style={styles.container}>
