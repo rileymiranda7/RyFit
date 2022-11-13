@@ -4,11 +4,12 @@ import { View, Text } from "react-native";
 import IconButton from "../../IconButton";
 import { Colors } from "../../../../constants/colors";
 
-export default function CompletedButton({ inputChangedHandler }) {
+export default function CompletedButton({ inputChangedHandler, setRowCompleted }) {
   const [isCompleted, setIsCompleted] = useState(false);
 
   function onPress() {
     inputChangedHandler(!isCompleted);
+    setRowCompleted(!isCompleted);
     setIsCompleted(!isCompleted);
   }
 

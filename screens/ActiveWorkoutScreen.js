@@ -28,6 +28,7 @@ export default function ActiveWorkoutScreen({
   const [workoutName, setWorkoutName] = useState(
     routineName ? routineName : "Today's Workout"
   );
+  const [numSetsCompleted, setNumSetsCompleted] = useState(0);
 
   const {
     seconds,
@@ -96,7 +97,7 @@ export default function ActiveWorkoutScreen({
       return;
     }
     // insert check here for completed sets
-    /* else if (noSetsCompleted) {
+    else if (numSetsCompleted < 1) {
       Alert.alert(
         `End Current Workout?`,
         "Workouts with no completed sets will not be saved!",
@@ -115,7 +116,7 @@ export default function ActiveWorkoutScreen({
         ]
       );
       return;
-    } */
+    }
     else {
       Alert.alert(
         `End Current Workout?`,
@@ -134,6 +135,14 @@ export default function ActiveWorkoutScreen({
           },
         ]
       );
+    }
+  }
+
+  const updateNumSetsCompleted = (shouldAddOneSet) => {
+    if (shouldAddOneSet) {
+      setNumSetsCompleted(numSetsCompleted + 1);
+    } else {
+      setNumSetsCompleted(numSetsCompleted - 1);
     }
   }
 
@@ -187,6 +196,7 @@ export default function ActiveWorkoutScreen({
               <Exercise
                 exerciseName={exercise.item.name}
                 handleOnSetCompleted={handleOnSetCompleted}
+                updateNumSetsCompleted={updateNumSetsCompleted}
               />
             );
           }}

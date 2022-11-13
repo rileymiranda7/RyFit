@@ -24,8 +24,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-around",
     minWidth: "100%",
-    backgroundColor: Colors.gray0,
-    borderRadius: 6,
   },
   set: {
     textAlign: "center",

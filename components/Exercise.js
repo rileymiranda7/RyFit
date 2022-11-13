@@ -7,7 +7,11 @@ import TableHeaderRow from "./UI/table/rows/TableHeaderRow";
 import IncompleteRow from "./UI/table/rows/IncompleteRow";
 import IconButton from "./UI/IconButton";
 
-export default function Exercise({ exerciseName, handleOnSetCompleted }) {
+export default function Exercise({ 
+  exerciseName, 
+  handleOnSetCompleted, 
+  updateNumSetsCompleted 
+}) {
   const [currentNumberOfSets, setCurrentNumberOfSets] = useState(1);
   // array of set rows
   const [rowArr, setRowArr] = useState([
@@ -46,6 +50,9 @@ export default function Exercise({ exerciseName, handleOnSetCompleted }) {
           // enteredValue === "status"
           if (enteredValue) {
             handleOnSetCompleted(restTimeAmount);
+            updateNumSetsCompleted(true);
+          } else {
+            updateNumSetsCompleted(false);
           }
           return {
             setNumber: set.setNumber,

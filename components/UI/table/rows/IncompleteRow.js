@@ -1,10 +1,11 @@
-import { View, Text, StyleSheet } from "react-native";
-import { Col, Row, Grid } from "react-native-easy-grid";
+import { StyleSheet } from "react-native";
+import { Col } from "react-native-easy-grid";
 
 import SetNumber from "../row-elements/SetNumber";
 import NumberInput from "../row-elements/NumberInput";
 import Previous from "../row-elements/Previous";
 import CompletedButton from "../row-elements/CompletedButton";
+import { useState } from "react";
 
 export default function IncompleteRow({
   setNumber,
@@ -12,15 +13,18 @@ export default function IncompleteRow({
   repsValue,
   inputChangedHandler,
 }) {
+
+  const [rowCompleted, setRowCompleted] = useState(false);
+
   return (
     <>
-      <Col style={styles.set}>
+      <Col style={[styles.set, {backgroundColor: rowCompleted ? "green" : "black",}]}>
         <SetNumber>{setNumber}</SetNumber>
       </Col>
-      <Col style={styles.previous}>
+      <Col style={[styles.previous, {backgroundColor: rowCompleted ? "green" : "black",}]}>
         <Previous />
       </Col>
-      <Col style={styles.lbs}>
+      <Col style={[styles.lbs, {backgroundColor: rowCompleted ? "green" : "black",}]}>
         <NumberInput
           textInputConfig={{
             keyboardType: "decimal-pad",
@@ -29,7 +33,7 @@ export default function IncompleteRow({
           }}
         />
       </Col>
-      <Col style={styles.reps}>
+      <Col style={[styles.reps, {backgroundColor: rowCompleted ? "green" : "black",}]}>
         <NumberInput
           textInputConfig={{
             keyboardType: "decimal-pad",
@@ -38,13 +42,14 @@ export default function IncompleteRow({
           }}
         />
       </Col>
-      <Col style={styles.completed}>
+      <Col style={[styles.completed, {backgroundColor: rowCompleted ? "green" : "black",}]}>
         <CompletedButton
           inputChangedHandler={inputChangedHandler.bind(
             this,
             "status",
             setNumber
           )}
+          setRowCompleted={setRowCompleted}
         />
       </Col>
     </>

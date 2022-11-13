@@ -53,3 +53,17 @@ need to put stopwatch somewhere
 if user tries to end workout under a minute after the workout
 was started or if workout has no exercises or if no completed sets
 then cancel workout don't save
+
+how to save entered data and active workout when 
+app crashes/is killed/is in background?
+
+need to set up notifications for set timer
+
+when to save data? on change?
+
+use context or just sql updates?
+
+what if user unchecks the one set they completed?
+need to track number of sets completed in workout
+
+need to stop header timer when workout is ended

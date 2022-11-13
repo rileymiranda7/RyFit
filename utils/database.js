@@ -145,7 +145,8 @@ export function initExerciseInstances() {
         CREATE TABLE IF NOT EXISTS exerciseInstances (
           exerciseInstanceId INTEGER PRIMARY KEY NOT NULL,
           exerciseName TEXT NOT NULL,
-          workoutId INT NOT NULL
+          workoutId INT NOT NULL,
+          numberInWorkout INT NOT NULL
         );
       `,
         [],
