@@ -1,5 +1,6 @@
 import { View, Text, Pressable, Modal, StyleSheet } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
+import { Audio } from 'expo-av';
 
 import IconButton from "../IconButton";
 import RunningTimer from "./RunningTimer";
@@ -12,6 +13,7 @@ export default function HeaderTimer({ restTimerAmount, rndm }) {
   const [restTime, setRestTime] = useState(3);
   const [useRestTime, setUseRestTime] = useState(false);
   const [initialRender, setInitialRender] = useState(true);
+  const [sound, setSound] = useState();
 
   const toggleShowSetTimer = () => {
     setShowSetTimerModal(!showSetTimerModal);
@@ -41,6 +43,16 @@ export default function HeaderTimer({ restTimerAmount, rndm }) {
     }
   };
 
+  async function playSound() {
+    console.log('Loading Sound');
+    const { sound } = await Audio.Sound.createAsync( require('../../../assets/bellAlert.wav')
+    );
+    setSound(sound);
+
+    console.log('Playing Sound');
+    await sound.playAsync();
+  }
+
   const onTimerEnd = (wasCanceled) => {
     if (useRestTime) {
       setUseRestTime(false);
@@ -48,9 +60,19 @@ export default function HeaderTimer({ restTimerAmount, rndm }) {
     setTimerIsRunning(false);
     setShowSetTimerModal(false);
     if (!wasCanceled) {
+      playSound();
       alert("Time for next set!");
     }
   };
+
+  useEffect(() => {
+    return sound
+      ? () => {
+          console.log('Unloading Sound');
+          sound.unloadAsync();
+        }
+      : undefined;
+  }, [sound]);
 
   useEffect(() => {
     if (initialRender) {
