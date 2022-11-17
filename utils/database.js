@@ -448,3 +448,23 @@ export async function deleteRoutine(routineName) {
   await deleteRoutineFromRoutineExerciseBridge(routineName);
   await deleteRoutineFromRoutines(routineName);
 }
+
+export async function createWorkout(name) {
+  const promise = new Promise((resolve, reject) => {
+    database.transaction((tx) => {
+      tx.executeSql(
+        `INSERT INTO workouts (startTime, duration, name) VALUES (DATETIME('now'), 0, ?) RETURNING workoutId;`,
+        [name],
+        (_, result) => {
+          console.log(result.rows._array)
+          resolve(result.rows._array[0].workoutId);
+        },
+        (_, error) => {
+          reject(error);
+        }
+      );
+    });
+  });
+
+  return promise;
+}

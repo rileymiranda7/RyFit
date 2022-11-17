@@ -67,3 +67,13 @@ what if user unchecks the one set they completed?
 need to track number of sets completed in workout
 
 need to stop header timer when workout is ended
+
+can't play sounds in background, going to have to use notifications
+when app is in background when timer goes off
+
+can't get custom sound to play for local notification only default
+
+maybe try ejecting to react native app but then can't use
+expo to publish to app store?
+
+don't worry about notifications for now, worry about saving workout data

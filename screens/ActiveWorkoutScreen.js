@@ -26,7 +26,7 @@ export default function ActiveWorkoutScreen({
   const [exerciseList, setExerciseList] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [workoutName, setWorkoutName] = useState(
-    routineName ? routineName : "Today's Workout"
+    routineName ? routineName : "New Workout"
   );
   const [numSetsCompleted, setNumSetsCompleted] = useState(0);
 
@@ -45,7 +45,7 @@ export default function ActiveWorkoutScreen({
   const isFocused = useIsFocused();
   const navigation = useNavigation();
 
-  const { routineName } = route.params;
+  const { routineName, workoutId } = route.params;
 
   const loadRoutine = async (routineName) => {
     const routine = await fetchRoutine(routineName);
@@ -60,6 +60,8 @@ export default function ActiveWorkoutScreen({
         setWorkoutName(routineName);
       }
     }
+    console.log('workoutId: ' + workoutId);
+    console.log('routineName: ' + routineName);
   }, [isFocused, routineName]);
 
   function submitPickedExerciseHandler(exercises) {

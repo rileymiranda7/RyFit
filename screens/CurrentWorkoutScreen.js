@@ -10,7 +10,7 @@ import {
 import React, { useState, useLayoutEffect, useEffect } from "react";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
 
-import { fetchRoutines, insertEmptyRoutine } from "../utils/database";
+import { createWorkout, fetchRoutines, insertEmptyRoutine } from "../utils/database";
 import RoutineItem from "../components/UI/RoutineItem";
 
 export default function CurrentWorkoutScreen() {
@@ -27,16 +27,11 @@ export default function CurrentWorkoutScreen() {
     setLoadedRoutines(routines);
   };
 
-  useEffect(() => {
-    if (isFocused) {
-      loadRoutines();
-    }
-  }, [isFocused]);
-
+  
   const showRoutineInput = () => {
     setAddingRoutine(!addingRoutine);
   };
-
+  
   const createRoutine = async () => {
     if (routineName != "") {
       await insertEmptyRoutine(routineName);
@@ -44,6 +39,12 @@ export default function CurrentWorkoutScreen() {
       setAddingRoutine(false);
     }
   };
+
+  useEffect(() => {
+    if (isFocused) {
+      loadRoutines();
+    }
+  }, [isFocused]);
 
   let createRoutineRender;
 
@@ -85,9 +86,11 @@ export default function CurrentWorkoutScreen() {
       </Text>
       <Button
         title="Begin Empy Workout"
-        onPress={() => {
+        onPress={async () => {
+          const workoutId = await createWorkout('New Workout');
           navigation.navigate("ActiveWorkout", {
             routineName: "BLANK",
+            workoutId: workoutId
           });
         }}
       />

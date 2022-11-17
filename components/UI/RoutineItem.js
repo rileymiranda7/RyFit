@@ -1,8 +1,10 @@
 import { useNavigation } from "@react-navigation/native";
 import { View, Text, StyleSheet, Pressable, Alert } from "react-native";
+
 import { Exercise } from "../../models/exercise";
 import IconButton from "./IconButton";
 import RoutineModal from "./modals/RoutineModal";
+import { createWorkout } from "../../utils/database";
 
 export default function RoutineItem({ routineName, exercises }) {
   let exerciseList;
@@ -21,9 +23,11 @@ export default function RoutineItem({ routineName, exercises }) {
         },
         {
           text: "Start",
-          onPress: () => {
+          onPress: async () => {
+            const workoutId = await createWorkout(routineName);
             navigation.navigate("ActiveWorkout", {
               routineName: routineName,
+              workoutId: workoutId
             });
           },
         },
