@@ -85,3 +85,6 @@ why update duration?
 just set endTime at end with DATETIMENOW
 then when need duration after workout is over
 subtract start time from end time
+
+no more checking workout duration when ending workout
+doesn't make sense just go off completed sets

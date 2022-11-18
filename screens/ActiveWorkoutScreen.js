@@ -17,7 +17,7 @@ import { useStopwatch } from 'react-timer-hook';
 
 import Exercise from "../components/Exercise";
 import PickExerciseModal from "../components/UI/modals/PickExerciseModal";
-import { fetchRoutine, fetchWorkoutName, updateWorkoutName } from "../utils/database";
+import { deleteWorkout, fetchRoutine, fetchWorkoutName, fetchWorkouts, updateWorkoutName } from "../utils/database";
 import IconButton from "../components/UI/IconButton";
 
 export default function ActiveWorkoutScreen({
@@ -67,28 +67,7 @@ export default function ActiveWorkoutScreen({
   };
   
   const endWorkout = () => {
-    if (hours < 1 && minutes < 1) {
-      Alert.alert(
-        `End Current Workout?`,
-        "Workouts under a minute long will not be saved!",
-        [
-          {
-            text: "Cancel",
-            onPress: () => {},
-            style: "cancel",
-          },
-          {
-            text: "End Workout",
-            onPress: () => {
-              navigation.navigate("CurrentWorkout");
-            },
-          },
-        ]
-      );
-      return;
-    }
-    // insert check here for completed sets
-    else if (numSetsCompleted < 1) {
+    if (numSetsCompleted < 1) {
       Alert.alert(
         `End Current Workout?`,
         "Workouts with no completed sets will not be saved!",
@@ -101,6 +80,7 @@ export default function ActiveWorkoutScreen({
           {
             text: "End Workout",
             onPress: () => {
+              deleteWorkout(workoutId);
               navigation.navigate("CurrentWorkout");
             },
           },
@@ -152,6 +132,7 @@ export default function ActiveWorkoutScreen({
     }
     console.log('workoutId: ' + workoutId);
     console.log('routineName: ' + routineName);
+    fetchWorkouts();
   }, [isFocused, routineName]);
 
 

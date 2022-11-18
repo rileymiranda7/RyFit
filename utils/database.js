@@ -531,3 +531,42 @@ export async function fetchWorkoutName(workoutId) {
   return promise;
 }
 
+export async function deleteWorkout(workoutId) {
+  const promise = new Promise((resolve, reject) => {
+    database.transaction((tx) => {
+      tx.executeSql(
+        `DELETE FROM workouts WHERE workoutId = ?`,
+        [workoutId],
+        (_, result) => {
+          resolve(result);
+        },
+        (_, error) => {
+          reject(error);
+        }
+      );
+    });
+  });
+
+  return promise;
+}
+
+export function fetchWorkouts() {
+  const promise = new Promise((resolve, reject) => {
+    database.transaction((tx) => {
+      tx.executeSql(
+        `SELECT * FROM workouts;`,
+        [],
+        (_, result) => {
+          console.log('all workouts')
+          console.log(result.rows._array)
+          resolve(result);
+        },
+        (_, error) => {
+          reject(error);
+        }
+      );
+    });
+  });
+
+  return promise;
+}
