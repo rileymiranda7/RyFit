@@ -29,6 +29,9 @@ export async function init() {
 
   return promise; */
 }
+
+/** INIT TABLES */
+
 export function initRoutineExerciseBridge() {
   const promise = new Promise((resolve, reject) => {
     database.transaction((tx) => {
@@ -179,6 +182,11 @@ export function initExerciseInstances() {
   return promise;
 }
 
+
+
+
+/* FETCH FUNCTIONS */
+
 export const getExercise = async (exerciseName) => {
   let exercise = await fetchExercise(exerciseName);
   return exercise;
@@ -235,53 +243,180 @@ export async function fetchRoutineExercises() {
         (_, error) => {
           reject(error);
         }
-      );
+        );
+      });
     });
-  });
-  return promise;
-}
-
-export async function fetchExercise(exerciseName) {
-  const promise = new Promise((resolve, reject) => {
-    database.transaction((tx) => {
-      tx.executeSql(
-        `SELECT * FROM exercises WHERE exerciseName = ?`,
-        [exerciseName],
-        (_, result) => {
-          const exercise = new Exercise(
-            result.rows._array[0].exerciseName,
-            result.rows._array[0].restTime,
-            result.rows._array[0].exerciseNotes
-          );
-          resolve(exercise);
-        },
-        (_, error) => {
-          reject(error);
-        }
-      );
+    return promise;
+  }
+  
+  export async function fetchExercise(exerciseName) {
+    const promise = new Promise((resolve, reject) => {
+      database.transaction((tx) => {
+        tx.executeSql(
+          `SELECT * FROM exercises WHERE exerciseName = ?`,
+          [exerciseName],
+          (_, result) => {
+            const exercise = new Exercise(
+              result.rows._array[0].exerciseName,
+              result.rows._array[0].restTime,
+              result.rows._array[0].exerciseNotes
+              );
+              resolve(exercise);
+            },
+            (_, error) => {
+              reject(error);
+            }
+            );
+          });
+        });
+        return promise;
+      }
+      
+  export function fetchPastWorkouts() {
+    const promise = new Promise((resolve, reject) => {
+      database.transaction((tx) => {
+        tx.executeSql(
+          `SELECT * FROM workouts;`,
+          [],
+          (_, result) => {
+            /* const places = [];
+            for (const dp of result.rows._array) {
+              places.push(
+                new Place(
+                  dp.title,
+                  dp.imageUri,
+                  {
+                    address: dp.address,
+                    lat: dp.lat,
+                    lng: dp.lng,
+                  },
+                  dp.id
+                )
+              );
+            }
+            resolve(places); */
+          },
+          (_, error) => {
+            reject(error);
+          }
+        );
+      });
     });
-  });
-  return promise;
-}
+  
+    return promise;
+  }
 
-export function insertIntoRoutineExerciseBridge(routineExercise) {
-  const promise = new Promise((resolve, reject) => {
-    database.transaction((tx) => {
-      tx.executeSql(
-        `INSERT INTO routineExerciseBridge (exerciseName, routineName) VALUES (?, ?);`,
-        [routineExercise.exerciseName, routineExercise.routineName],
-        (_, result) => {
-          resolve(result);
-        },
-        (_, error) => {
-          reject(error);
-        }
-      );
+  export function fetchRoutineNamesList() {
+    const promise = new Promise((resolve, reject) => {
+      database.transaction((tx) => {
+        tx.executeSql(
+          `SELECT * FROM routines ORDER BY dateCreated ASC;`,
+          [],
+          (_, result) => {
+            resolve(result.rows._array);
+          },
+          (_, error) => {
+            reject(error);
+          }
+        );
+      });
     });
-  });
+    return promise;
+  }
 
-  return promise;
-}
+  export function fetchExercises() {
+    const promise = new Promise((resolve, reject) => {
+      database.transaction((tx) => {
+        tx.executeSql(
+          `SELECT * FROM exercises;`,
+          [],
+          (_, result) => {
+            const exercises = [];
+            for (const e of result.rows._array) {
+              exercises.push(
+                new Exercise(
+                  e.exerciseName,
+                  e.restTime,
+                  e.exerciseNotes,
+                  e.routineName
+                )
+              );
+            }
+            resolve(exercises);
+          },
+          (_, error) => {
+            reject(error);
+          }
+        );
+      });
+    });
+  
+    return promise;
+  }
+
+  export async function fetchWorkoutName(workoutId) {
+    const promise = new Promise((resolve, reject) => {
+      database.transaction((tx) => {
+        tx.executeSql(
+          `SELECT name FROM workouts
+          WHERE workoutId = ?;`,
+          [workoutId],
+          (_, result) => {
+            console.log('workoutName: ' + result.rows._array[0].name);
+            resolve(result);
+          },
+          (_, error) => {
+            reject(error);
+          }
+        );
+      });
+    });
+    return promise;
+  }
+
+  export function fetchWorkouts() {
+    const promise = new Promise((resolve, reject) => {
+      database.transaction((tx) => {
+        tx.executeSql(
+          `SELECT * FROM workouts;`,
+          [],
+          (_, result) => {
+            console.log('all workouts')
+            console.log(result.rows._array)
+            resolve(result);
+          },
+          (_, error) => {
+            reject(error);
+          }
+        );
+      });
+    });
+  
+    return promise;
+  }
+
+
+
+  /* INSERT FUNCTIONS */
+
+  export function insertIntoRoutineExerciseBridge(routineExercise) {
+    const promise = new Promise((resolve, reject) => {
+      database.transaction((tx) => {
+        tx.executeSql(
+          `INSERT INTO routineExerciseBridge (exerciseName, routineName) VALUES (?, ?);`,
+          [routineExercise.exerciseName, routineExercise.routineName],
+          (_, result) => {
+            resolve(result);
+          },
+          (_, error) => {
+            reject(error);
+          }
+        );
+      });
+    });
+
+    return promise;
+  }
 
 export async function insertEmptyRoutine(routineName) {
   const promise = new Promise((resolve, reject) => {
@@ -302,87 +437,6 @@ export async function insertEmptyRoutine(routineName) {
   return promise;
 }
 
-export function fetchPastWorkouts() {
-  const promise = new Promise((resolve, reject) => {
-    database.transaction((tx) => {
-      tx.executeSql(
-        `SELECT * FROM workouts;`,
-        [],
-        (_, result) => {
-          /* const places = [];
-          for (const dp of result.rows._array) {
-            places.push(
-              new Place(
-                dp.title,
-                dp.imageUri,
-                {
-                  address: dp.address,
-                  lat: dp.lat,
-                  lng: dp.lng,
-                },
-                dp.id
-              )
-            );
-          }
-          resolve(places); */
-        },
-        (_, error) => {
-          reject(error);
-        }
-      );
-    });
-  });
-
-  return promise;
-}
-
-export function fetchRoutineNamesList() {
-  const promise = new Promise((resolve, reject) => {
-    database.transaction((tx) => {
-      tx.executeSql(
-        `SELECT * FROM routines ORDER BY dateCreated ASC;`,
-        [],
-        (_, result) => {
-          resolve(result.rows._array);
-        },
-        (_, error) => {
-          reject(error);
-        }
-      );
-    });
-  });
-  return promise;
-}
-
-export function fetchExercises() {
-  const promise = new Promise((resolve, reject) => {
-    database.transaction((tx) => {
-      tx.executeSql(
-        `SELECT * FROM exercises;`,
-        [],
-        (_, result) => {
-          const exercises = [];
-          for (const e of result.rows._array) {
-            exercises.push(
-              new Exercise(
-                e.exerciseName,
-                e.restTime,
-                e.exerciseNotes,
-                e.routineName
-              )
-            );
-          }
-          resolve(exercises);
-        },
-        (_, error) => {
-          reject(error);
-        }
-      );
-    });
-  });
-
-  return promise;
-}
 
 export function insertExercise(exercise) {
   const promise = new Promise((resolve, reject) => {
@@ -402,6 +456,33 @@ export function insertExercise(exercise) {
 
   return promise;
 }
+
+export async function createWorkout(name) {
+  const promise = new Promise((resolve, reject) => {
+    database.transaction((tx) => {
+      tx.executeSql(
+        `INSERT INTO workouts (startTime, name) 
+        VALUES (DATETIME('now'), ?) 
+        RETURNING workoutId;`,
+        [name],
+        (_, result) => {
+          console.log(result.rows._array)
+          resolve(result.rows._array[0].workoutId);
+        },
+        (_, error) => {
+          reject(error);
+        }
+      );
+    });
+  });
+
+  return promise;
+}
+
+
+
+
+/* DELETE FUNCTIONS */
 
 export function deleteExerciseFromRoutine(exerciseName, routineName) {
   const promise = new Promise((resolve, reject) => {
@@ -465,72 +546,6 @@ export async function deleteRoutine(routineName) {
   await deleteRoutineFromRoutines(routineName);
 }
 
-export async function createWorkout(name) {
-  const promise = new Promise((resolve, reject) => {
-    database.transaction((tx) => {
-      tx.executeSql(
-        `INSERT INTO workouts (startTime, name) 
-        VALUES (DATETIME('now'), ?) 
-        RETURNING workoutId;`,
-        [name],
-        (_, result) => {
-          console.log(result.rows._array)
-          resolve(result.rows._array[0].workoutId);
-        },
-        (_, error) => {
-          reject(error);
-        }
-      );
-    });
-  });
-
-  return promise;
-}
-
-export async function updateWorkoutName(workoutId, name) {
-  const promise = new Promise((resolve, reject) => {
-    database.transaction((tx) => {
-      tx.executeSql(
-        `UPDATE workouts 
-        SET name = ?
-        WHERE workoutId = ?
-        RETURNING name;`,
-        [name, workoutId],
-        (_, result) => {
-          console.log('updateWorkout')
-          console.log(result.rows._array)
-          resolve(result.rows._array[0]);
-        },
-        (_, error) => {
-          reject(error);
-        }
-      );
-    });
-  });
-
-  return promise;
-}
-
-export async function fetchWorkoutName(workoutId) {
-  const promise = new Promise((resolve, reject) => {
-    database.transaction((tx) => {
-      tx.executeSql(
-        `SELECT name FROM workouts
-        WHERE workoutId = ?;`,
-        [workoutId],
-        (_, result) => {
-          console.log('workoutName: ' + result.rows._array[0].name);
-          resolve(result);
-        },
-        (_, error) => {
-          reject(error);
-        }
-      );
-    });
-  });
-  return promise;
-}
-
 export async function deleteWorkout(workoutId) {
   const promise = new Promise((resolve, reject) => {
     database.transaction((tx) => {
@@ -550,16 +565,24 @@ export async function deleteWorkout(workoutId) {
   return promise;
 }
 
-export function fetchWorkouts() {
+
+
+
+/* UPDATE FUNCTIONS */
+
+export async function updateWorkoutName(workoutId, name) {
   const promise = new Promise((resolve, reject) => {
     database.transaction((tx) => {
       tx.executeSql(
-        `SELECT * FROM workouts;`,
-        [],
+        `UPDATE workouts 
+        SET name = ?
+        WHERE workoutId = ?
+        RETURNING name;`,
+        [name, workoutId],
         (_, result) => {
-          console.log('all workouts')
+          console.log('updateWorkout')
           console.log(result.rows._array)
-          resolve(result);
+          resolve(result.rows._array[0]);
         },
         (_, error) => {
           reject(error);
