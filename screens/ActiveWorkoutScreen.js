@@ -17,7 +17,7 @@ import { useStopwatch } from 'react-timer-hook';
 
 import Exercise from "../components/Exercise";
 import PickExerciseModal from "../components/UI/modals/PickExerciseModal";
-import { fetchRoutine } from "../utils/database";
+import { fetchRoutine, fetchWorkoutName, updateWorkoutName } from "../utils/database";
 import IconButton from "../components/UI/IconButton";
 
 export default function ActiveWorkoutScreen({
@@ -53,17 +53,6 @@ export default function ActiveWorkoutScreen({
     setExerciseList(routine.exercises);
   };
 
-  useEffect(() => {
-    if (isFocused && routineName) {
-      if (routineName !== "BLANK") {
-        loadRoutine(routineName);
-        setWorkoutName(routineName);
-      }
-    }
-    console.log('workoutId: ' + workoutId);
-    console.log('routineName: ' + routineName);
-  }, [isFocused, routineName]);
-
   function submitPickedExerciseHandler(exercises) {
     exercises.forEach((exercise) => {
       setExerciseList((curExerciseList) => {
@@ -72,11 +61,11 @@ export default function ActiveWorkoutScreen({
     });
     setModalVisible(false);
   }
-
+  
   const closeModal = () => {
     setModalVisible(false);
   };
-
+  
   const endWorkout = () => {
     if (hours < 1 && minutes < 1) {
       Alert.alert(
@@ -136,9 +125,9 @@ export default function ActiveWorkoutScreen({
             },
           },
         ]
-      );
+        );
+      }
     }
-  }
 
   const updateNumSetsCompleted = (shouldAddOneSet) => {
     if (shouldAddOneSet) {
@@ -147,6 +136,25 @@ export default function ActiveWorkoutScreen({
       setNumSetsCompleted(numSetsCompleted - 1);
     }
   }
+  
+  const resetWorkoutName = async () => {
+    await updateWorkoutName(workoutId, workoutName);
+  }
+
+
+
+  useEffect(() => {
+    if (isFocused && routineName) {
+      if (routineName !== "BLANK") {
+        loadRoutine(routineName);
+        setWorkoutName(routineName);
+      }
+    }
+    console.log('workoutId: ' + workoutId);
+    console.log('routineName: ' + routineName);
+  }, [isFocused, routineName]);
+
+
 
   return (
     <View style={styles.container}>
@@ -158,6 +166,7 @@ export default function ActiveWorkoutScreen({
                 <TextInput
                   style={styles.textStyle}
                   onChangeText={setWorkoutName}
+                  onBlur={() => resetWorkoutName()}
                   value={workoutName}
                   maxLength={12}
                 />

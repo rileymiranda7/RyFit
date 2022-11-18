@@ -77,3 +77,11 @@ maybe try ejecting to react native app but then can't use
 expo to publish to app store?
 
 don't worry about notifications for now, worry about saving workout data
+
+for a workout you can only update the name and duration, so do 
+these at same time with one function
+
+why update duration?
+just set endTime at end with DATETIMENOW
+then when need duration after workout is over
+subtract start time from end time

@@ -12,6 +12,22 @@ export async function init() {
   await initWorkouts();
   await initSets();
   await initExerciseInstances();
+  /* const promise = new Promise((resolve, reject) => {
+    database.transaction((tx) => {
+      tx.executeSql(
+        `DROP TABLE workouts;`,
+        [],
+        () => {
+          resolve();
+        },
+        (_, error) => {
+          reject(error);
+        }
+      );
+    });
+  });
+
+  return promise; */
 }
 export function initRoutineExerciseBridge() {
   const promise = new Promise((resolve, reject) => {
@@ -94,7 +110,7 @@ export function initWorkouts() {
         CREATE TABLE IF NOT EXISTS workouts (
           workoutId INTEGER PRIMARY KEY NOT NULL,
           startTime DATE NOT NULL,
-          duration INTEGER NOT NULL,
+          endTime DATE,
           name TEXT NOT NULL
         );
       `,
@@ -453,7 +469,9 @@ export async function createWorkout(name) {
   const promise = new Promise((resolve, reject) => {
     database.transaction((tx) => {
       tx.executeSql(
-        `INSERT INTO workouts (startTime, duration, name) VALUES (DATETIME('now'), 0, ?) RETURNING workoutId;`,
+        `INSERT INTO workouts (startTime, name) 
+        VALUES (DATETIME('now'), ?) 
+        RETURNING workoutId;`,
         [name],
         (_, result) => {
           console.log(result.rows._array)
@@ -468,3 +486,48 @@ export async function createWorkout(name) {
 
   return promise;
 }
+
+export async function updateWorkoutName(workoutId, name) {
+  const promise = new Promise((resolve, reject) => {
+    database.transaction((tx) => {
+      tx.executeSql(
+        `UPDATE workouts 
+        SET name = ?
+        WHERE workoutId = ?
+        RETURNING name;`,
+        [name, workoutId],
+        (_, result) => {
+          console.log('updateWorkout')
+          console.log(result.rows._array)
+          resolve(result.rows._array[0]);
+        },
+        (_, error) => {
+          reject(error);
+        }
+      );
+    });
+  });
+
+  return promise;
+}
+
+export async function fetchWorkoutName(workoutId) {
+  const promise = new Promise((resolve, reject) => {
+    database.transaction((tx) => {
+      tx.executeSql(
+        `SELECT name FROM workouts
+        WHERE workoutId = ?;`,
+        [workoutId],
+        (_, result) => {
+          console.log('workoutName: ' + result.rows._array[0].name);
+          resolve(result);
+        },
+        (_, error) => {
+          reject(error);
+        }
+      );
+    });
+  });
+  return promise;
+}
+
