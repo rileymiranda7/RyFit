@@ -4,20 +4,17 @@ import { View, Text } from "react-native";
 import IconButton from "../../IconButton";
 import { Colors } from "../../../../constants/colors";
 
-export default function CompletedButton({ inputChangedHandler, setRowCompleted }) {
-  const [isCompleted, setIsCompleted] = useState(false);
-
+export default function CompletedButton({ inputChangedHandler, setIsCompleted }) {
+  
   function onPress() {
-    inputChangedHandler(!isCompleted);
-    setRowCompleted(!isCompleted);
-    setIsCompleted(!isCompleted);
+    inputChangedHandler("rndm str for enteredValue cuz we don't need it");
   }
 
   return (
     <IconButton
       icon="checkbox"
       size={28}
-      color={isCompleted ? Colors.neonGreen : "white"}
+      color={setIsCompleted ? Colors.neonGreen : "white"}
       onPress={onPress}
     />
   );

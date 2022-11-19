@@ -11,20 +11,22 @@ export default function IncompleteRow({
   setNumber,
   lbsValue,
   repsValue,
+  setIsCompleted,
   inputChangedHandler,
 }) {
 
-  const [rowCompleted, setRowCompleted] = useState(false);
-
   return (
     <>
-      <Col style={[styles.set, {backgroundColor: rowCompleted ? "green" : "black",}]}>
+      <Col style={[styles.set, 
+        {backgroundColor: setIsCompleted ? "green" : "black",}]}>
         <SetNumber>{setNumber}</SetNumber>
       </Col>
-      <Col style={[styles.previous, {backgroundColor: rowCompleted ? "green" : "black",}]}>
+      <Col style={[styles.previous, 
+        {backgroundColor: setIsCompleted ? "green" : "black",}]}>
         <Previous />
       </Col>
-      <Col style={[styles.lbs, {backgroundColor: rowCompleted ? "green" : "black",}]}>
+      <Col style={[styles.lbs, 
+        {backgroundColor: setIsCompleted ? "green" : "black",}]}>
         <NumberInput
           textInputConfig={{
             keyboardType: "decimal-pad",
@@ -33,7 +35,8 @@ export default function IncompleteRow({
           }}
         />
       </Col>
-      <Col style={[styles.reps, {backgroundColor: rowCompleted ? "green" : "black",}]}>
+      <Col style={[styles.reps, 
+        {backgroundColor: setIsCompleted ? "green" : "black",}]}>
         <NumberInput
           textInputConfig={{
             keyboardType: "decimal-pad",
@@ -42,14 +45,15 @@ export default function IncompleteRow({
           }}
         />
       </Col>
-      <Col style={[styles.completed, {backgroundColor: rowCompleted ? "green" : "black",}]}>
+      <Col style={[styles.completed, 
+        {backgroundColor: setIsCompleted ? "green" : "black",}]}>
         <CompletedButton
           inputChangedHandler={inputChangedHandler.bind(
             this,
             "status",
             setNumber
           )}
-          setRowCompleted={setRowCompleted}
+          setIsCompleted={setIsCompleted}
         />
       </Col>
     </>

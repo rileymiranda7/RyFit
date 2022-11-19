@@ -83,6 +83,7 @@ export default function ActiveWorkoutScreen({
               deleteWorkout(workoutId);
               navigation.navigate("CurrentWorkout");
             },
+            style: "destructive",
           },
         ]
       );

@@ -88,3 +88,11 @@ subtract start time from end time
 
 no more checking workout duration when ending workout
 doesn't make sense just go off completed sets
+
+need to create exercise instance for each exercise in routine
+if doing routine workout 
+or if adding an exercise mid workout
+
+only insert exercise instance if the set is completed?
+need to make sure set completed button cant be set to completed
+when pressed if weight and reps fields are empty

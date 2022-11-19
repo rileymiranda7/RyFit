@@ -1,4 +1,4 @@
-import { View, Button, StyleSheet, Text } from "react-native";
+import { View, Button, StyleSheet, Text, Alert } from "react-native";
 import { useState } from "react";
 import { Swipeable } from "react-native-gesture-handler";
 import { Row } from "react-native-easy-grid";
@@ -47,11 +47,32 @@ export default function Exercise({
             status: set.status,
           };
         } else {
-          // enteredValue === "status"
-          if (enteredValue) {
-            handleOnSetCompleted(restTimeAmount);
-            updateNumSetsCompleted(true);
+          // inputIdentifier === "status"
+          // if set status is currently in progress
+          // and we get the signal to try to set to completed
+          let shouldStatusBeCompleted;
+          if (set.status === "IN PROGRESS") {
+            // if lbs and reps are filled out we can set to completed
+            if (set.lbs && set.reps) {
+              shouldStatusBeCompleted = true;
+              handleOnSetCompleted(restTimeAmount);
+              updateNumSetsCompleted(true);
+            } else {
+              shouldStatusBeCompleted = false;
+              Alert.alert(
+                `Missing Weight and Reps`,
+                "",
+                [
+                  {
+                    text: "Ok",
+                    onPress: () => {},
+                    style: "default",
+                  }
+                ]
+              );
+            }
           } else {
+            shouldStatusBeCompleted = false;
             updateNumSetsCompleted(false);
           }
           return {
@@ -59,7 +80,7 @@ export default function Exercise({
             previous: set.previous,
             lbs: set.lbs,
             reps: set.reps,
-            status: enteredValue ? "COMPLETED" : "IN PROGRESS",
+            status: shouldStatusBeCompleted ? "COMPLETED" : "IN PROGRESS",
           };
         }
       }
@@ -94,6 +115,10 @@ export default function Exercise({
       );
     };
 
+    const setRowCompleted = () => {
+
+    }
+
     return (
       <Swipeable
         renderRightActions={(progress, dragX) =>
@@ -113,6 +138,7 @@ export default function Exercise({
             setNumber={item.setNumber}
             lbsValue={item.lbs}
             repsValue={item.reps}
+            setIsCompleted={item.status === "COMPLETED" ? true : false}
             inputChangedHandler={inputChangedHandler}
           />
         </Row>
