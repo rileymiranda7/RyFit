@@ -362,7 +362,6 @@ export async function fetchRoutineExercises() {
           WHERE workoutId = ?;`,
           [workoutId],
           (_, result) => {
-            console.log('workoutName: ' + result.rows._array[0].name);
             resolve(result);
           },
           (_, error) => {
@@ -466,7 +465,6 @@ export async function createWorkout(name) {
         RETURNING workoutId;`,
         [name],
         (_, result) => {
-          console.log(result.rows._array)
           resolve(result.rows._array[0].workoutId);
         },
         (_, error) => {
@@ -580,8 +578,28 @@ export async function updateWorkoutName(workoutId, name) {
         RETURNING name;`,
         [name, workoutId],
         (_, result) => {
-          console.log('updateWorkout')
-          console.log(result.rows._array)
+          resolve(result.rows._array[0]);
+        },
+        (_, error) => {
+          reject(error);
+        }
+      );
+    });
+  });
+
+  return promise;
+}
+
+export async function updateWorkoutEndTime(workoutId) {
+  const promise = new Promise((resolve, reject) => {
+    database.transaction((tx) => {
+      tx.executeSql(
+        `UPDATE workouts 
+        SET endTime = DATETIME('now')
+        WHERE workoutId = ?
+        RETURNING endTime;`,
+        [workoutId],
+        (_, result) => {
           resolve(result.rows._array[0]);
         },
         (_, error) => {

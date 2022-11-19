@@ -17,7 +17,7 @@ import { useStopwatch } from 'react-timer-hook';
 
 import Exercise from "../components/Exercise";
 import PickExerciseModal from "../components/UI/modals/PickExerciseModal";
-import { deleteWorkout, fetchRoutine, fetchWorkoutName, fetchWorkouts, updateWorkoutName } from "../utils/database";
+import { deleteWorkout, fetchRoutine, fetchWorkoutName, fetchWorkouts, updateWorkoutEndTime, updateWorkoutName } from "../utils/database";
 import IconButton from "../components/UI/IconButton";
 
 export default function ActiveWorkoutScreen({
@@ -101,7 +101,8 @@ export default function ActiveWorkoutScreen({
           },
           {
             text: "End Workout",
-            onPress: () => {
+            onPress: async () => {
+              await updateWorkoutEndTime(workoutId);
               navigation.navigate("CurrentWorkout");
             },
           },
