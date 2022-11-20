@@ -15,7 +15,7 @@ export async function init() {
   /* const promise = new Promise((resolve, reject) => {
     database.transaction((tx) => {
       tx.executeSql(
-        `DROP TABLE workouts;`,
+        `DROP TABLE routineExerciseBridge;`,
         [],
         () => {
           resolve();
@@ -40,6 +40,7 @@ export function initRoutineExerciseBridge() {
         CREATE TABLE IF NOT EXISTS routineExerciseBridge (
           exerciseName TEXT NOT NULL,
           routineName TEXT NOT NULL,
+          numberInRoutine INT NOT NULL,
           PRIMARY KEY (exerciseName, routineName),
           FOREIGN KEY(exerciseName) REFERENCES exercises(exerciseName),
           FOREIGN KEY(routineName) REFERENCES routines(routineName)
@@ -209,6 +210,9 @@ export async function fetchRoutines() {
     return routines;
   };
   const result = await fetchRoutineExercises();
+  if (!result || result?.rows?._array < 0) {
+    return [];
+  }
   const routines = await getRoutines(result);
   return routines;
 }
@@ -227,8 +231,16 @@ export async function fetchRoutine(routineName) {
     return routine;
   };
   const result = await fetchRoutineExercises();
+  console.log('result: ' + JSON.stringify(result));
   const routine = await getRoutine(result);
   return routine;
+}
+
+export async function fetchRoutineSize(routineName) {
+  const routine = await fetchRoutine(routineName);
+  console.log('routine: ' + JSON.stringify(routine));
+  console.log('routine.exercises.length: ' + routine.exercises.length)
+  return routine.exercises.length;
 }
 
 export async function fetchRoutineExercises() {
@@ -238,9 +250,11 @@ export async function fetchRoutineExercises() {
         `SELECT * FROM routineExerciseBridge;`,
         [],
         (_, result) => {
+          console.log('resolve')
           resolve(result);
         },
         (_, error) => {
+          console.log('reject')
           reject(error);
         }
         );
@@ -402,8 +416,12 @@ export async function fetchRoutineExercises() {
     const promise = new Promise((resolve, reject) => {
       database.transaction((tx) => {
         tx.executeSql(
-          `INSERT INTO routineExerciseBridge (exerciseName, routineName) VALUES (?, ?);`,
-          [routineExercise.exerciseName, routineExercise.routineName],
+          `INSERT INTO routineExerciseBridge 
+          (exerciseName, routineName, numberInRoutine) VALUES (?, ?, ?);`,
+          [routineExercise.exerciseName, 
+            routineExercise.routineName, 
+            routineExercise.numberInRoutine
+          ],
           (_, result) => {
             resolve(result);
           },

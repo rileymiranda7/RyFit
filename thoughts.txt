@@ -107,3 +107,16 @@ NEED TO UPDATE EVERYTHING WHEN COMPLETED SET IS DELETED
 should workout order be managed in active workout?
 can't rely on number in routine if not using routine
 or if user doesn't want to add that exercise to routine
+
+need to store size of routine starting with 0
+when the routine is created
+then when exercise is added increment the size
+when order is updated by dragging and dropping
+when user navigates back to current workout screen
+first call routine exercise order update function
+with loadedExercises and in function iterate over
+each exercise and update its numberInRoutine column
+in its routineExerciseBridge  
+
+do we need to store size or just get size of routine
+when we are adding a new exercise

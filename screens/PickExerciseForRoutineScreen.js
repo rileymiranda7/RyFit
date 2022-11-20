@@ -14,6 +14,7 @@ import { useIsFocused, useNavigation } from "@react-navigation/native";
 import {
   fetchExercises,
   fetchRoutine,
+  fetchRoutineSize,
   insertExercise,
   insertIntoRoutineExerciseBridge,
 } from "../utils/database";
@@ -39,9 +40,13 @@ export default function PickExerciseForRoutineScreen({ route }) {
     const filteredExercises = exercises.filter(
       (exer) => !loadedRoutineExerNames.includes(exer.name)
     );
+    let routineSize = await fetchRoutineSize(routineName) + 1;
     await Promise.all(
-      filteredExercises.map(async (exercise) => {
-        const routineExercise = new RoutineExercise(exercise.name, routineName);
+      filteredExercises.map(async (exercise, index) => {
+        console.log("numberInRoutine for " + exercise.name + ": " + (routineSize + index))
+        const routineExercise = new RoutineExercise(
+          exercise.name, routineName, (routineSize + index)
+        );
         await insertIntoRoutineExerciseBridge(routineExercise);
       })
     );
