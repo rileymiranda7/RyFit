@@ -2,26 +2,51 @@ import {
   View,
   Text,
   StyleSheet,
-  Modal,
   Pressable,
   TextInput,
   FlatList,
   Alert,
+  SafeAreaView,
 } from "react-native";
 import React, { useState, useEffect } from "react";
-import { useIsFocused } from "@react-navigation/native";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 
-import { fetchExercises, insertExercise } from "../../../utils/database";
-import ExerciseOption from "../ExerciseOption";
-import { Exercise } from "../../../models/exercise";
+import {
+  fetchExercises,
+  fetchRoutine,
+  insertExercise,
+  insertIntoRoutineExerciseBridge,
+} from "../utils/database";
+import ExerciseOption from "../components/UI/ExerciseOption";
+import { Exercise } from "../models/exercise";
+import { RoutineExercise } from "../models/routineExercise";
+import IconButton from "../components/UI/IconButton";
+import BackButton from "../components/UI/BackButton";
 
-export default function PickExerciseModal({
-  submitPickedExerciseHandler,
-  closeModal,
-}) {
+export default function PickExerciseForRoutineScreen({ route }) {
   const [selectedExercises, setSelectedExercises] = useState([]);
   const [exerciseNameInput, setExerciseNameInput] = useState("");
   const [loadedExercises, setLoadedExercises] = useState([]);
+  const [loadedRoutineExercises, setLoadedRoutineExercises] = useState([]);
+
+  const { routineName } = route.params;
+  const navigation = useNavigation();
+
+  const submitPickedExerciseHandler = async (exercises) => {
+    const loadedRoutineExerNames = loadedRoutineExercises.map((exer) => {
+      return exer.name;
+    });
+    const filteredExercises = exercises.filter(
+      (exer) => !loadedRoutineExerNames.includes(exer.name)
+    );
+    await Promise.all(
+      filteredExercises.map(async (exercise) => {
+        const routineExercise = new RoutineExercise(exercise.name, routineName);
+        await insertIntoRoutineExerciseBridge(routineExercise);
+      })
+    );
+    navigation.goBack();
+  };
 
   const isFocused = useIsFocused();
 
@@ -29,6 +54,11 @@ export default function PickExerciseModal({
     const exercises = await fetchExercises();
     setLoadedExercises(exercises);
   }
+
+  const loadRoutine = async (routineName) => {
+    const routine = await fetchRoutine(routineName);
+    setLoadedRoutineExercises(routine.exercises);
+  };
 
   const exerciseSelected = (exercise) => {
     setSelectedExercises((currArr) => {
@@ -106,17 +136,18 @@ export default function PickExerciseModal({
   };
 
   useEffect(() => {
-    if (isFocused) {
+    if (isFocused && routineName) {
       loadExercises();
+      loadRoutine(routineName);
     }
-  }, [isFocused]);
+  }, [isFocused, routineName]);
 
   let pickExerciseList;
 
   if (loadedExercises && loadedExercises.length > 0) {
     pickExerciseList = (
       <View style={styles.exerciseList}>
-        <Text>Pick Exercise Below</Text>
+        <Text style={styles.smallTitle}>Pick Exercises Below</Text>
         <FlatList
           data={loadedExercises}
           renderItem={(e) => {
@@ -133,31 +164,36 @@ export default function PickExerciseModal({
       </View>
     );
   } else {
-    pickExerciseList = <Text>here</Text>;
+    pickExerciseList = <Text>no exercises found</Text>;
   }
 
   return (
-    <Modal
-      animationType="slide"
-      transparent={true}
-      visible={true}
-      onRequestClose={() => {
-        Alert.alert("Modal has been closed.");
-        closeModal();
-      }}
-    >
-      <View>
-        <View style={styles.modalView}>
-          <Text style={styles.modalText}>Select Exercise</Text>
-          <View style={styles.inputContainer}>
-            <TextInput
-              style={styles.input}
-              onChangeText={setExerciseNameInput}
-              value={exerciseNameInput}
-              placeholder="Enter an Exercise"
-            />
-          </View>
-          {pickExerciseList}
+    <SafeAreaView>
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <IconButton
+            icon="trash"
+            onPress={() => {}}
+            size={40}
+            color={"#3e04c3"}
+          />
+          <Text style={styles.title}>Select Exercises</Text>
+          <BackButton
+            onPress={() => navigation.goBack()}
+            size={40}
+            color={"#7145eb"}
+          />
+        </View>
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.input}
+            onChangeText={setExerciseNameInput}
+            value={exerciseNameInput}
+            placeholder="Enter an Exercise"
+          />
+        </View>
+        {pickExerciseList}
+        <View style={styles.addButtonContainer}>
           <Pressable
             style={({ pressed }) => [
               styles.button,
@@ -166,67 +202,54 @@ export default function PickExerciseModal({
             ]}
             onPress={() => combineExercises()}
           >
-            <Text style={styles.textStyle}>Add Exercise</Text>
-          </Pressable>
-          <Pressable
-            style={({ pressed }) => [
-              styles.button,
-              styles.buttonClose,
-              pressed && { opacity: 0.75 },
-            ]}
-            onPress={() => closeModal()}
-          >
-            <Text style={styles.textStyle}>Cancel</Text>
+            <Text style={styles.textStyle}>
+              {routineName ? "Add to " + routineName : "Add to Workout"}
+            </Text>
           </Pressable>
         </View>
       </View>
-    </Modal>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  exerciseList: {
-    minHeight: "45%",
-    minWidth: "80%",
+  addButtonContainer: {
+    marginVertical: 10,
   },
-  exerciseItemText: {
+  title: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
+    fontSize: 25,
+  },
+  smallTitle: {
+    color: "white",
+    fontWeight: "bold",
     fontSize: 20,
+  },
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginHorizontal: 8,
+    marginVertical: 12,
+  },
+  exerciseList: {
+    flex: 1,
+    minWidth: "100%",
+    padding: 10,
   },
   container: {
     flex: 1,
-    paddingVertical: 5,
-  },
-  modalView: {
-    margin: 20,
-    marginTop: "14%",
-    width: "90%",
-    height: "87%",
+    minHeight: "100%",
+    minWidth: "100%",
     backgroundColor: "#3e04c3",
-    borderRadius: 20,
-    paddingHorizontal: 0,
-    paddingVertical: 0,
-    alignItems: "center",
-    justifyContent: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
   },
   button: {
     borderRadius: 20,
     padding: 10,
     elevation: 2,
-    marginVertical: 20,
-  },
-  buttonOpen: {
-    backgroundColor: "#F194FF",
-  },
-  endWorkoutButton: {
-    backgroundColor: "#ff0000",
+    margin: 10,
   },
   buttonClose: {
     backgroundColor: "#2196F3",
@@ -237,11 +260,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 20,
   },
-  modalText: {
-    marginBottom: 20,
-    textAlign: "center",
-    fontSize: 30,
-  },
   input: {
     fontSize: 25,
     backgroundColor: "#b8bbbe",
@@ -251,10 +269,10 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     backgroundColor: "#b8bbbe",
-    minWidth: "80%",
     height: "8%",
     alignItems: "center",
     justifyContent: "center",
     marginVertical: 20,
+    marginHorizontal: 35,
   },
 });

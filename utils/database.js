@@ -477,6 +477,11 @@ export async function createWorkout(name) {
   return promise;
 }
 
+export async function insertExerciseInstance
+  (workoutId, exerciseName, numberInWorkout) {
+    
+}
+
 
 
 

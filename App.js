@@ -12,12 +12,11 @@ import * as SplashScreen from "expo-splash-screen";
 import PastWorkoutsScreen from "./screens/PastWorkoutsScreen";
 import ProfileScreen from "./screens/ProfileScreen";
 import CurrentWorkoutScreen from "./screens/CurrentWorkoutScreen";
-import PickExerciseScreen from "./screens/PickExerciseScreen";
+import PickExerciseForRoutineScreen from "./screens/PickExerciseForRoutineScreen";
 import HeaderTimer from "./components/UI/timer/HeaderTimer";
 import TestCountdown from "./TestCountdown";
 import { init } from "./utils/database";
 import RoutineModal from "./components/UI/modals/RoutineModal";
-import PickExerciseModal from "./components/UI/modals/PickExerciseModal";
 import ActiveWorkoutScreen from "./screens/ActiveWorkoutScreen";
 
 const BottomTabs = createBottomTabNavigator();
@@ -96,8 +95,8 @@ function CurrentWorkoutStackNavigator({ handleOnSetCompleted }) {
         }}
       />
       <Stack.Screen
-        name="PickExerciseModal"
-        component={PickExerciseScreen}
+        name="PickExerciseForRoutineScreen"
+        component={PickExerciseForRoutineScreen}
         title="Pick Exercise"
         options={{
           //presentation: "modal",

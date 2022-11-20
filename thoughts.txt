@@ -96,3 +96,14 @@ or if adding an exercise mid workout
 only insert exercise instance if the set is completed?
 need to make sure set completed button cant be set to completed
 when pressed if weight and reps fields are empty
+
+need to implement exercise number in workout
+
+will exercise component lose its data if its position
+is moved??
+
+NEED TO UPDATE EVERYTHING WHEN COMPLETED SET IS DELETED
+
+should workout order be managed in active workout?
+can't rely on number in routine if not using routine
+or if user doesn't want to add that exercise to routine

@@ -16,7 +16,7 @@ import {
 import { useStopwatch } from 'react-timer-hook';
 
 import Exercise from "../components/Exercise";
-import PickExerciseModal from "../components/UI/modals/PickExerciseModal";
+import PickExerciseForActiveWorkoutModal from "../components/UI/modals/PickExerciseForActiveWorkoutModal";
 import { deleteWorkout, fetchRoutine, fetchWorkoutName, fetchWorkouts, updateWorkoutEndTime, updateWorkoutName } from "../utils/database";
 import IconButton from "../components/UI/IconButton";
 
@@ -223,7 +223,7 @@ export default function ActiveWorkoutScreen({
       </View>
       <View>
         {modalVisible && (
-          <PickExerciseModal
+          <PickExerciseForActiveWorkoutModal
             submitPickedExerciseHandler={submitPickedExerciseHandler}
             closeModal={closeModal}
           />

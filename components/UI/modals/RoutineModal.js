@@ -131,7 +131,7 @@ export default function RoutineModal({ navigation, route }) {
             pressed && { opacity: 0.75 },
           ]}
           onPress={() =>
-            navigation.navigate("PickExerciseModal", {
+            navigation.navigate("PickExerciseForRoutineScreen", {
               routineName: routineName,
             })
           }
@@ -139,7 +139,7 @@ export default function RoutineModal({ navigation, route }) {
           <View style={styles.addButtonRow}>
             <IconButton
               onPress={() =>
-                navigation.navigate("PickExerciseModal", {
+                navigation.navigate("PickExerciseForRoutineScreen", {
                   routineName: routineName,
                 })
               }
