@@ -1,14 +1,17 @@
 import {
   View,
   Text,
-  Modal,
   StyleSheet,
   Pressable,
   SafeAreaView,
   Alert,
+  TouchableOpacity
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useIsFocused } from "@react-navigation/native";
+import DraggableFlatList, {
+  ScaleDecorator,
+} from "react-native-draggable-flatlist";
 
 import BackButton from "../BackButton";
 import IconButton from "../IconButton";
@@ -101,28 +104,49 @@ export default function RoutineModal({ navigation, route }) {
             <Text>No exercises found in routine. Click Add Exercise</Text>
           )}
           {(loadedExercises || loadedExercises.length > 0) &&
-            loadedExercises.map((exercise, index) => {
-              return (
-                <View style={styles.exerciseRow} key={index}>
-                  <Pressable
-                    style={({ pressed }) => [pressed && { opacity: 0.75 }]}
-                  >
-                    <IconButton
-                      icon="trash"
-                      onPress={() => {
-                        shouldRemoveExerciseFromRoutine(
-                          exercise.name,
-                          routineName
-                        );
-                      }}
-                      size={30}
+            <DraggableFlatList 
+              onDragEnd={({ data }) => {
+                setLoadedExercises(data);
+                console.log(loadedExercises);
+              }}
+              data={loadedExercises}
+              renderItem={({ item, drag, isActive }) => {
+                return (
+                  <ScaleDecorator>
+                    <TouchableOpacity
+                      activeOpacity={1}
+                      onLongPress={drag}
+                      disabled={isActive}
+                      style={[
+                      /*  styles.rowItem,
+                        { backgroundColor: isActive ? "red" : item.backgroundColor }, */
+                      ]}
+                    >
+                      <View style={styles.exerciseRow}>
+                        <Pressable
+                          style={({ pressed }) => [pressed && { opacity: 0.75 }]}
+                        >
+                        <IconButton
+                          icon="trash"
+                          onPress={() => {
+                            shouldRemoveExerciseFromRoutine(
+                              item.name,
+                              routineName
+                            );
+                          }}
+                          size={30}
                       color={"#1f0263"}
                     />
                   </Pressable>
-                  <Text style={styles.exerciseTextStyle}>{exercise.name}</Text>
+                  <Text style={styles.exerciseTextStyle}>{item.name}</Text>
                 </View>
-              );
-            })}
+                    </TouchableOpacity>
+                  </ScaleDecorator>
+                );
+              }}
+              keyExtractor={(exercise) => exercise.name}
+            />
+          }
         </View>
         <Pressable
           style={({ pressed }) => [

@@ -1,12 +1,12 @@
-import { useState, useEffect } from "react";
+/* import { useState, useEffect } from "react";
 import {
   View,
   Text,
   StyleSheet,
   Pressable,
+  FlatList,
   TextInput,
-  Alert,
-  TouchableOpacity
+  Alert
 } from "react-native";
 import {
   useNavigation,
@@ -14,9 +14,6 @@ import {
   useIsFocused,
 } from "@react-navigation/native";
 import { useStopwatch } from 'react-timer-hook';
-import DraggableFlatList, {
-  ScaleDecorator,
-} from "react-native-draggable-flatlist";
 
 import Exercise from "../components/Exercise";
 import PickExerciseForActiveWorkoutModal from "../components/UI/modals/PickExerciseForActiveWorkoutModal";
@@ -145,11 +142,7 @@ export default function ActiveWorkoutScreen({
   return (
     <View style={styles.container}>
       <View style={styles.exerciseList}>
-        <DraggableFlatList
-        onDragEnd={({ data }) => {
-          setExerciseList(data);
-          console.log(exerciseList);
-        }}
+        <FlatList
           ListHeaderComponent={
             <View style={styles.rowSpread}>
               <View style={styles.rowTogether}>
@@ -192,25 +185,13 @@ export default function ActiveWorkoutScreen({
             </View>
           }
           data={exerciseList}
-          renderItem={({ item, drag, isActive }) => {
+          renderItem={(exercise) => {
             return (
-              <ScaleDecorator>
-                <TouchableOpacity
-                  activeOpacity={1}
-                  onLongPress={drag}
-                  disabled={isActive}
-                  style={[
-                  /*  styles.rowItem,
-                    { backgroundColor: isActive ? "red" : item.backgroundColor }, */
-                  ]}
-                >
-                  <Exercise
-                    exerciseName={item.name}
-                    handleOnSetCompleted={handleOnSetCompleted}
-                    updateNumSetsCompleted={updateNumSetsCompleted}
-                  />
-                </TouchableOpacity>
-              </ScaleDecorator>
+              <Exercise
+                exerciseName={exercise.item.name}
+                handleOnSetCompleted={handleOnSetCompleted}
+                updateNumSetsCompleted={updateNumSetsCompleted}
+              />
             );
           }}
           keyExtractor={(exercise) => exercise.name}
@@ -339,3 +320,4 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
 });
+ */
