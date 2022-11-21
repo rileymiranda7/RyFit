@@ -247,7 +247,8 @@ export async function fetchRoutineExercises() {
   const promise = new Promise((resolve, reject) => {
     database.transaction((tx) => {
       tx.executeSql(
-        `SELECT * FROM routineExerciseBridge;`,
+        `SELECT * FROM routineExerciseBridge
+        ORDER BY numberInRoutine ASC;`,
         [],
         (_, result) => {
           console.log('resolve')
@@ -624,6 +625,38 @@ export async function updateWorkoutEndTime(workoutId) {
         [workoutId],
         (_, result) => {
           resolve(result.rows._array[0]);
+        },
+        (_, error) => {
+          reject(error);
+        }
+      );
+    });
+  });
+
+  return promise;
+}
+
+export async function updateRoutineOrder(routineName, newExerciseOrder) {
+  await Promise.all(
+    newExerciseOrder.map(async (exercise, index) => {
+      await updateExerciseNumberInRoutine(routineName, exercise.name, index + 1);
+    })
+  );
+}
+
+export async function updateExerciseNumberInRoutine(
+  routineName, exerciseName, newPositionInRoutine
+  ) {
+  const promise = new Promise((resolve, reject) => {
+    database.transaction((tx) => {
+      tx.executeSql(
+        `UPDATE routineExerciseBridge 
+        SET numberInRoutine = ?
+        WHERE routineName = ?
+        AND exerciseName = ?;`,
+        [newPositionInRoutine, routineName, exerciseName],
+        (_, result) => {
+          resolve(result);
         },
         (_, error) => {
           reject(error);

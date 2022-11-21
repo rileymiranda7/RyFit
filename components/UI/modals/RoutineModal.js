@@ -19,6 +19,7 @@ import {
   deleteExerciseFromRoutine,
   fetchRoutine,
   deleteRoutine,
+  updateRoutineOrder,
 } from "../../../utils/database";
 
 export default function RoutineModal({ navigation, route }) {
@@ -94,7 +95,10 @@ export default function RoutineModal({ navigation, route }) {
           />
           <Text style={styles.routineName}>{routineName}</Text>
           <BackButton
-            onPress={() => navigation.goBack()}
+            onPress={() => {
+              updateRoutineOrder(routineName, loadedExercises);
+              navigation.goBack();
+            }}
             size={40}
             color={"#6737eb"}
           />
