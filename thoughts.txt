@@ -108,15 +108,21 @@ should workout order be managed in active workout?
 can't rely on number in routine if not using routine
 or if user doesn't want to add that exercise to routine
 
-need to store size of routine starting with 0
-when the routine is created
-then when exercise is added increment the size
-when order is updated by dragging and dropping
-when user navigates back to current workout screen
-first call routine exercise order update function
-with loadedExercises and in function iterate over
-each exercise and update its numberInRoutine column
-in its routineExerciseBridge  
 
-do we need to store size or just get size of routine
-when we are adding a new exercise
+just get size of routine when we are adding a new exercise
+
+add exercise, change exercise order, and delete exercise actions
+are done when action is done now and not when back button is pressed
+in routine modal
+
+when exercise is added the routine's current size is fetched and
+incremented and the exercise is inserted into routineExerciseBridge
+
+when order is changed every routineExercise numberInRoutine
+is updated with the index of its position in the updated state
+array passed from routineModal
+
+when an exercise is deleted the exercise's current position is fetched,
+then routineExerciseBrides are updated so that each routineExerciseBridge
+with a numberInRoutine larger than the deleted exercise's current position
+is decremented by one, then the exercise is deleted

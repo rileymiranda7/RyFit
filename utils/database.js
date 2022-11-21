@@ -188,11 +188,6 @@ export function initExerciseInstances() {
 
 /* FETCH FUNCTIONS */
 
-export const getExercise = async (exerciseName) => {
-  let exercise = await fetchExercise(exerciseName);
-  return exercise;
-};
-
 export async function fetchRoutines() {
   const routineNames = await fetchRoutineNamesList();
   const getRoutines = async (result) => {
@@ -201,7 +196,7 @@ export async function fetchRoutines() {
       let routine = new Routine(routineName.routineName, []);
       for (const routineExercise of result.rows._array) {
         if (routineExercise.routineName === routineName.routineName) {
-          const exercise = await getExercise(routineExercise.exerciseName);
+          const exercise = await fetchExercise(routineExercise.exerciseName);
           routine?.exercises?.push(exercise);
         }
       }
@@ -223,7 +218,7 @@ export async function fetchRoutine(routineName) {
     await Promise.all(
       result.rows._array.map(async (routineExercise) => {
         if (routineExercise.routineName === routineName) {
-          const exercise = await getExercise(routineExercise.exerciseName);
+          const exercise = await fetchExercise(routineExercise.exerciseName);
           routine.exercises.push(exercise);
         }
       })
@@ -231,15 +226,12 @@ export async function fetchRoutine(routineName) {
     return routine;
   };
   const result = await fetchRoutineExercises();
-  console.log('result: ' + JSON.stringify(result));
   const routine = await getRoutine(result);
   return routine;
 }
 
 export async function fetchRoutineSize(routineName) {
   const routine = await fetchRoutine(routineName);
-  console.log('routine: ' + JSON.stringify(routine));
-  console.log('routine.exercises.length: ' + routine.exercises.length)
   return routine.exercises.length;
 }
 
@@ -251,11 +243,9 @@ export async function fetchRoutineExercises() {
         ORDER BY numberInRoutine ASC;`,
         [],
         (_, result) => {
-          console.log('resolve')
           resolve(result);
         },
         (_, error) => {
-          console.log('reject')
           reject(error);
         }
         );
@@ -263,7 +253,27 @@ export async function fetchRoutineExercises() {
     });
     return promise;
   }
-  
+
+export async function fetchExerciseNumberInRoutine(routineName, exerciseName) {
+  const promise = new Promise((resolve, reject) => {
+    database.transaction((tx) => {
+      tx.executeSql(
+        `SELECT numberInRoutine FROM routineExerciseBridge
+        WHERE routineName = ?
+        AND exerciseName = ?;`,
+        [routineName, exerciseName],
+        (_, result) => {
+          resolve(result.rows._array[0].numberInRoutine);
+        },
+        (_, error) => {
+          reject(error);
+        }
+        );
+      });
+    });
+    return promise;
+  }
+
   export async function fetchExercise(exerciseName) {
     const promise = new Promise((resolve, reject) => {
       database.transaction((tx) => {
@@ -506,7 +516,15 @@ export async function insertExerciseInstance
 
 /* DELETE FUNCTIONS */
 
-export function deleteExerciseFromRoutine(exerciseName, routineName) {
+export async function deleteExerciseFromRoutine(
+  exerciseName, routineName, newExerciseOrder
+) {
+  const exerciseToDeletePosition = await fetchExerciseNumberInRoutine(
+    routineName, exerciseName
+  );
+  await updateRoutineOrder(
+    routineName, newExerciseOrder, false, exerciseToDeletePosition
+  );
   const promise = new Promise((resolve, reject) => {
     database.transaction((tx) => {
       tx.executeSql(
@@ -636,12 +654,24 @@ export async function updateWorkoutEndTime(workoutId) {
   return promise;
 }
 
-export async function updateRoutineOrder(routineName, newExerciseOrder) {
-  await Promise.all(
-    newExerciseOrder.map(async (exercise, index) => {
-      await updateExerciseNumberInRoutine(routineName, exercise.name, index + 1);
-    })
-  );
+export async function updateRoutineOrder(
+  routineName, newExerciseOrder, notDeletingExercise, exerciseToDeletePosition
+  ) {
+    if (notDeletingExercise) {
+      await Promise.all(
+        newExerciseOrder.map(async (exercise, index) => {
+          await updateExerciseNumberInRoutine(routineName, exercise.name, index + 1);
+        })
+      );
+    } else {
+      await Promise.all(
+        newExerciseOrder.map(async (exercise, index) => {
+          if (index + 1 > exerciseToDeletePosition) {
+            await updateExerciseNumberInRoutine(routineName, exercise.name, index);
+          }
+        })
+      );
+    }
 }
 
 export async function updateExerciseNumberInRoutine(

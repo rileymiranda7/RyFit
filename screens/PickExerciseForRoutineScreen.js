@@ -43,7 +43,6 @@ export default function PickExerciseForRoutineScreen({ route }) {
     let routineSize = await fetchRoutineSize(routineName) + 1;
     await Promise.all(
       filteredExercises.map(async (exercise, index) => {
-        console.log("numberInRoutine for " + exercise.name + ": " + (routineSize + index))
         const routineExercise = new RoutineExercise(
           exercise.name, routineName, (routineSize + index)
         );

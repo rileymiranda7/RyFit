@@ -40,7 +40,7 @@ export default function RoutineModal({ navigation, route }) {
   }, [routineName, isFocused]);
 
   const removeExerciseFromRoutine = async (exerciseName, routineName) => {
-    await deleteExerciseFromRoutine(exerciseName, routineName);
+    await deleteExerciseFromRoutine(exerciseName, routineName, loadedExercises);
     loadRoutine(routineName);
   };
 
@@ -96,7 +96,6 @@ export default function RoutineModal({ navigation, route }) {
           <Text style={styles.routineName}>{routineName}</Text>
           <BackButton
             onPress={() => {
-              updateRoutineOrder(routineName, loadedExercises);
               navigation.goBack();
             }}
             size={40}
@@ -112,6 +111,7 @@ export default function RoutineModal({ navigation, route }) {
               onDragEnd={({ data }) => {
                 setLoadedExercises(data);
                 console.log(loadedExercises);
+                updateRoutineOrder(routineName, data, true, -1);
               }}
               data={loadedExercises}
               renderItem={({ item, drag, isActive }) => {
