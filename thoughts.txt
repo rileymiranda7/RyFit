@@ -94,13 +94,6 @@ if doing routine workout
 or if adding an exercise mid workout
 
 only insert exercise instance if the set is completed?
-need to make sure set completed button cant be set to completed
-when pressed if weight and reps fields are empty
-
-need to implement exercise number in workout
-
-will exercise component lose its data if its position
-is moved??
 
 NEED TO UPDATE EVERYTHING WHEN COMPLETED SET IS DELETED
 
@@ -126,3 +119,21 @@ when an exercise is deleted the exercise's current position is fetched,
 then routineExerciseBrides are updated so that each routineExerciseBridge
 with a numberInRoutine larger than the deleted exercise's current position
 is decremented by one, then the exercise is deleted
+
+need to handle adding deleting updating for exerciseInstances and sets
+
+when to create exercise instance?
+when set completed or when workout started if there is exercise
+or when exercise is added
+
+what if exercise is deleted or no sets are completed
+
+start with empty workout?
+
+need to maintain workoutInstance array in activeworkoutscreen in state?
+would include exerciseInstanceId, sets completed, and also eventually
+exercise position number in routine
+
+
+
+CANNOT LET USER ADD EXERCISE THATS ALREADY IN WORKOUT

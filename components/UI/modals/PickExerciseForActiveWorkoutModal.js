@@ -117,7 +117,10 @@ export default function PickExerciseForActiveWorkoutModal({
   if (loadedExercises && loadedExercises.length > 0) {
     pickExerciseList = (
       <View>
-        <Text style={{ color: "white"}}>Pick Exercise(s) Below</Text>
+        <Text style={{ color: "white"}}>
+          Pick Exercise(s) Below. 
+          Note: exercises already in workout will not be added
+          </Text>
         <FlatList
           data={loadedExercises}
           renderItem={(e) => {

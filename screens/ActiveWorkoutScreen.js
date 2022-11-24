@@ -20,8 +20,9 @@ import DraggableFlatList, {
 
 import Exercise from "../components/Exercise";
 import PickExerciseForActiveWorkoutModal from "../components/UI/modals/PickExerciseForActiveWorkoutModal";
-import { deleteWorkout, fetchRoutine, fetchWorkoutName, fetchWorkouts, updateWorkoutEndTime, updateWorkoutName } from "../utils/database";
+import { deleteWorkout, fetchRoutine, fetchWorkoutName, fetchWorkouts, insertExerciseInstance, updateWorkoutEndTime, updateWorkoutName } from "../utils/database";
 import IconButton from "../components/UI/IconButton";
+import { ExerciseState } from "../models/exerciseState";
 
 export default function ActiveWorkoutScreen({
   handleOnSetCompleted,
@@ -32,6 +33,7 @@ export default function ActiveWorkoutScreen({
     routineName ? routineName : "New Workout"
   );
   const [numSetsCompleted, setNumSetsCompleted] = useState(0);
+  const [exerciseStateList, setExerciseStateList] = useState([]);
 
   const {
     seconds,
@@ -54,13 +56,50 @@ export default function ActiveWorkoutScreen({
     const routine = await fetchRoutine(routineName);
     console.log(routine);
     setExerciseList(routine.exercises);
+    // insert exerciseInstances and set exerciseStateList 
+    let exerciseStateList = [];
+    await Promise.all(
+      routine.exercises.map(async (exercise, index) => {
+        const exerciseInstanceId = await insertExerciseInstance(
+          exercise.name, workoutId, index + 1
+        );
+        exerciseStateList.push(new ExerciseState(
+          exercise.name, exerciseInstanceId, 0
+        ));
+      })
+    );
+    console.log('exerciseStateList');
+    console.log(exerciseStateList);
+    setExerciseStateList(exerciseStateList);
   };
 
   function submitPickedExerciseHandler(exercises) {
+    let curExerciseNames = [];
+    exerciseList.forEach((exercise) => {
+      curExerciseNames.push(exercise.name);
+    });
+    console.log('curExerciseNames')
+    console.log(curExerciseNames)
+    let exercisesToAddNames = [];
     exercises.forEach((exercise) => {
-      setExerciseList((curExerciseList) => {
-        return [...curExerciseList, exercise];
-      });
+      exercisesToAddNames.push(exercise.name);
+    });
+    console.log('exercisesToAddNames')
+    console.log(exercisesToAddNames)
+
+    let temp = exerciseList;
+    
+    exercises.forEach((exercise) => {
+      if (!curExerciseNames.includes(exercise.name)) {
+        temp.push(exercise);
+      }
+    });
+
+    console.log('result')
+    console.log(temp);
+
+    setExerciseList((curExerciseList) => {
+        return [...temp];
     });
     setModalVisible(false);
   }

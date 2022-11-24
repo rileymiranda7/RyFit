@@ -60,7 +60,7 @@ export default function Exercise({
             } else {
               shouldStatusBeCompleted = false;
               Alert.alert(
-                `Missing Weight and Reps`,
+                `Missing Weight and/or Reps`,
                 "",
                 [
                   {
