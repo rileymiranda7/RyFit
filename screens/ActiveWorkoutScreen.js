@@ -21,8 +21,10 @@ import DraggableFlatList, {
 import Exercise from "../components/Exercise";
 import PickExerciseForActiveWorkoutModal from "../components/UI/modals/PickExerciseForActiveWorkoutModal";
 import { 
+  deleteIncompleteSets,
   deleteWorkout, 
   fetchRoutine,
+  fetchSets,
   insertExerciseInstance, 
   insertSet, 
   updateWorkoutEndTime, 
@@ -61,6 +63,8 @@ export default function ActiveWorkoutScreen({
   const { routineName, workoutId } = route.params;
 
   const loadRoutine = async (routineName) => {
+    console.log("sets");
+    console.log(await fetchSets());
     const routine = await fetchRoutine(routineName);
     setExerciseList(routine.exercises);
     // insert exerciseInstances
@@ -136,8 +140,9 @@ export default function ActiveWorkoutScreen({
           },
           {
             text: "End Workout",
-            onPress: () => {
-              deleteWorkout(workoutId);
+            onPress: async () => {
+              await deleteIncompleteSets(workoutId);
+              await deleteWorkout(workoutId);
               navigation.navigate("CurrentWorkout");
             },
             style: "destructive",
@@ -149,7 +154,7 @@ export default function ActiveWorkoutScreen({
     else {
       Alert.alert(
         `End Current Workout?`,
-        "",
+        "Sets in progress (not completed or failed) will not be saved.",
         [
           {
             text: "Cancel",
@@ -160,6 +165,7 @@ export default function ActiveWorkoutScreen({
             text: "End Workout",
             onPress: async () => {
               await updateWorkoutEndTime(workoutId);
+              await deleteIncompleteSets(workoutId);
               navigation.navigate("CurrentWorkout");
             },
           },

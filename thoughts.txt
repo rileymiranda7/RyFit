@@ -153,4 +153,4 @@ does sets need setNumber to be part of key? setNumber is not unique value
 and when would we ever need to fetch a specific set?
 
 exercises added each get initial set now
-need to implement updating and deleting sets
+need to implement adding updating and deleting sets

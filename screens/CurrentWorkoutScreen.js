@@ -10,7 +10,7 @@ import {
 import React, { useState, useLayoutEffect, useEffect } from "react";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
 
-import { createWorkout, fetchRoutines, insertEmptyRoutine } from "../utils/database";
+import { createWorkout, fetchRoutines, fetchSets, insertEmptyRoutine } from "../utils/database";
 import RoutineItem from "../components/UI/RoutineItem";
 
 export default function CurrentWorkoutScreen() {
@@ -23,6 +23,8 @@ export default function CurrentWorkoutScreen() {
   const navigation = useNavigation();
 
   const loadRoutines = async () => {
+    console.log("sets");
+    console.log(await fetchSets());
     const routines = await fetchRoutines();
     setLoadedRoutines(routines);
   };

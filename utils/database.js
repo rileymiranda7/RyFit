@@ -694,6 +694,26 @@ export async function deleteWorkout(workoutId) {
   return promise;
 }
 
+export async function deleteIncompleteSets(workoutId) {
+  const promise = new Promise((resolve, reject) => {
+    database.transaction((tx) => {
+      tx.executeSql(
+        `DELETE FROM sets WHERE workoutId = ?
+        AND status = "IN PROGRESS";`,
+        [workoutId],
+        (_, result) => {
+          resolve(result);
+        },
+        (_, error) => {
+          reject(error);
+        }
+      );
+    });
+  });
+
+  return promise;
+}
+
 
 
 
