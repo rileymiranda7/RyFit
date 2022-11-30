@@ -10,7 +10,7 @@ import {
 import React, { useState, useLayoutEffect, useEffect } from "react";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
 
-import { createWorkout, fetchRoutines, fetchWorkouts, insertEmptyRoutine } from "../utils/database";
+import { createWorkout, fetchRoutines, insertEmptyRoutine } from "../utils/database";
 import RoutineItem from "../components/UI/RoutineItem";
 
 export default function CurrentWorkoutScreen() {

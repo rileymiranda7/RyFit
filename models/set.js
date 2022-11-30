@@ -7,14 +7,20 @@
 class Set {
   constructor(
     setNumber,
-    weightDone,
-    repsCompleted,
+    weight,
+    reps,
     type, // "WORKING", "WARMUP", "DROPSET"
-    status // "COMPLETED", "FAILED", "IN PROGRESS"
+    status, // "COMPLETED", "FAILED", "IN PROGRESS"
+    exerciseName,
+    workoutId
   ) {
     this.setNumber = setNumber;
-    this.weightDone = weightDone;
-    this.repsCompleted = repsCompleted;
+    this.weight = weight;
+    this.reps = reps;
+    this.exerciseName = exerciseName;
+    this.workoutId = workoutId;
+    this.type = type;
+    this.status = status;
   }
 }
 

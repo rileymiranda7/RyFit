@@ -20,9 +20,17 @@ import DraggableFlatList, {
 
 import Exercise from "../components/Exercise";
 import PickExerciseForActiveWorkoutModal from "../components/UI/modals/PickExerciseForActiveWorkoutModal";
-import { deleteWorkout, fetchRoutine, fetchWorkoutName, fetchWorkouts, insertExerciseInstance, updateWorkoutEndTime, updateWorkoutName } from "../utils/database";
+import { 
+  deleteWorkout, 
+  fetchRoutine,
+  insertExerciseInstance, 
+  insertSet, 
+  updateWorkoutEndTime, 
+  updateWorkoutName 
+} from "../utils/database";
 import IconButton from "../components/UI/IconButton";
-import { ExerciseState } from "../models/exerciseState";
+import { ExerciseInstance } from "../models/exerciseInstance";
+import Set from "../models/set";
 
 export default function ActiveWorkoutScreen({
   handleOnSetCompleted,
@@ -54,18 +62,21 @@ export default function ActiveWorkoutScreen({
 
   const loadRoutine = async (routineName) => {
     const routine = await fetchRoutine(routineName);
-    console.log(routine);
     setExerciseList(routine.exercises);
-    // insert exerciseInstances and set exerciseStateList 
+    // insert exerciseInstances
+    // update exerciseStateList
+    // insert sets for each exercise
     let exerciseStateList = [];
     await Promise.all(
       routine.exercises.map(async (exercise, index) => {
-        const exerciseInstanceId = await insertExerciseInstance(
-          exercise.name, workoutId, index + 1
+        const exerciseInstance = new ExerciseInstance(
+          exercise.name, workoutId, 0, index + 1
         );
-        exerciseStateList.push(new ExerciseState(
-          exercise.name, exerciseInstanceId, 0
-        ));
+        await insertExerciseInstance(exerciseInstance);
+        exerciseStateList.push(exerciseInstance);
+        await insertSet(new Set(
+          1, -1, -1, "WORKING", "IN PROGRESS", 
+          exercise.name, workoutId));
       })
     );
     console.log('exerciseStateList');
@@ -73,34 +84,38 @@ export default function ActiveWorkoutScreen({
     setExerciseStateList(exerciseStateList);
   };
 
-  function submitPickedExerciseHandler(exercises) {
+  async function submitPickedExerciseHandler(exercises) {
+    // update exerciseList and exerciseStateList with new
+    // exercises
+    // insert new exercise instances
+    // insert new sets for new exercises
     let curExerciseNames = [];
     exerciseList.forEach((exercise) => {
       curExerciseNames.push(exercise.name);
     });
     console.log('curExerciseNames')
     console.log(curExerciseNames)
-    let exercisesToAddNames = [];
-    exercises.forEach((exercise) => {
-      exercisesToAddNames.push(exercise.name);
-    });
-    console.log('exercisesToAddNames')
-    console.log(exercisesToAddNames)
-
-    let temp = exerciseList;
-    
-    exercises.forEach((exercise) => {
-      if (!curExerciseNames.includes(exercise.name)) {
-        temp.push(exercise);
-      }
-    });
-
+    let tempExerList = exerciseList;
+    let tempExerStateList = exerciseStateList;
+    await Promise.all(
+      exercises.map(async (exercise, index) => {
+        if (!curExerciseNames.includes(exercise.name)) {
+          tempExerList.push(exercise);
+          const exerciseInstance = new ExerciseInstance(
+            exercise.name, workoutId, 0, index + 1
+          );
+          await insertExerciseInstance(exerciseInstance);
+          await insertSet(new Set(
+            1, -1, -1, "WORKING", "IN PROGRESS", 
+            exercise.name, workoutId));
+          tempExerStateList.push(exerciseInstance);
+        }
+      })
+    );
     console.log('result')
-    console.log(temp);
-
-    setExerciseList((curExerciseList) => {
-        return [...temp];
-    });
+    console.log(tempExerStateList);
+    setExerciseList(tempExerList);
+    setExerciseStateList(tempExerStateList);
     setModalVisible(false);
   }
   
@@ -176,7 +191,6 @@ export default function ActiveWorkoutScreen({
     }
     console.log('workoutId: ' + workoutId);
     console.log('routineName: ' + routineName);
-    fetchWorkouts();
   }, [isFocused, routineName]);
 
 

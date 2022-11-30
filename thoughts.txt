@@ -131,9 +131,26 @@ what if exercise is deleted or no sets are completed
 start with empty workout?
 
 need to maintain workoutInstance array in activeworkoutscreen in state?
-would include exerciseInstanceId, sets completed, and also eventually
-exercise position number in routine
+would include exerciseInstanceId (exerciseName + workoutId), 
+sets completed, and exercise position number in routine
 
+workoutInstance should just use exerciseName and workoutId as primary key
 
+adding exerciseInstances done for exerciseStateList
+ 
+ start on set insertion?
+ each exercise should start with one set in in progresss status
 
-CANNOT LET USER ADD EXERCISE THATS ALREADY IN WORKOUT
+ primary key for sets will be made up of the set number, exerciseName,
+ and workoutId
+
+ need to test set insertion is working
+ 
+should split db file into db folder with init, insert, update, and delete
+files
+
+does sets need setNumber to be part of key? setNumber is not unique value
+and when would we ever need to fetch a specific set?
+
+exercises added each get initial set now
+need to implement updating and deleting sets

@@ -2,6 +2,7 @@ import * as SQLite from "expo-sqlite";
 
 import { Exercise } from "../models/exercise";
 import { Routine } from "../models/routine";
+import Set from "../models/set";
 
 const database = SQLite.openDatabase("RyFit.db");
 
@@ -15,7 +16,7 @@ export async function init() {
   /* const promise = new Promise((resolve, reject) => {
     database.transaction((tx) => {
       tx.executeSql(
-        `DROP TABLE exerciseInstances;`,
+        `DROP TABLE sets;`,
         [],
         () => {
           resolve();
@@ -136,11 +137,16 @@ export function initSets() {
       tx.executeSql(
         `
         CREATE TABLE IF NOT EXISTS sets (
-          setNumber INTEGER PRIMARY KEY NOT NULL,
-          exerciseInstanceId INTEGER NOT NULL,
-          weight INTEGER NOT NULL,
-          reps INTEGER NOT NULL,
-          type TEXT NOT NULL
+          setNumber INTEGER NOT NULL,
+          weight INTEGER,
+          reps INTEGER,
+          type TEXT NOT NULL,
+          status TEXT NOT NULL,
+          exerciseName TEXT NOT NULL,
+          workoutId INT NOT NULL,
+          PRIMARY KEY (exerciseName, workoutId),
+          FOREIGN KEY(exerciseName) REFERENCES exerciseInstances(exerciseName),
+          FOREIGN KEY(workoutId) REFERENCES exerciseInstances(workoutId)
         );
       `,
         [],
@@ -162,10 +168,12 @@ export function initExerciseInstances() {
       tx.executeSql(
         `
         CREATE TABLE IF NOT EXISTS exerciseInstances (
-          exerciseInstanceId INTEGER PRIMARY KEY NOT NULL,
           exerciseName TEXT NOT NULL,
           workoutId INT NOT NULL,
-          numberInWorkout INT NOT NULL
+          numberInWorkout INT NOT NULL,
+          PRIMARY KEY (exerciseName, workoutId),
+          FOREIGN KEY(exerciseName) REFERENCES exercises(exerciseName),
+          FOREIGN KEY(workoutId) REFERENCES workouts(workoutId)
         );
       `,
         [],
@@ -416,6 +424,39 @@ export async function fetchExerciseNumberInRoutine(routineName, exerciseName) {
     return promise;
   }
 
+  export function fetchSets() {
+    const promise = new Promise((resolve, reject) => {
+      database.transaction((tx) => {
+        tx.executeSql(
+          `SELECT * FROM sets;`,
+          [],
+          (_, result) => {
+            /* const sets = [];
+            for (const s of result.rows._array) {
+              sets.push(
+                new Set(
+                  s.setNumber,
+                  s.weight,
+                  s.reps,
+                  s.type,
+                  s.status,
+                  s.exerciseName,
+                  s.workoutId
+                )
+              );
+            } */
+            resolve(result.rows._array);
+          },
+          (_, error) => {
+            reject(error);
+          }
+        );
+      });
+    });
+  
+    return promise;
+  }
+
 
 
   /* INSERT FUNCTIONS */
@@ -505,16 +546,15 @@ export async function createWorkout(name) {
 }
 
 export async function insertExerciseInstance
-  (exerciseName, workoutId, numberInWorkout) {
+  (exerciseInstance) {
     const promise = new Promise((resolve, reject) => {
     database.transaction((tx) => {
       tx.executeSql(
         `INSERT INTO exerciseInstances (exerciseName, workoutId, numberInWorkout) 
-        VALUES (?, ?, ?) 
-        RETURNING exerciseInstanceId;`,
-        [exerciseName, workoutId, numberInWorkout],
+        VALUES (?, ?, ?);`,
+        [exerciseInstance.name, exerciseInstance.workoutId, exerciseInstance.numberInWorkout],
         (_, result) => {
-          resolve(result.rows._array[0].exerciseInstanceId);
+          resolve(result);
         },
         (_, error) => {
           reject(error);
@@ -526,7 +566,41 @@ export async function insertExerciseInstance
   return promise;
 }
 
+export async function insertSet(set) {
+    const promise = new Promise((resolve, reject) => {
+    database.transaction((tx) => {
+      tx.executeSql(
+        `INSERT INTO sets (
+          setNumber, 
+          weight, 
+          reps,
+          type,
+          status,
+          exerciseName,
+          workoutId
+          ) 
+        VALUES (?, ?, ?, ?, ?, ?, ?);`,
+        [
+          set.setNumber,
+          set.weight,
+          set.reps,
+          set.type,
+          set.status,
+          set.exerciseName,
+          set.workoutId
+        ],
+        (_, result) => {
+          resolve(result);
+        },
+        (_, error) => {
+          reject(error);
+        }
+      );
+    });
+  });
 
+  return promise;
+}
 
 
 /* DELETE FUNCTIONS */

@@ -46,7 +46,7 @@ export default function PickExerciseForActiveWorkoutModal({
   async function addExercise() {
     const newExercise = new Exercise(exerciseNameInput, "3:00", null);
     await insertExercise(newExercise);
-    submitPickedExerciseHandler([...selectedExercises, newExercise]);
+    await submitPickedExerciseHandler([...selectedExercises, newExercise]);
   }
 
   function shouldAddExercise() {
@@ -61,11 +61,11 @@ export default function PickExerciseForActiveWorkoutModal({
         },
         {
           text: "Add",
-          onPress: () => {
+          onPress: async () => {
             if (exerciseNameInput !== "") {
               addExercise();
             } else {
-              submitPickedExerciseHandler(selectedExercises);
+              await submitPickedExerciseHandler(selectedExercises);
             }
           },
         },
@@ -73,7 +73,7 @@ export default function PickExerciseForActiveWorkoutModal({
     );
   }
 
-  const combineExercises = () => {
+  const combineExercises = async () => {
     // get arr of loaded exercise names
     let loadedNamesArr = [];
     loadedExercises.forEach((exercise) => {
@@ -96,12 +96,12 @@ export default function PickExerciseForActiveWorkoutModal({
         exerciseNameInput !== "" &&
         !selectedNamesArr.includes(exerciseNameInput)
       ) {
-        submitPickedExerciseHandler([
+        await submitPickedExerciseHandler([
           ...selectedExercises,
           new Exercise(exerciseNameInput, "3:00", null, null),
         ]);
       } else {
-        submitPickedExerciseHandler(selectedExercises);
+        await submitPickedExerciseHandler(selectedExercises);
       }
     }
   };
@@ -171,7 +171,7 @@ export default function PickExerciseForActiveWorkoutModal({
               styles.buttonClose,
               pressed && { opacity: 0.75 },
             ]}
-            onPress={() => combineExercises()}
+            onPress={async () => await combineExercises()}
           >
             <Text style={styles.textStyle}>Add Exercise</Text>
           </Pressable>
