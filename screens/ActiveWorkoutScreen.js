@@ -43,6 +43,7 @@ export default function ActiveWorkoutScreen({
     routineName ? routineName : "New Workout"
   );
   const [numSetsCompleted, setNumSetsCompleted] = useState(0);
+  const [numSets, setNumSets] = useState(0)
   const [exerciseStateList, setExerciseStateList] = useState([]);
 
   const {
@@ -63,14 +64,13 @@ export default function ActiveWorkoutScreen({
   const { routineName, workoutId } = route.params;
 
   const loadRoutine = async (routineName) => {
-    console.log("sets");
-    console.log(await fetchSets());
     const routine = await fetchRoutine(routineName);
     setExerciseList(routine.exercises);
     // insert exerciseInstances
     // update exerciseStateList
     // insert sets for each exercise
     let exerciseStateList = [];
+    let numberOfSets = 0;
     await Promise.all(
       routine.exercises.map(async (exercise, index) => {
         const exerciseInstance = new ExerciseInstance(
@@ -81,8 +81,10 @@ export default function ActiveWorkoutScreen({
         await insertSet(new Set(
           1, -1, -1, "WORKING", "IN PROGRESS", 
           exercise.name, workoutId));
+        numberOfSets = index + 1;
       })
     );
+    setNumSets(numberOfSets);
     console.log('exerciseStateList');
     console.log(exerciseStateList);
     setExerciseStateList(exerciseStateList);
@@ -112,6 +114,7 @@ export default function ActiveWorkoutScreen({
           await insertSet(new Set(
             1, -1, -1, "WORKING", "IN PROGRESS", 
             exercise.name, workoutId));
+          setNumSets(numSets + 1);
           tempExerStateList.push(exerciseInstance);
         }
       })
@@ -128,6 +131,8 @@ export default function ActiveWorkoutScreen({
   };
   
   const endWorkout = () => {
+    console.log("numSets: " + numSets);
+    console.log("numSetsCompleted: " + numSetsCompleted);
     if (numSetsCompleted < 1) {
       Alert.alert(
         `End Current Workout?`,
@@ -150,11 +155,10 @@ export default function ActiveWorkoutScreen({
         ]
       );
       return;
-    }
-    else {
+    } else if (numSets - numSetsCompleted > 0) {
       Alert.alert(
         `End Current Workout?`,
-        "Sets in progress (not completed or failed) will not be saved.",
+        "Sets in progress will not be saved",
         [
           {
             text: "Cancel",
@@ -166,6 +170,27 @@ export default function ActiveWorkoutScreen({
             onPress: async () => {
               await updateWorkoutEndTime(workoutId);
               await deleteIncompleteSets(workoutId);
+              navigation.navigate("CurrentWorkout");
+            },
+            style: "destructive",
+          },
+        ]
+        );
+    }
+    else {
+      Alert.alert(
+        `End Current Workout?`,
+        "",
+        [
+          {
+            text: "Cancel",
+            onPress: () => {},
+            style: "cancel",
+          },
+          {
+            text: "End Workout",
+            onPress: async () => {
+              await updateWorkoutEndTime(workoutId);
               navigation.navigate("CurrentWorkout");
             },
           },
