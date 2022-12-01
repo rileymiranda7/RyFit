@@ -292,6 +292,7 @@ export default function ActiveWorkoutScreen({
                     exerciseName={item.name}
                     handleOnSetCompleted={handleOnSetCompleted}
                     updateNumSetsCompleted={updateNumSetsCompleted}
+                    workoutId={workoutId}
                   />
                 </TouchableOpacity>
               </ScaleDecorator>

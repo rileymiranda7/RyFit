@@ -405,14 +405,16 @@ export async function fetchExerciseNumberInRoutine(routineName, exerciseName) {
     return promise;
   }
 
-  export function fetchWorkouts() {
+  export function fetchCompletedWorkouts() {
     const promise = new Promise((resolve, reject) => {
       database.transaction((tx) => {
-        tx.executeSql(
-          `SELECT * FROM workouts;`,
+        tx.executeSql( 
+          `SELECT * FROM workouts
+          WHERE endTime IS NOT NULL
+          ORDER BY endTime DESC;`,
           [],
           (_, result) => {
-            resolve(result);
+            resolve(result.rows._array);
           },
           (_, error) => {
             reject(error);
@@ -456,6 +458,7 @@ export async function fetchExerciseNumberInRoutine(routineName, exerciseName) {
   
     return promise;
   }
+
 
 
 
@@ -794,6 +797,76 @@ export async function updateExerciseNumberInRoutine(
         WHERE routineName = ?
         AND exerciseName = ?;`,
         [newPositionInRoutine, routineName, exerciseName],
+        (_, result) => {
+          resolve(result);
+        },
+        (_, error) => {
+          reject(error);
+        }
+      );
+    });
+  });
+
+  return promise;
+}
+
+export async function updateSetWeight(setNumber, workoutId, exerciseName, newWeight) {
+  const promise = new Promise((resolve, reject) => {
+    database.transaction((tx) => {
+      tx.executeSql(
+        `UPDATE sets 
+        SET weight = ?
+        WHERE setNumber = ?
+        AND workoutId = ?
+        AND exerciseName = ?;`,
+        [newWeight, setNumber, workoutId, exerciseName],
+        (_, result) => {
+          resolve(result);
+        },
+        (_, error) => {
+          reject(error);
+        }
+      );
+    });
+  });
+
+  return promise;
+}
+
+export async function updateSetReps(setNumber, workoutId, exerciseName, newReps) {
+  const promise = new Promise((resolve, reject) => {
+    database.transaction((tx) => {
+      tx.executeSql(
+        `UPDATE sets 
+        SET reps = ?
+        WHERE setNumber = ?
+        AND workoutId = ?
+        AND exerciseName = ?;`,
+        [newReps, setNumber, workoutId, exerciseName],
+        (_, result) => {
+          resolve(result);
+        },
+        (_, error) => {
+          reject(error);
+        }
+      );
+    });
+  });
+
+  return promise;
+}
+
+export async function updateSetStatus(
+  setNumber, workoutId, exerciseName, newStatus) {
+  const promise = new Promise((resolve, reject) => {
+    database.transaction((tx) => {
+      tx.executeSql(
+        `UPDATE sets 
+        SET status = ?
+        WHERE setNumber = ?
+        AND workoutId = ?
+        AND exerciseName = ?;`,
+        [newStatus, setNumber, workoutId, exerciseName],
         (_, result) => {
           resolve(result);
         },

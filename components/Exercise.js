@@ -6,11 +6,13 @@ import { Row } from "react-native-easy-grid";
 import TableHeaderRow from "./UI/table/rows/TableHeaderRow";
 import IncompleteRow from "./UI/table/rows/IncompleteRow";
 import IconButton from "./UI/IconButton";
+import { fetchSets, updateSetReps, updateSetStatus, updateSetWeight } from "../utils/database";
 
 export default function Exercise({ 
   exerciseName, 
   handleOnSetCompleted, 
-  updateNumSetsCompleted 
+  updateNumSetsCompleted,
+  workoutId
 }) {
   const [currentNumberOfSets, setCurrentNumberOfSets] = useState(1);
   // array of set rows
@@ -26,67 +28,78 @@ export default function Exercise({
   const [restTimeAmount, setRestTimeAmount] = useState("2.25");
 
   // updates rowArr state when any input on any row is changed
-  function inputChangedHandler(inputIdentifier, setNumber, enteredValue) {
+  async function inputChangedHandler(inputIdentifier, setNumber, enteredValue) {
+    console.log("rowArr")
+    console.log(rowArr)
     let temp = rowArr;
-    let updatedArr = temp.map((set) => {
-      if (set.setNumber === setNumber) {
-        if (inputIdentifier === "lbs") {
-          return {
-            setNumber: set.setNumber,
-            previous: set.previous,
-            lbs: enteredValue,
-            reps: set.reps,
-            status: set.status,
-          };
-        } else if (inputIdentifier === "reps") {
-          return {
-            setNumber: set.setNumber,
-            previous: set.previous,
-            lbs: set.lbs,
-            reps: enteredValue,
-            status: set.status,
-          };
-        } else {
-          // inputIdentifier === "status"
-          // if set status is currently in progress
-          // and we get the signal to try to set to completed
-          let shouldStatusBeCompleted;
-          if (set.status === "IN PROGRESS") {
-            // if lbs and reps are filled out we can set to completed
-            if (set.lbs && set.reps) {
-              shouldStatusBeCompleted = true;
-              handleOnSetCompleted(restTimeAmount);
-              updateNumSetsCompleted(true);
+    const updatedArr = await Promise.all(
+      temp.map(async (set) => {
+        if (set.setNumber === setNumber) {
+          if (inputIdentifier === "lbs") {
+            await updateSetWeight(setNumber, workoutId, exerciseName, enteredValue);
+            return {
+              setNumber: set.setNumber,
+              previous: set.previous,
+              lbs: enteredValue,
+              reps: set.reps,
+              status: set.status,
+            };
+          } else if (inputIdentifier === "reps") {
+            await updateSetReps(setNumber, workoutId, exerciseName, enteredValue);
+            return {
+              setNumber: set.setNumber,
+              previous: set.previous,
+              lbs: set.lbs,
+              reps: enteredValue,
+              status: set.status,
+            };
+          } else {
+            // inputIdentifier === "status"
+            // if set status is currently in progress
+            // and we get the signal to try to set to completed
+            let shouldStatusBeCompleted;
+            if (set.status === "IN PROGRESS") {
+              // if lbs and reps are filled out we can set to completed
+              if (set.lbs && set.reps) {
+                shouldStatusBeCompleted = true;
+                handleOnSetCompleted(restTimeAmount);
+                updateNumSetsCompleted(true);
+              } else {
+                shouldStatusBeCompleted = false;
+                Alert.alert(
+                  `Missing Weight and/or Reps`,
+                  "",
+                  [
+                    {
+                      text: "Ok",
+                      onPress: () => {},
+                      style: "default",
+                    }
+                  ]
+                );
+              }
             } else {
               shouldStatusBeCompleted = false;
-              Alert.alert(
-                `Missing Weight and/or Reps`,
-                "",
-                [
-                  {
-                    text: "Ok",
-                    onPress: () => {},
-                    style: "default",
-                  }
-                ]
-              );
+              updateNumSetsCompleted(false);
             }
-          } else {
-            shouldStatusBeCompleted = false;
-            updateNumSetsCompleted(false);
+            const newStatus = shouldStatusBeCompleted ? 
+              "COMPLETED" : "IN PROGRESS";
+            await updateSetStatus(setNumber, workoutId, exerciseName, newStatus)
+            return {
+              setNumber: set.setNumber,
+              previous: set.previous,
+              lbs: set.lbs,
+              reps: set.reps,
+              status: newStatus,
+            };
           }
-          return {
-            setNumber: set.setNumber,
-            previous: set.previous,
-            lbs: set.lbs,
-            reps: set.reps,
-            status: shouldStatusBeCompleted ? "COMPLETED" : "IN PROGRESS",
-          };
         }
-      }
-      return set;
-    });
+        return set;
+      })
+    );
     setRowArr(updatedArr);
+    console.log("sets");
+    console.log(await fetchSets());
   }
 
   let row = [];

@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View, Alert } from "react-native";
+import { StyleSheet, View, Alert } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createDrawerNavigator } from "@react-navigation/drawer";
@@ -14,7 +14,6 @@ import ProfileScreen from "./screens/ProfileScreen";
 import CurrentWorkoutScreen from "./screens/CurrentWorkoutScreen";
 import PickExerciseForRoutineScreen from "./screens/PickExerciseForRoutineScreen";
 import HeaderTimer from "./components/UI/timer/HeaderTimer";
-import TestCountdown from "./TestCountdown";
 import { init } from "./utils/database";
 import RoutineModal from "./components/UI/modals/RoutineModal";
 import ActiveWorkoutScreen from "./screens/ActiveWorkoutScreen";

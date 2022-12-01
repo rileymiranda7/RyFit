@@ -6,8 +6,8 @@ import { Colors } from "../../../../constants/colors";
 
 export default function CompletedButton({ inputChangedHandler, setIsCompleted }) {
   
-  function onPress() {
-    inputChangedHandler("rndm str for enteredValue cuz we don't need it");
+  async function onPress() {
+    await inputChangedHandler("rndm str for enteredValue cuz we don't need it");
   }
 
   return (
@@ -15,7 +15,7 @@ export default function CompletedButton({ inputChangedHandler, setIsCompleted })
       icon="checkbox"
       size={28}
       color={setIsCompleted ? Colors.neonGreen : "white"}
-      onPress={onPress}
+      onPress={async () => await onPress()}
     />
   );
 }

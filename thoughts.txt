@@ -154,3 +154,13 @@ and when would we ever need to fetch a specific set?
 
 exercises added each get initial set now
 need to implement adding updating and deleting sets
+
+to pull all past workout info first get most recent workout
+ordered by endTime
+use workoutId from that to get exerciseInstances ordered by
+numberInWorkout
+then you can get sets for each exerciseInstance
+
+for getting past workouts use endTime column to determine
+if workout is in progress or not
+return where endTime is not null
