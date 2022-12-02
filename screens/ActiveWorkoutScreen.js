@@ -27,7 +27,7 @@ import {
   fetchSets,
   insertExerciseInstance, 
   insertSet, 
-  updateWorkoutEndTime, 
+  updateWorkoutDuration, 
   updateWorkoutName 
 } from "../utils/database";
 import IconButton from "../components/UI/IconButton";
@@ -168,7 +168,7 @@ export default function ActiveWorkoutScreen({
           {
             text: "End Workout",
             onPress: async () => {
-              await updateWorkoutEndTime(workoutId);
+              await updateWorkoutDuration(workoutId);
               await deleteIncompleteSets(workoutId);
               navigation.navigate("CurrentWorkout");
             },
@@ -190,7 +190,8 @@ export default function ActiveWorkoutScreen({
           {
             text: "End Workout",
             onPress: async () => {
-              await updateWorkoutEndTime(workoutId);
+              const duration = hours + "h " + minutes + "m"
+              await updateWorkoutDuration(duration, workoutId);
               navigation.navigate("CurrentWorkout");
             },
           },

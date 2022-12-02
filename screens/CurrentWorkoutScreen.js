@@ -81,6 +81,32 @@ export default function CurrentWorkoutScreen() {
     );
   }
 
+  let renderRoutines;
+  if (loadedRoutines !== undefined && loadedRoutines.length > 0) {
+    renderRoutines = (
+      <View style={styles.routinesContainer}>
+        <FlatList
+          data={loadedRoutines}
+          keyExtractor={(e) => e.name}
+          renderItem={(routine) => {
+            return (
+              <RoutineItem
+                routineName={routine.item.name}
+                exercises={routine.item.exercises}
+                refreshRoutines={loadRoutines}
+              />
+            );
+          }}
+          numColumns={2}
+        />
+      </View>
+    );
+  } else {
+    renderRoutines = (<View style={styles.routinesContainer}>
+      <Text style={styles.noRoutinesTextStyle}>No routines found{"\n"}Create one above</Text>
+    </View>)
+  }
+
   let workoutNotStartedScreen = (
     <View style={styles.container}>
       <Text style={styles.textStyle}>
@@ -97,24 +123,7 @@ export default function CurrentWorkoutScreen() {
         }}
       />
       {createRoutineRender}
-      {loadedRoutines !== undefined && loadedRoutines.length > 0 && (
-        <View style={styles.routinesContainer}>
-          <FlatList
-            data={loadedRoutines}
-            keyExtractor={(e) => e.name}
-            renderItem={(routine) => {
-              return (
-                <RoutineItem
-                  routineName={routine.item.name}
-                  exercises={routine.item.exercises}
-                  refreshRoutines={loadRoutines}
-                />
-              );
-            }}
-            numColumns={2}
-          />
-        </View>
-      )}
+      {renderRoutines}
     </View>
   );
 
@@ -156,6 +165,12 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     fontSize: 20,
+    marginVertical: 5,
+  },
+  noRoutinesTextStyle: {
+    color: "white",
+    textAlign: "center",
+    fontSize: 15,
     marginVertical: 5,
   },
   button: {

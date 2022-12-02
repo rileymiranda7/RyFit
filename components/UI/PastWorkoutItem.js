@@ -2,10 +2,7 @@ import { View, Text, StyleSheet, Pressable } from 'react-native'
 import React from 'react'
 
 export default function PastWorkoutItem({ 
-  workoutId, 
-  startTime, 
-  endTime, 
-  name 
+  workout
 }) {
   return (
     <Pressable
@@ -13,8 +10,10 @@ export default function PastWorkoutItem({
       onPress={() => {}}
     >
       <View style={styles.headerContainer}>
-        <Text style={styles.workoutTextStyle}>{name}</Text>
-        <Text style={styles.workoutTextStyle}>{startTime}</Text>
+        <Text style={styles.workoutNameStyle}>{workout.name}</Text>
+        <Text style={styles.workoutDateTimeStyle}>
+          {workout.dateShort + ' | ' + workout.startTime}
+        </Text>
       </View>
       {/* {exerciseList.map((exercise, index) => {
         return (
@@ -37,10 +36,15 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: "white",
   },
-  workoutTextStyle: {
+  workoutNameStyle: {
+    color: "white",
+    fontSize: 16,
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  workoutDateTimeStyle: {
     color: "white",
     fontSize: 14,
-    fontWeight: "bold",
     textAlign: "center",
   },
   exerciseTextStyle: {

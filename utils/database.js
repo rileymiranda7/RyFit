@@ -3,6 +3,7 @@ import * as SQLite from "expo-sqlite";
 import { Exercise } from "../models/exercise";
 import { Routine } from "../models/routine";
 import Set from "../models/set";
+import { Workout } from "../models/workout";
 
 const database = SQLite.openDatabase("RyFit.db");
 
@@ -16,7 +17,7 @@ export async function init() {
   /* const promise = new Promise((resolve, reject) => {
     database.transaction((tx) => {
       tx.executeSql(
-        `DROP TABLE sets;`,
+        `DROP TABLE workouts;`,
         [],
         () => {
           resolve();
@@ -113,9 +114,12 @@ export function initWorkouts() {
         `
         CREATE TABLE IF NOT EXISTS workouts (
           workoutId INTEGER PRIMARY KEY NOT NULL,
-          startTime DATE NOT NULL,
-          endTime DATE,
-          name TEXT NOT NULL
+          dateShort TEXT NOT NULL,
+          dateFull TEXT NOT NULL,
+          startTime TEXT NOT NULL,
+          duration TEXT,
+          name TEXT NOT NULL,
+          timestamp DATE NOT NULL
         );
       `,
         [],
@@ -410,11 +414,24 @@ export async function fetchExerciseNumberInRoutine(routineName, exerciseName) {
       database.transaction((tx) => {
         tx.executeSql( 
           `SELECT * FROM workouts
-          WHERE endTime IS NOT NULL
-          ORDER BY endTime DESC;`,
+          WHERE duration IS NOT NULL
+          ORDER BY timestamp DESC;`,
           [],
           (_, result) => {
-            resolve(result.rows._array);
+            const workouts = [];
+            for (const w of result.rows._array) {
+              workouts.push(
+                new Workout(
+                  w.workoutId,
+                  w.dateShort,
+                  w.dateFull,
+                  w.startTime,
+                  w.duration,
+                  w.name
+                )
+              )
+            }
+            resolve(workouts);
           },
           (_, error) => {
             reject(error);
@@ -528,13 +545,19 @@ export function insertExercise(exercise) {
 }
 
 export async function createWorkout(name) {
+  const dateShort = 
+  (new Date().toLocaleDateString(undefined,{dateStyle:'short'})).toString();
+  const dateFull =
+  (new Date().toLocaleDateString(undefined,{dateStyle:'full'})).toString();
+  const startTime = 
+  (new Date().toLocaleTimeString(undefined,{timeStyle:'short'})).toString();
   const promise = new Promise((resolve, reject) => {
     database.transaction((tx) => {
       tx.executeSql(
-        `INSERT INTO workouts (startTime, name) 
-        VALUES (DATETIME('now'), ?) 
+        `INSERT INTO workouts (dateShort, dateFull, startTime, name, timestamp) 
+        VALUES (?, ?, ?, ?, datetime('now')) 
         RETURNING workoutId;`,
-        [name],
+        [dateShort, dateFull, startTime, name],
         (_, result) => {
           resolve(result.rows._array[0].workoutId);
         },
@@ -744,15 +767,15 @@ export async function updateWorkoutName(workoutId, name) {
   return promise;
 }
 
-export async function updateWorkoutEndTime(workoutId) {
+export async function updateWorkoutDuration(duration, workoutId) {
   const promise = new Promise((resolve, reject) => {
     database.transaction((tx) => {
       tx.executeSql(
         `UPDATE workouts 
-        SET endTime = DATETIME('now')
+        SET duration = ?
         WHERE workoutId = ?
-        RETURNING endTime;`,
-        [workoutId],
+        RETURNING duration;`,
+        [duration, workoutId],
         (_, result) => {
           resolve(result.rows._array[0]);
         },

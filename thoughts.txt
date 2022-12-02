@@ -164,3 +164,21 @@ then you can get sets for each exerciseInstance
 for getting past workouts use endTime column to determine
 if workout is in progress or not
 return where endTime is not null
+
+on pastworkoutitem just show workout name, exercises, and date
+in detailed screen show time and duration as well
+
+instead of using sqlite date time functionality use
+native js functions to store multiple versions of time and date
+
+store just short time
+
+don't store end time just duration
+
+store short and full date
+
+store duration with useStopwatch
+
+need to also store regular timestamp to use for ordering workouts
+
+need to fix keyboard not being dimissed only dismissed in flatlist

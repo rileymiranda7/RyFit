@@ -25,28 +25,35 @@ export default function PastWorkoutsScreen() {
     }
   }, [isFocused]);
 
+  let renderPastWorkoutItems;
+  if (loadedWorkouts !== undefined && loadedWorkouts.length > 0) {
+    renderPastWorkoutItems = (
+      <FlatList
+        data={loadedWorkouts}
+        renderItem={(workout) => {
+          return (
+            <PastWorkoutItem 
+              workout={workout.item}
+            />
+          )
+        }}
+        keyExtractor={w => w.workoutId}
+      />
+    )
+  } else {
+    renderPastWorkoutItems = (
+      <Text style={styles.noPastWorkoutsTextStyle}>
+        No past workouts found
+      </Text>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.textStyle}>
         Past Workouts
       </Text>
-      {loadedWorkouts !== undefined && 
-      loadedWorkouts.length > 0 && (
-        <FlatList
-          data={loadedWorkouts}
-          renderItem={(workout) => {
-          return (
-            <PastWorkoutItem 
-              workoutId={workout.item.workoutId}
-              startTime={workout.item.startTime}
-              endTime={workout.item.endTime}
-              name={workout.item.name}
-            />
-          )
-          }}
-          keyExtractor={w => w.workoutId}
-        />
-      )}
+      {renderPastWorkoutItems}
     </View>
   );
 }
@@ -63,6 +70,12 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     fontSize: 20,
+    marginVertical: 5,
+  },
+  noPastWorkoutsTextStyle: {
+    color: "white",
+    textAlign: "center",
+    fontSize: 15,
     marginVertical: 5,
   },
 });
