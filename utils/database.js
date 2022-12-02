@@ -476,6 +476,29 @@ export async function fetchExerciseNumberInRoutine(routineName, exerciseName) {
     return promise;
   }
 
+  export function fetchExercisesFromPastWorkout(workoutId) {
+    const promise = new Promise((resolve, reject) => {
+      database.transaction((tx) => {
+        tx.executeSql(
+          `SELECT exerciseName FROM exerciseInstances
+          WHERE workoutId = ?
+          ORDER BY numberInWorkout;`,
+          [workoutId],
+          (_, result) => {
+            console.log("past workout exercises")
+            console.log(result.rows._array);
+            resolve(result.rows._array);
+          },
+          (_, error) => {
+            reject(error);
+          }
+        );
+      });
+    });
+  
+    return promise;
+  }
+
 
 
 
