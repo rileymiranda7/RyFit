@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, Pressable } from 'react-native'
 import { useState, useEffect } from 'react'
-import { useIsFocused } from '@react-navigation/native'
+import { useIsFocused, useNavigation } from '@react-navigation/native'
 import { fetchExercisesFromPastWorkout } from '../../utils/database';
 
 export default function PastWorkoutItem({ 
@@ -10,9 +10,9 @@ export default function PastWorkoutItem({
   const [loadedExercises, setLoadedExercises] = useState();
 
   const isFocused = useIsFocused();
+  const navigation = useNavigation();
 
   const loadExercises = async () => {
-    console.log("past workout exercises1")
     const exercises = await fetchExercisesFromPastWorkout(workout.workoutId);
     setLoadedExercises(exercises);
   };
@@ -26,7 +26,11 @@ export default function PastWorkoutItem({
   return (
     <Pressable
       style={({ pressed }) => [pressed && styles.pressed, styles.container]}
-      onPress={() => {}}
+      onPress={() => {
+        navigation.navigate("PastWorkoutItemScreen", {
+          workout: workout
+        });
+      }}
     >
       <View style={styles.headerContainer}>
         <Text style={styles.workoutNameStyle}>{workout.name}</Text>

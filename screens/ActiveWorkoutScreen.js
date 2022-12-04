@@ -158,7 +158,7 @@ export default function ActiveWorkoutScreen({
     } else if (numSets - numSetsCompleted > 0) {
       Alert.alert(
         `End Current Workout?`,
-        "Sets in progress will not be saved",
+        "There are some sets still in progress!",
         [
           {
             text: "Cancel",
@@ -205,6 +205,14 @@ export default function ActiveWorkoutScreen({
       setNumSetsCompleted(numSetsCompleted + 1);
     } else {
       setNumSetsCompleted(numSetsCompleted - 1);
+    }
+  }
+
+  const updateNumSets = (shouldAddOneSet) => {
+    if (shouldAddOneSet) {
+      setNumSets(numSets + 1);
+    } else {
+      setNumSets(numSets - 1);
     }
   }
   
@@ -293,6 +301,7 @@ export default function ActiveWorkoutScreen({
                     exerciseName={item.name}
                     handleOnSetCompleted={handleOnSetCompleted}
                     updateNumSetsCompleted={updateNumSetsCompleted}
+                    updateNumSets={updateNumSets}
                     workoutId={workoutId}
                   />
                 </TouchableOpacity>

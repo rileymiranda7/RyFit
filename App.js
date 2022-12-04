@@ -17,6 +17,7 @@ import HeaderTimer from "./components/UI/timer/HeaderTimer";
 import { init } from "./utils/database";
 import RoutineModal from "./components/UI/modals/RoutineModal";
 import ActiveWorkoutScreen from "./screens/ActiveWorkoutScreen";
+import PastWorkoutItemScreen from "./screens/PastWorkoutItemScreen";
 
 const BottomTabs = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
@@ -123,6 +124,13 @@ function PastWorkoutsStackNavigator() {
       <Stack.Screen
         name="PastWorkoutsStack"
         component={PastWorkoutsScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="PastWorkoutItemScreen"
+        component={PastWorkoutItemScreen}
         options={{
           headerShown: false,
         }}

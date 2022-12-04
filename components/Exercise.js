@@ -6,12 +6,14 @@ import { Row } from "react-native-easy-grid";
 import TableHeaderRow from "./UI/table/rows/TableHeaderRow";
 import IncompleteRow from "./UI/table/rows/IncompleteRow";
 import IconButton from "./UI/IconButton";
-import { fetchSets, updateSetReps, updateSetStatus, updateSetWeight } from "../utils/database";
+import { deleteAllSetsFromCurrentExercise, deleteSet, fetchSets, insertSet, updateSetOrder, updateSetReps, updateSetStatus, updateSetWeight } from "../utils/database";
+import Set from "../models/set";
 
 export default function Exercise({ 
   exerciseName, 
   handleOnSetCompleted, 
   updateNumSetsCompleted,
+  updateNumSets,
   workoutId
 }) {
   const [currentNumberOfSets, setCurrentNumberOfSets] = useState(1);
@@ -29,8 +31,6 @@ export default function Exercise({
 
   // updates rowArr state when any input on any row is changed
   async function inputChangedHandler(inputIdentifier, setNumber, enteredValue) {
-    console.log("rowArr")
-    console.log(rowArr)
     let temp = rowArr;
     const updatedArr = await Promise.all(
       temp.map(async (set) => {
@@ -98,8 +98,6 @@ export default function Exercise({
       })
     );
     setRowArr(updatedArr);
-    console.log("sets");
-    console.log(await fetchSets());
   }
 
   let row = [];
@@ -172,7 +170,6 @@ export default function Exercise({
         },
       ];
     });
-    setCurrentNumberOfSets(currentNumberOfSets + 1);
   }
 
   function deleteSetButtonPressedHandler(setNumberToRemove) {
@@ -201,7 +198,12 @@ export default function Exercise({
     setCurrentNumberOfSets(currentNumberOfSets - 1);
   }
 
-  const deleteItem = ({ item, index }) => {
+  const deleteItem = async ({ item, index }) => {
+    const setNumberToBeDeleted = index + 1;
+    updateNumSets(false);
+    if (rowArr[index].status === "COMPLETED") {
+      updateNumSetsCompleted(false);
+    }
     // delete item
     let a = rowArr;
     a.splice(index, 1);
@@ -211,7 +213,7 @@ export default function Exercise({
     // this code works in reseting the set numbers
     // but any nums in fields aren't deleted right
     let b = a.map((set) => {
-      if (set.setNumber > index + 1) {
+      if (set.setNumber > setNumberToBeDeleted) {
         return {
           setNumber: set.setNumber - 1,
           previous: set.previous,
@@ -224,6 +226,9 @@ export default function Exercise({
       }
     });
     setRowArr([...b]);
+    await deleteAllSetsFromCurrentExercise(workoutId, exerciseName);
+    await updateSetOrder(
+      workoutId, exerciseName, b);
   };
 
   return (
@@ -247,12 +252,27 @@ export default function Exercise({
       <TableHeaderRow />
 
       {rowArr.map((item, index) =>
-        renderItem({ item, index }, () => {
-          deleteItem({ item, index });
+        renderItem({ item, index }, async () => {
+          await deleteItem({ item, index });
         })
       )}
 
-      <Button title="Add Set" onPress={addRowButtonPressedHandler} />
+      <Button 
+        title="Add Set" 
+        onPress={async () => {
+          addRowButtonPressedHandler();
+          await insertSet(new Set(
+            currentNumberOfSets + 1,
+            -1, -1,
+            "WORKING",
+            "IN PROGRESS",
+            exerciseName,
+            workoutId
+          ));
+          setCurrentNumberOfSets(currentNumberOfSets + 1);
+          updateNumSets(true);
+        }}
+      />
     </View>
   );
 }

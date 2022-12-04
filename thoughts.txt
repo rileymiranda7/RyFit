@@ -182,3 +182,46 @@ store duration with useStopwatch
 need to also store regular timestamp to use for ordering workouts
 
 need to fix keyboard not being dimissed only dismissed in flatlist
+
+need to insert set when new set added
+need to update set numbers for sets after set deleted and
+need to delete set from db
+
+unique constraint failing for sets because if u have more than 
+one set the keys are same
+
+working now ?
+
+test deleting sets more (test first set and last set)
+
+need to delete the set first than fix order otherwise there are
+2 duplicate set rows
+
+updating exercise order in routine was fine when an exercise was
+deleted because numberInRoutine is not part of exerciseInstances
+key
+
+deleting set first was not problem
+problem is in map the current set setnumber will be the same as the 
+
+problem with logic when deleting first 
+
+solution: delete all sets in exerciseInstance and reinsert with
+array in exercise state
+
+what happens when all sets deleted from exercise?
+
+need to delete sets that werent completed
+
+need to fix numSets and numSets completed logic
+with set deletion and adding
+
+increase num sets when added in
+routine, exercise, or add set button
+decrease num sets when set is deleted or exercise is deleted
+
+increase numSetsCompleted when completed button pressed
+decrease numSetsCompleted when completed button pressed again
+or completed set deleted or exercise with completed sets deleted
+
+everything implemented except deleted exercises part

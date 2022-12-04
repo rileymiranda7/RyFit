@@ -148,7 +148,7 @@ export function initSets() {
           status TEXT NOT NULL,
           exerciseName TEXT NOT NULL,
           workoutId INT NOT NULL,
-          PRIMARY KEY (exerciseName, workoutId),
+          PRIMARY KEY (exerciseName, workoutId, setNumber),
           FOREIGN KEY(exerciseName) REFERENCES exerciseInstances(exerciseName),
           FOREIGN KEY(workoutId) REFERENCES exerciseInstances(workoutId)
         );
@@ -485,8 +485,28 @@ export async function fetchExerciseNumberInRoutine(routineName, exerciseName) {
           ORDER BY numberInWorkout;`,
           [workoutId],
           (_, result) => {
-            console.log("past workout exercises")
-            console.log(result.rows._array);
+            resolve(result.rows._array);
+          },
+          (_, error) => {
+            reject(error);
+          }
+        );
+      });
+    });
+  
+    return promise;
+  
+  }
+  export function fetchSetsFromCompletedExercise(exerciseName, workoutId) {
+    const promise = new Promise((resolve, reject) => {
+      database.transaction((tx) => {
+        tx.executeSql(
+          `SELECT * FROM sets
+          WHERE exerciseName = ?
+          AND workoutId = ?
+          ORDER BY setNumber;`,
+          [exerciseName, workoutId],
+          (_, result) => {
             resolve(result.rows._array);
           },
           (_, error) => {
@@ -763,6 +783,53 @@ export async function deleteIncompleteSets(workoutId) {
   return promise;
 }
 
+export async function deleteSet(
+  workoutId, exerciseName, setNumberToBeDeleted
+) {
+  console.log(await fetchSets());
+  const promise = new Promise((resolve, reject) => {
+    database.transaction((tx) => {
+      tx.executeSql(
+        `DELETE FROM sets WHERE workoutId = ?
+        AND exerciseName = ?
+        AND setNumber = ?;`,
+        [workoutId, exerciseName, setNumberToBeDeleted],
+        (_, result) => {
+          resolve(result);
+        },
+        (_, error) => {
+          reject(error);
+        }
+      );
+    });
+  });
+
+  return promise;
+}
+
+export async function deleteAllSetsFromCurrentExercise(
+  workoutId, exerciseName
+) {
+  console.log(await fetchSets());
+  const promise = new Promise((resolve, reject) => {
+    database.transaction((tx) => {
+      tx.executeSql(
+        `DELETE FROM sets WHERE workoutId = ?
+        AND exerciseName = ?;`,
+        [workoutId, exerciseName],
+        (_, result) => {
+          resolve(result);
+        },
+        (_, error) => {
+          reject(error);
+        }
+      );
+    });
+  });
+
+  return promise;
+}
+
 
 
 
@@ -856,6 +923,30 @@ export async function updateExerciseNumberInRoutine(
   return promise;
 }
 
+export async function updateSetNumberInExercise(
+  workoutId, exerciseName, newSetNumber
+  ) {
+  const promise = new Promise((resolve, reject) => {
+    database.transaction((tx) => {
+      tx.executeSql(
+        `UPDATE sets 
+        SET setNumber = ?
+        WHERE workoutId = ?
+        AND exerciseName = ?;`,
+        [newSetNumber, workoutId, exerciseName],
+        (_, result) => {
+          resolve(result);
+        },
+        (_, error) => {
+          reject(error);
+        }
+      );
+    });
+  });
+
+  return promise;
+}
+
 export async function updateSetWeight(setNumber, workoutId, exerciseName, newWeight) {
   const promise = new Promise((resolve, reject) => {
     database.transaction((tx) => {
@@ -924,4 +1015,18 @@ export async function updateSetStatus(
   });
 
   return promise;
+}
+
+export async function updateSetOrder(
+  workoutId, exerciseName, newSetOrder) {
+    console.log("new set order");
+    console.log(newSetOrder);
+  await Promise.all(
+    newSetOrder.map(async (set) => {
+        await insertSet(new Set(
+          set.setNumber, set.lbs, set.reps, "WORKING", 
+          set.status, exerciseName, workoutId
+        ));
+    })
+  );
 }
