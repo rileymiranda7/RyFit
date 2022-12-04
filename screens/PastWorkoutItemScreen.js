@@ -1,10 +1,12 @@
 import { View, Text, StyleSheet } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useIsFocused, useNavigation, useRoute } from '@react-navigation/native'
+import { Ionicons } from "@expo/vector-icons";
+import { FlatList } from 'react-native-gesture-handler';
+
 
 import BackButton from '../components/UI/BackButton';
 import { fetchExercisesFromPastWorkout } from '../utils/database';
-import { FlatList } from 'react-native-gesture-handler';
 import PastExerciseItem from '../components/UI/PastExerciseItem';
 
 export default function PastWorkoutItemScreen() {
@@ -41,8 +43,25 @@ export default function PastWorkoutItemScreen() {
             color={"#6737eb"}
           />
       </View>
-      <View style={{flex: 1}}>
-        <FlatList 
+      
+      <View style={styles.pastExerListContainer}>
+        <FlatList
+          ListHeaderComponent={
+            <>
+            <View style={styles.rowContainer}>
+        <Ionicons name="calendar-outline" size={30} color="#6737eb" />
+        <Text style={styles.infoTextStyle}> {workout.dateFull}</Text>
+      </View>
+      <View style={styles.rowContainer}>
+        <Ionicons name="time-outline" size={30} color="#6737eb" />
+        <Text style={styles.infoTextStyle}> {workout.startTime}</Text>
+      </View>
+      <View style={styles.rowContainer}>
+        <Ionicons name="timer-outline" size={30} color="#6737eb" />
+        <Text style={styles.infoTextStyle}> {workout.duration}</Text>
+      </View>
+            </>
+          }
           data={loadedExercises}
           renderItem={(en) => {
             return (
@@ -66,9 +85,14 @@ const styles = StyleSheet.create({
     minHeight: "100%",
     flex: 1
   },
+  pastExerListContainer: {
+    minWidth: "100%",
+    minHeight: "100%",
+    flex: 1
+  },
   workoutNameStyle: {
     color: "white",
-    fontSize: 16,
+    fontSize: 25,
     fontWeight: "bold",
     textAlign: "center",
   },
@@ -80,12 +104,21 @@ const styles = StyleSheet.create({
   exerciseTextStyle: {
     color: "white",
   },
+  infoTextStyle: {
+    color: "white",
+    fontSize: 16
+  },
   headerContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     marginHorizontal: 8,
     marginVertical: 12,
+  },
+  rowContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    margin: 4
   },
   pressed: {
     opacity: 0.75,

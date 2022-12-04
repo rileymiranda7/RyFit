@@ -23,13 +23,13 @@ export default function PastExerciseItem({ workoutId, exerciseName }) {
   }, [isFocused]);
 
   return (
-    <View>
-      <Text style={styles.exerciseTextStyle}>{exerciseName}</Text>
+    <View style={styles.container}>
+      <Text style={styles.exerciseTitleStyle}>{exerciseName}</Text>
       {loadedSets !== undefined && loadedSets.length > 0 && 
       (loadedSets.map((set, index) => {
         return (
-          <Text style={styles.exerciseTextStyle} key={index}>
-            {set.setNumber} {set.weight}x{set.reps}
+          <Text style={styles.setTextStyle} key={index}>
+            {set.setNumber}    {set.weight} x {set.reps}
           </Text>
         );
       }))}
@@ -39,10 +39,11 @@ export default function PastExerciseItem({ workoutId, exerciseName }) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#3e04c3",
     minWidth: "100%",
     minHeight: "100%",
-    flex: 1
+    flex: 1,
+    margin: 10,
+    padding: 5
   },
   workoutNameStyle: {
     color: "white",
@@ -55,8 +56,14 @@ const styles = StyleSheet.create({
     fontSize: 14,
     textAlign: "center",
   },
-  exerciseTextStyle: {
+  exerciseTitleStyle: {
     color: "white",
+    fontSize: 22,
+    fontWeight: "bold",
+  },
+  setTextStyle: {
+    color: "white",
+    fontSize: 18
   },
   headerContainer: {
     flexDirection: "row",
