@@ -23,8 +23,8 @@ import PickExerciseForActiveWorkoutModal from "../components/UI/modals/PickExerc
 import { 
   deleteIncompleteSets,
   deleteWorkout, 
+  fetchCompletedWorkouts, 
   fetchRoutine,
-  fetchSets,
   insertExerciseInstance, 
   insertSet, 
   updateWorkoutDuration, 
@@ -64,6 +64,8 @@ export default function ActiveWorkoutScreen({
   const { routineName, workoutId } = route.params;
 
   const loadRoutine = async (routineName) => {
+    console.log("here")
+    console.log(await fetchCompletedWorkouts());
     const routine = await fetchRoutine(routineName);
     setExerciseList(routine.exercises);
     // insert exerciseInstances
@@ -85,8 +87,6 @@ export default function ActiveWorkoutScreen({
       })
     );
     setNumSets(numberOfSets);
-    console.log('exerciseStateList');
-    console.log(exerciseStateList);
     setExerciseStateList(exerciseStateList);
   };
 
@@ -99,8 +99,6 @@ export default function ActiveWorkoutScreen({
     exerciseList.forEach((exercise) => {
       curExerciseNames.push(exercise.name);
     });
-    console.log('curExerciseNames')
-    console.log(curExerciseNames)
     let tempExerList = exerciseList;
     let tempExerStateList = exerciseStateList;
     await Promise.all(
@@ -119,8 +117,6 @@ export default function ActiveWorkoutScreen({
         }
       })
     );
-    console.log('result')
-    console.log(tempExerStateList);
     setExerciseList(tempExerList);
     setExerciseStateList(tempExerStateList);
     setModalVisible(false);
@@ -131,8 +127,6 @@ export default function ActiveWorkoutScreen({
   };
   
   const endWorkout = () => {
-    console.log("numSets: " + numSets);
-    console.log("numSetsCompleted: " + numSetsCompleted);
     if (numSetsCompleted < 1) {
       Alert.alert(
         `End Current Workout?`,
@@ -229,8 +223,6 @@ export default function ActiveWorkoutScreen({
         setWorkoutName(routineName);
       }
     }
-    console.log('workoutId: ' + workoutId);
-    console.log('routineName: ' + routineName);
   }, [isFocused, routineName]);
 
 
@@ -241,7 +233,6 @@ export default function ActiveWorkoutScreen({
         <DraggableFlatList
         onDragEnd={({ data }) => {
           setExerciseList(data);
-          console.log(exerciseList);
         }}
           ListHeaderComponent={
             <View style={styles.rowSpread}>

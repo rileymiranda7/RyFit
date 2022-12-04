@@ -44,12 +44,9 @@ export default function HeaderTimer({ restTimerAmount, rndm }) {
   };
 
   async function playSound() {
-    console.log('Loading Sound');
     const { sound } = await Audio.Sound.createAsync( require('../../../assets/bellAlert.wav')
     );
     setSound(sound);
-
-    console.log('Playing Sound');
     await sound.playAsync();
   }
 
@@ -68,7 +65,6 @@ export default function HeaderTimer({ restTimerAmount, rndm }) {
   useEffect(() => {
     return sound
       ? () => {
-          console.log('Unloading Sound');
           sound.unloadAsync();
         }
       : undefined;

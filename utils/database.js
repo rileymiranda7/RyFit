@@ -308,14 +308,14 @@ export async function fetchExerciseNumberInRoutine(routineName, exerciseName) {
         return promise;
       }
       
-  export function fetchPastWorkouts() {
+/*   export function fetchPastWorkouts() {
     const promise = new Promise((resolve, reject) => {
       database.transaction((tx) => {
         tx.executeSql(
           `SELECT * FROM workouts;`,
           [],
           (_, result) => {
-            /* const places = [];
+            const places = [];
             for (const dp of result.rows._array) {
               places.push(
                 new Place(
@@ -330,7 +330,7 @@ export async function fetchExerciseNumberInRoutine(routineName, exerciseName) {
                 )
               );
             }
-            resolve(places); */
+            resolve(places);
           },
           (_, error) => {
             reject(error);
@@ -340,7 +340,7 @@ export async function fetchExerciseNumberInRoutine(routineName, exerciseName) {
     });
   
     return promise;
-  }
+  } */
 
   export function fetchRoutineNamesList() {
     const promise = new Promise((resolve, reject) => {
@@ -786,7 +786,6 @@ export async function deleteIncompleteSets(workoutId) {
 export async function deleteSet(
   workoutId, exerciseName, setNumberToBeDeleted
 ) {
-  console.log(await fetchSets());
   const promise = new Promise((resolve, reject) => {
     database.transaction((tx) => {
       tx.executeSql(
@@ -810,7 +809,6 @@ export async function deleteSet(
 export async function deleteAllSetsFromCurrentExercise(
   workoutId, exerciseName
 ) {
-  console.log(await fetchSets());
   const promise = new Promise((resolve, reject) => {
     database.transaction((tx) => {
       tx.executeSql(
@@ -1019,8 +1017,6 @@ export async function updateSetStatus(
 
 export async function updateSetOrder(
   workoutId, exerciseName, newSetOrder) {
-    console.log("new set order");
-    console.log(newSetOrder);
   await Promise.all(
     newSetOrder.map(async (set) => {
         await insertSet(new Set(

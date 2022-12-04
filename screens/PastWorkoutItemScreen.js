@@ -20,8 +20,6 @@ export default function PastWorkoutItemScreen() {
 
   const loadExercises = async () => {
     const exercises = await fetchExercisesFromPastWorkout(workout.workoutId);
-    console.log("exercises")
-    console.log(exercises)
     setLoadedExercises(exercises);
   };
 

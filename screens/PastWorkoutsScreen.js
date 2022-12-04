@@ -15,8 +15,6 @@ export default function PastWorkoutsScreen() {
   useEffect(() => {
     async function loadPastWorkouts() {
       const workouts = await fetchCompletedWorkouts();
-      console.log("workouts");
-      console.log(workouts)
       setLoadedWorkouts(workouts);
     }
 

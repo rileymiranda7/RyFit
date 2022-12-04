@@ -23,8 +23,6 @@ export default function CurrentWorkoutScreen() {
   const navigation = useNavigation();
 
   const loadRoutines = async () => {
-    console.log("sets");
-    console.log(await fetchSets());
     const routines = await fetchRoutines();
     setLoadedRoutines(routines);
   };

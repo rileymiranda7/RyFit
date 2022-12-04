@@ -110,7 +110,6 @@ export default function RoutineModal({ navigation, route }) {
             <DraggableFlatList 
               onDragEnd={({ data }) => {
                 setLoadedExercises(data);
-                console.log(loadedExercises);
                 updateRoutineOrder(routineName, data, true, -1);
               }}
               data={loadedExercises}

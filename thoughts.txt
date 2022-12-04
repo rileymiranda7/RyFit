@@ -182,6 +182,7 @@ store duration with useStopwatch
 need to also store regular timestamp to use for ordering workouts
 
 need to fix keyboard not being dimissed only dismissed in flatlist
+only problem when flatlist doesnt take up whole screen
 
 need to insert set when new set added
 need to update set numbers for sets after set deleted and
