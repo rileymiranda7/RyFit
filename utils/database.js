@@ -922,6 +922,49 @@ export async function updateExerciseNumberInRoutine(
 
   return promise;
 }
+export async function updateWorkoutExerciseOrder(
+  newExerciseOrder, workoutId, notDeletingExercise, exerciseToDeletePosition
+  ) {
+    if (notDeletingExercise) {
+      await Promise.all(
+        newExerciseOrder.map(async (exercise, index) => {
+          await updateExerciseNumberInWorkout(workoutId, exercise.name, index + 1);
+        })
+      );
+    } else {
+      await Promise.all(
+        newExerciseOrder.map(async (exercise, index) => {
+          if (index + 1 > exerciseToDeletePosition) {
+            await updateExerciseNumberInWorkout(routineName, exercise.name, index);
+          }
+        })
+      );
+    }
+}
+
+export async function updateExerciseNumberInWorkout(
+  workoutId, exerciseName, newPositionInWorkout
+  ) {
+  const promise = new Promise((resolve, reject) => {
+    database.transaction((tx) => {
+      tx.executeSql(
+        `UPDATE exerciseInstances 
+        SET numberInWorkout = ?
+        WHERE workoutId = ?
+        AND exerciseName = ?;`,
+        [newPositionInWorkout, workoutId, exerciseName],
+        (_, result) => {
+          resolve(result);
+        },
+        (_, error) => {
+          reject(error);
+        }
+      );
+    });
+  });
+
+  return promise;
+}
 
 export async function updateSetNumberInExercise(
   workoutId, exerciseName, newSetNumber

@@ -61,6 +61,7 @@ export default function CurrentWorkoutScreen() {
             },
           ]
         );
+        workoutWasCompleted = false;
     }
   }, [route.params?.workoutWasCompleted]);
 

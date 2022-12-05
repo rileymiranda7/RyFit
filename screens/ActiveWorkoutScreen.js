@@ -27,7 +27,9 @@ import {
   fetchRoutine,
   insertExerciseInstance, 
   insertSet, 
+  updateExerciseNumberInWorkout, 
   updateWorkoutDuration, 
+  updateWorkoutExerciseOrder, 
   updateWorkoutName 
 } from "../utils/database";
 import IconButton from "../components/UI/IconButton";
@@ -238,8 +240,9 @@ export default function ActiveWorkoutScreen({
     <View style={styles.container}>
       <View style={styles.exerciseList}>
         <DraggableFlatList
-        onDragEnd={({ data }) => {
+        onDragEnd={async ({ data }) => {
           setExerciseList(data);
+          await updateWorkoutExerciseOrder(data, workoutId, true, -1);
         }}
           ListHeaderComponent={
             <View style={styles.rowSpread}>

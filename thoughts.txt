@@ -234,3 +234,9 @@ add place calculator in bottom tab
 add notes section to each exercise
 
 should add workout completed alert
+
+to do with exercise instances:
+if routine, save new order and deleted/added exercises?
+save exerciseInstance order in workout
+add delete exercise and update order 
+add exercise option screen
