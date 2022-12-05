@@ -6,9 +6,10 @@ import {
   Pressable,
   FlatList,
   TextInput,
+  Alert,
 } from "react-native";
 import React, { useState, useLayoutEffect, useEffect } from "react";
-import { useIsFocused, useNavigation } from "@react-navigation/native";
+import { useIsFocused, useNavigation, useRoute } from "@react-navigation/native";
 
 import { createWorkout, fetchRoutines, fetchSets, insertEmptyRoutine } from "../utils/database";
 import RoutineItem from "../components/UI/RoutineItem";
@@ -21,6 +22,8 @@ export default function CurrentWorkoutScreen() {
   const isFocused = useIsFocused();
 
   const navigation = useNavigation();
+  const route = useRoute();
+  
 
   const loadRoutines = async () => {
     const routines = await fetchRoutines();
@@ -45,6 +48,21 @@ export default function CurrentWorkoutScreen() {
       loadRoutines();
     }
   }, [isFocused]);
+
+  useEffect(() => {
+    if (route.params?.workoutWasCompleted) {
+        Alert.alert(
+          `Workout Completed!`,
+          "You can view it in Past Workouts",
+          [
+            {
+              text: "Ok",
+              onPress: () => {},
+            },
+          ]
+        );
+    }
+  }, [route.params?.workoutWasCompleted]);
 
   let createRoutineRender;
 

@@ -232,3 +232,5 @@ add exercise options screen
 make exercises in current workout movable
 add place calculator in bottom tab
 add notes section to each exercise
+
+should add workout completed alert

@@ -142,7 +142,9 @@ export default function ActiveWorkoutScreen({
             onPress: async () => {
               await deleteIncompleteSets(workoutId);
               await deleteWorkout(workoutId);
-              navigation.navigate("CurrentWorkout");
+              navigation.navigate("CurrentWorkout", {
+                workoutWasCompleted: false
+              });
             },
             style: "destructive",
           },
@@ -165,7 +167,9 @@ export default function ActiveWorkoutScreen({
               const duration = hours + "h " + minutes + "m"
               await updateWorkoutDuration(duration, workoutId);
               await deleteIncompleteSets(workoutId);
-              navigation.navigate("CurrentWorkout");
+              navigation.navigate("CurrentWorkout", {
+                workoutWasCompleted: true
+              });
             },
             style: "destructive",
           },
@@ -187,7 +191,9 @@ export default function ActiveWorkoutScreen({
             onPress: async () => {
               const duration = hours + "h " + minutes + "m"
               await updateWorkoutDuration(duration, workoutId);
-              navigation.navigate("CurrentWorkout");
+              navigation.navigate("CurrentWorkout", {
+                workoutWasCompleted: true
+              });
             },
           },
         ]
