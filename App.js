@@ -6,9 +6,11 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import "react-native-gesture-handler";
 import * as Notifications from "expo-notifications";
 import * as SplashScreen from "expo-splash-screen";
+import { Ionicons } from "@expo/vector-icons";
 
 import PastWorkoutsScreen from "./screens/PastWorkoutsScreen";
 import ProfileScreen from "./screens/ProfileScreen";
@@ -25,10 +27,10 @@ import ExerciseHistoryTabScreen from "./screens/ExerciseHistoryTabScreen";
 import ExerciseRecordsTabScreen from "./screens/ExerciseRecordsTabScreen";
 import ExerciseSettingsTabScreen from "./screens/ExerciseSettingsTabScreen";
 
-const BottomTabs = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
+const BottomTabs = createMaterialBottomTabNavigator();
 const Stack = createStackNavigator();
-const Tab = createMaterialTopTabNavigator();
+const TopTabs = createMaterialTopTabNavigator();
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -74,11 +76,11 @@ async function requestPermissionsAsync() {
 
 function ExerciseTabNavigator() {
   return (
-    <Tab.Navigator>
-      <Tab.Screen name="History" component={ExerciseHistoryTabScreen} />
-      <Tab.Screen name="Records" component={ExerciseRecordsTabScreen} />
-      <Tab.Screen name="Settings" component={ExerciseSettingsTabScreen} />
-    </Tab.Navigator>
+    <TopTabs.Navigator>
+      <TopTabs.Screen name="History" component={ExerciseHistoryTabScreen} />
+      <TopTabs.Screen name="Records" component={ExerciseRecordsTabScreen} />
+      <TopTabs.Screen name="Settings" component={ExerciseSettingsTabScreen} />
+    </TopTabs.Navigator>
   );
 }
 
@@ -168,28 +170,30 @@ function PastWorkoutsStackNavigator() {
 function BottomTabsNavigator({ handleOnSetCompleted }) {
   return (
     <BottomTabs.Navigator
-      initialRouteName="Drawer"
-      screenOptions={({ navigation }) => ({
-        headerStyle: { backgroundColor: "brown" },
-        headerTintColor: "gold",
-        tabBarStyle: { backgroundColor: "#2d0689" },
-        tabBarActiveTintColor: "red",
-      })}
+      initialRouteName="Workout"
+      shifting={true}
+      barStyle={{ backgroundColor: "#2d0689" }}
     >
       <BottomTabs.Screen
         name="PastWorkoutsBottomTabs"
         component={PastWorkoutsStackNavigator}
         options={{
-          headerShown: false,
-          title: "Past Workouts",
+          tabBarLabel: 'Past Workouts',
+          tabBarIcon: () => (
+            <Ionicons name="book-outline" color={"#fff"} size={26} />
+          ),
+          tabBarColor: "green"
         }}
       />
       <BottomTabs.Screen
         name="Debug"
         component={DebugScreen}
         options={{
-          headerShown: false,
-          title: "Debug",
+          tabBarLabel: 'Debug',
+          tabBarIcon: () => (
+            <Ionicons name="sad-outline" color={"#fff"} size={25} />
+          ),
+          tabBarColor: "red"
         }}
       />
       <BottomTabs.Screen
@@ -201,8 +205,11 @@ function BottomTabsNavigator({ handleOnSetCompleted }) {
           />
         )}
         options={{
-          headerShown: false,
-          title: "Workout",
+          tabBarLabel: 'Workout',
+          tabBarIcon: () => (
+            <Ionicons name="barbell-outline" color={"#fff"} size={26} />
+          ),
+          tabBarColor: "#2d0689"
         }}
       />
     </BottomTabs.Navigator>

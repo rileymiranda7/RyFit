@@ -250,3 +250,5 @@ picked unique constraint failed
 not using exerciseStateList anywhere why did we make?
 
 swap bottom tabs navigator to material bottom tabs
+
+medal-outline ionicon for records
