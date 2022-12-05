@@ -5,6 +5,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createStackNavigator } from "@react-navigation/stack";
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import "react-native-gesture-handler";
 import * as Notifications from "expo-notifications";
 import * as SplashScreen from "expo-splash-screen";
@@ -19,10 +20,15 @@ import RoutineModal from "./components/UI/modals/RoutineModal";
 import ActiveWorkoutScreen from "./screens/ActiveWorkoutScreen";
 import PastWorkoutItemScreen from "./screens/PastWorkoutItemScreen";
 import DebugScreen from "./screens/DebugScreen";
+import ExerciseScreen from "./screens/ExerciseScreen";
+import ExerciseHistoryTabScreen from "./screens/ExerciseHistoryTabScreen";
+import ExerciseRecordsTabScreen from "./screens/ExerciseRecordsTabScreen";
+import ExerciseSettingsTabScreen from "./screens/ExerciseSettingsTabScreen";
 
 const BottomTabs = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
+const Tab = createMaterialTopTabNavigator();
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -64,6 +70,16 @@ async function requestPermissionsAsync() {
       allowAnnouncements: true,
     },
   });
+}
+
+function ExerciseTabNavigator() {
+  return (
+    <Tab.Navigator>
+      <Tab.Screen name="History" component={ExerciseHistoryTabScreen} />
+      <Tab.Screen name="Records" component={ExerciseRecordsTabScreen} />
+      <Tab.Screen name="Settings" component={ExerciseSettingsTabScreen} />
+    </Tab.Navigator>
+  );
 }
 
 // Navigators listed with most nested first
@@ -109,6 +125,15 @@ function CurrentWorkoutStackNavigator({ handleOnSetCompleted }) {
         children={() => (
           <ActiveWorkoutScreen handleOnSetCompleted={handleOnSetCompleted} />
         )}
+        title="Pick Exercise"
+        options={{
+          //presentation: "modal",
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="ExerciseScreen"
+        component={ExerciseTabNavigator}
         title="Pick Exercise"
         options={{
           //presentation: "modal",
@@ -177,7 +202,7 @@ function BottomTabsNavigator({ handleOnSetCompleted }) {
         )}
         options={{
           headerShown: false,
-          title: "Start Workout",
+          title: "Workout",
         }}
       />
     </BottomTabs.Navigator>

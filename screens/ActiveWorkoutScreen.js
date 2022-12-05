@@ -33,7 +33,6 @@ import {
   updateWorkoutExerciseOrder, 
   updateWorkoutName 
 } from "../utils/database";
-import IconButton from "../components/UI/IconButton";
 import { ExerciseInstance } from "../models/exerciseInstance";
 import Set from "../models/set";
 
@@ -255,20 +254,14 @@ export default function ActiveWorkoutScreen({
           await updateWorkoutExerciseOrder(data, workoutId, true, -1);
         }}
           ListHeaderComponent={
-            <View style={styles.rowSpread}>
+            <View style={[styles.rowSpread, { marginBottom: 12}]}>
               <View style={styles.rowTogether}>
                 <TextInput
-                  style={styles.textStyle}
+                  style={[styles.textStyle, styles.textInput]}
                   onChangeText={setWorkoutName}
                   onBlur={() => resetWorkoutName()}
                   value={workoutName}
-                  maxLength={12}
-                />
-                <IconButton
-                  icon="create"
-                  size={25}
-                  color={"white"}
-                  onPress={() => {}}
+                  maxLength={14}
                 />
               </View>
               <View style={styles.timerContainer}>
@@ -397,6 +390,10 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     fontSize: 20,
+  },
+  textInput: {
+    minWidth: "50%",
+    textAlign: "left"
   },
   modalText: {
     marginBottom: 20,

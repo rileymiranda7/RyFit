@@ -2,12 +2,13 @@ import { View, Button, StyleSheet, Text, Alert } from "react-native";
 import { useState } from "react";
 import { Swipeable } from "react-native-gesture-handler";
 import { Row } from "react-native-easy-grid";
+import { useNavigation } from "@react-navigation/native";
 
 import TableHeaderRow from "./UI/table/rows/TableHeaderRow";
 import IncompleteRow from "./UI/table/rows/IncompleteRow";
-import IconButton from "./UI/IconButton";
-import { deleteAllSetsFromCurrentExercise, deleteSet, fetchSets, insertSet, updateSetOrder, updateSetReps, updateSetStatus, updateSetWeight } from "../utils/database";
+import { deleteAllSetsFromCurrentExercise, insertSet, updateSetOrder, updateSetReps, updateSetStatus, updateSetWeight } from "../utils/database";
 import Set from "../models/set";
+import Pressable from "react-native/Libraries/Components/Pressable/Pressable";
 
 export default function Exercise({ 
   exerciseName, 
@@ -28,6 +29,8 @@ export default function Exercise({
     },
   ]);
   const [restTimeAmount, setRestTimeAmount] = useState("2.25");
+
+  const navigation = useNavigation();
 
   // updates rowArr state when any input on any row is changed
   async function inputChangedHandler(inputIdentifier, setNumber, enteredValue) {
@@ -233,21 +236,27 @@ export default function Exercise({
 
   return (
     <View>
-      <View style={styles.nameAndOptionsRow}>
-        <Text
-          style={{
-            color: "white",
-            fontSize: 20,
+      <View>
+        <Pressable 
+          style={({ pressed }) => [
+            styles.exerciseName,
+            pressed && { opacity: 0.75 }
+          ]}
+          onPress={() => {
+            navigation.navigate("ExerciseScreen", {
+              exerciseName: exerciseName
+            });
           }}
         >
-          {exerciseName}
-        </Text>
-        <IconButton
-          icon="ellipsis-horizontal-circle-outline"
-          size={30}
-          color="white"
-          onPress={() => {}}
-        />
+          <Text
+            style={{
+              color: "white",
+              fontSize: 20,
+            }}
+          >
+            {exerciseName}
+          </Text>
+        </Pressable>
       </View>
       <TableHeaderRow />
 
@@ -278,10 +287,10 @@ export default function Exercise({
 }
 
 const styles = StyleSheet.create({
-  nameAndOptionsRow: {
+  nameRow: {
     flex: 1,
-    flexDirection: "row",
-    justifyContent: "space-between",
+  },
+  exerciseName: {
   },
   grid: {
     borderRadius: 6,
