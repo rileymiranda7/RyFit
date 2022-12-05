@@ -162,7 +162,8 @@ export default function ActiveWorkoutScreen({
           {
             text: "End Workout",
             onPress: async () => {
-              await updateWorkoutDuration(workoutId);
+              const duration = hours + "h " + minutes + "m"
+              await updateWorkoutDuration(duration, workoutId);
               await deleteIncompleteSets(workoutId);
               navigation.navigate("CurrentWorkout");
             },

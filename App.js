@@ -18,6 +18,7 @@ import { init } from "./utils/database";
 import RoutineModal from "./components/UI/modals/RoutineModal";
 import ActiveWorkoutScreen from "./screens/ActiveWorkoutScreen";
 import PastWorkoutItemScreen from "./screens/PastWorkoutItemScreen";
+import DebugScreen from "./screens/DebugScreen";
 
 const BottomTabs = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
@@ -156,6 +157,14 @@ function BottomTabsNavigator({ handleOnSetCompleted }) {
         options={{
           headerShown: false,
           title: "Past Workouts",
+        }}
+      />
+      <BottomTabs.Screen
+        name="Debug"
+        component={DebugScreen}
+        options={{
+          headerShown: false,
+          title: "Debug",
         }}
       />
       <BottomTabs.Screen

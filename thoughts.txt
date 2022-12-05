@@ -226,3 +226,9 @@ decrease numSetsCompleted when completed button pressed again
 or completed set deleted or exercise with completed sets deleted
 
 everything implemented except deleted exercises part
+
+todo:
+add exercise options screen
+make exercises in current workout movable
+add place calculator in bottom tab
+add notes section to each exercise

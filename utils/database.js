@@ -14,10 +14,11 @@ export async function init() {
   await initWorkouts();
   await initSets();
   await initExerciseInstances();
+
   /* const promise = new Promise((resolve, reject) => {
     database.transaction((tx) => {
       tx.executeSql(
-        `DROP TABLE workouts;`,
+        `DROP TABLE exerciseInstances;`,
         [],
         () => {
           resolve();
@@ -29,6 +30,7 @@ export async function init() {
     });
   });
   return promise; */
+
 }
 
 /** INIT TABLES */
