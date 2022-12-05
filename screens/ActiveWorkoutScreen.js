@@ -21,6 +21,7 @@ import DraggableFlatList, {
 import Exercise from "../components/Exercise";
 import PickExerciseForActiveWorkoutModal from "../components/UI/modals/PickExerciseForActiveWorkoutModal";
 import { 
+  deleteExerciseInstancesWithNoCompletedSets,
   deleteIncompleteSets,
   deleteWorkout, 
   fetchCompletedWorkouts, 
@@ -103,6 +104,7 @@ export default function ActiveWorkoutScreen({
     });
     let tempExerList = exerciseList;
     let tempExerStateList = exerciseStateList;
+    let numberOfSets = 0;
     await Promise.all(
       exercises.map(async (exercise, index) => {
         if (!curExerciseNames.includes(exercise.name)) {
@@ -114,11 +116,12 @@ export default function ActiveWorkoutScreen({
           await insertSet(new Set(
             1, -1, -1, "WORKING", "IN PROGRESS", 
             exercise.name, workoutId));
-          setNumSets(numSets + 1);
+            numberOfSets = index + 1;
           tempExerStateList.push(exerciseInstance);
         }
       })
     );
+    setNumSets(numberOfSets);
     setExerciseList(tempExerList);
     setExerciseStateList(tempExerStateList);
     setModalVisible(false);
@@ -129,6 +132,8 @@ export default function ActiveWorkoutScreen({
   };
   
   const endWorkout = () => {
+    console.log("numSets: " + numSets);
+    console.log("numSetsCompleted: " + numSetsCompleted);
     if (numSetsCompleted < 1) {
       Alert.alert(
         `End Current Workout?`,
@@ -144,6 +149,8 @@ export default function ActiveWorkoutScreen({
             onPress: async () => {
               await deleteIncompleteSets(workoutId);
               await deleteWorkout(workoutId);
+              await deleteExerciseInstancesWithNoCompletedSets(
+                workoutId, exerciseList);
               navigation.navigate("CurrentWorkout", {
                 workoutWasCompleted: false
               });
@@ -169,6 +176,8 @@ export default function ActiveWorkoutScreen({
               const duration = hours + "h " + minutes + "m"
               await updateWorkoutDuration(duration, workoutId);
               await deleteIncompleteSets(workoutId);
+              await deleteExerciseInstancesWithNoCompletedSets(
+                workoutId, exerciseList);
               navigation.navigate("CurrentWorkout", {
                 workoutWasCompleted: true
               });
@@ -231,6 +240,7 @@ export default function ActiveWorkoutScreen({
         loadRoutine(routineName);
         setWorkoutName(routineName);
       }
+      console.log("new workout workoutId: " + workoutId);
     }
   }, [isFocused, routineName]);
 

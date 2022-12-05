@@ -54,7 +54,7 @@ export default function RoutineItem({ routineName, exercises }) {
         <Text style={styles.routineNameStyle}>{routineName}</Text>
         <IconButton
           icon="ellipsis-horizontal-circle-outline"
-          size={27}
+          size={35}
           color="white"
           onPress={() => {
             navigation.navigate("RoutineModal", {
@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
   },
   routineNameStyle: {
     color: "white",
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: "bold",
     textAlign: "center",
   },

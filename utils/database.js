@@ -18,7 +18,7 @@ export async function init() {
   /* const promise = new Promise((resolve, reject) => {
     database.transaction((tx) => {
       tx.executeSql(
-        `DROP TABLE exerciseInstances;`,
+        `DROP TABLE workouts;`,
         [],
         () => {
           resolve();
@@ -521,6 +521,25 @@ export async function fetchExerciseNumberInRoutine(routineName, exerciseName) {
     return promise;
   }
 
+  export function fetchAllExerciseInstances() {
+    const promise = new Promise((resolve, reject) => {
+      database.transaction((tx) => {
+        tx.executeSql(
+          `SELECT * FROM exerciseInstances;`,
+          [],
+          (_, result) => {
+            resolve(result.rows._array);
+          },
+          (_, error) => {
+            reject(error);
+          }
+        );
+      });
+    });
+  
+    return promise;
+  }
+
 
 
 
@@ -817,6 +836,48 @@ export async function deleteAllSetsFromCurrentExercise(
         `DELETE FROM sets WHERE workoutId = ?
         AND exerciseName = ?;`,
         [workoutId, exerciseName],
+        (_, result) => {
+          resolve(result);
+        },
+        (_, error) => {
+          reject(error);
+        }
+      );
+    });
+  });
+
+  return promise;
+}
+
+export async function deleteExerciseInstancesWithNoCompletedSets(
+  workoutId, exerciseList
+) {
+  await Promise.all(
+    exerciseList.map(async (exercise) => {
+      let exerHasCompletedSet = false;
+      const sets = await fetchSetsFromCompletedExercise(
+        exercise.name, workoutId);
+      for (let set of sets) {
+        if (set.status === "COMPLETED") {
+          exerHasCompletedSet = true;
+          break;
+        }
+      }
+      if (!exerHasCompletedSet) {
+        await deleteExerciseInstance(exercise.name, workoutId);
+      }
+    })
+  )
+}
+
+export function deleteExerciseInstance(exerciseName, workoutId) {
+  const promise = new Promise((resolve, reject) => {
+    database.transaction((tx) => {
+      tx.executeSql(
+        `DELETE FROM exerciseInstances 
+        WHERE exerciseName = ?
+        AND workoutId = ?;`,
+        [exerciseName, workoutId],
         (_, result) => {
           resolve(result);
         },

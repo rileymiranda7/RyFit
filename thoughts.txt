@@ -240,3 +240,11 @@ if routine, save new order and deleted/added exercises?
 save exerciseInstance order in workout
 add delete exercise and update order 
 add exercise option screen
+
+need to delete exerciseInstances in Active workout when workout is ended as well
+ones that don't have completed sets
+problem was workout with id would get deleted when workout was canceled
+but exerInstance with same id would not so in next workout when same exercise
+picked unique constraint failed
+
+not using exerciseStateList anywhere why did we make?
