@@ -114,8 +114,8 @@ const style = StyleSheet.create({
   },
   colon: {
     position: "absolute",
-    top: "34%",
-    left: "37.25%",
+    top: "30%",
+    left: "37.7%",
     justifyContent: "center",
     alignItems: "center",
   },

@@ -306,7 +306,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   exerciseName: {
-    backgroundColor: "maroon"
   },
   grid: {
     borderRadius: 6,
