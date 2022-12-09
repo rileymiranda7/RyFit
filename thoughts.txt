@@ -252,3 +252,90 @@ not using exerciseStateList anywhere why did we make?
 swap bottom tabs navigator to material bottom tabs
 
 medal-outline ionicon for records
+
+use modal component for exercise options like delete, rest timer
+and modal stack screen for exercise info?
+
+have Exercise component render exerOptionsModal then call callback
+function to delete exercise from state array and db
+
+when an exercise is to be deleted need to deduct sets and completed sets
+from numSets and numSetsCompleted and delete those sets from db
+and
+need to update numberInWorkout    
+
+for now don't ask user to update routine
+
+need to delete all sets from deleted exercise
+should keep track of nums sets and num completed sets
+in exercise component in state
+
+need to delete all exerciseInstances from workout
+like with sets b4 updating numberInWorkouts like with deleting
+sets?
+
+NEED TO FIX EXERCISE STATE ARRAYS
+NEED TO CLEARLY DIFFERENTIATE BETWEEN ARRAY OF 
+EXERCISE OBJECTS AND ARRAY OF EXERCISE INSTANCE OBJECTS
+
+right now using exercise obj array for exerything but just
+using name
+
+need to maintain exerciseInstance array as well and pass to exercise
+and exercise options modal
+
+using exerList right now for draggable flatlist but should
+be using other list because order is not getting updated in exerInstList
+
+going to need exercise obj list eventually for rest time and exercise notes
+
+INSTEAD of using two state arrays for each kind of object,
+use ONE array where each element is an object containing a nested
+Exercise object and an ExerciseInstance object:
+{
+  exer: {
+   name,
+   restTime,
+   notes 
+  },
+  exerInst: {
+    name,
+    workoutId,
+    numSetsCompleted,
+    numberInWorkout
+  }
+}
+ 
+maybe above not good idea
+does Exercise list need to know the order of exercises in workout??
+
+do we need to store numberInWorkout as prop in ExerciseInstance
+or should we just use index of array used in draggable flatlist + 1?
+
+should numberInWorkout be updated every time an exercise is moved or
+deleted or when workout is ended?
+
+lets just set every exerciseInstance's numberInWorkout when workout is done
+also makes deleting easier cuz dont have to worry ab updating order
+
+when new exerciseInstance obj created just put -1 for numberInWorkout
+
+if you want to pass both Exercise and ExerciseInstance objs to 
+Exercise component than both need to be in array for flatlist
+
+instead of object of objects, just use object of two arrays:
+{
+  exerList: [],
+  instList: []
+}
+
+passing instList to flatlist now
+
+MAIN STATE LIST NEEDS TO BE AN ARRAY LIKE BEFORE
+SO YOU CAN PASS EACH OBJECT TO EXERCISE COMPONENT
+
+
+updating workout order after order changed by dragging item
+not updating workout order after updating because it doesn't matter
+indexes of ExerAndInstList array will update automatically and thats
+what we're using for numberInWorkout

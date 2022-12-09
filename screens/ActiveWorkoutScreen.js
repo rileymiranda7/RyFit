@@ -21,6 +21,8 @@ import DraggableFlatList, {
 import Exercise from "../components/Exercise";
 import PickExerciseForActiveWorkoutModal from "../components/UI/modals/PickExerciseForActiveWorkoutModal";
 import { 
+  deleteAllSetsFromCurrentExercise,
+  deleteExerciseInstance,
   deleteExerciseInstancesWithNoCompletedSets,
   deleteIncompleteSets,
   deleteWorkout, 
@@ -39,14 +41,27 @@ import Set from "../models/set";
 export default function ActiveWorkoutScreen({
   handleOnSetCompleted,
 }) {
-  const [exerciseList, setExerciseList] = useState([]);
-  const [modalVisible, setModalVisible] = useState(false);
+
+  const [exerAndInstList, setExerAndInstList] = useState([]);
+  /* {
+    exer: {
+      name,
+      restTime,
+      notes 
+    },
+    inst: {
+      name,
+      workoutId,
+      numSetsCompleted,
+      numberInWorkout
+    }
+  } */
+
+  const [pickExerModalVisible, setPickExerModalVisible] = useState(false);
   const [workoutName, setWorkoutName] = useState(
-    routineName ? routineName : "New Workout"
-  );
+    routineName ? routineName : "New Workout");
   const [numSetsCompleted, setNumSetsCompleted] = useState(0);
   const [numSets, setNumSets] = useState(0)
-  const [exerciseStateList, setExerciseStateList] = useState([]);
 
   const {
     seconds,
@@ -69,19 +84,18 @@ export default function ActiveWorkoutScreen({
     console.log("here")
     console.log(await fetchCompletedWorkouts());
     const routine = await fetchRoutine(routineName);
-    setExerciseList(routine.exercises);
     // insert exerciseInstances
-    // update exerciseStateList
+    // update exerAndInstList
     // insert sets for each exercise
-    let exerciseStateList = [];
+    let tempExerAndInstList = [];
     let numberOfSets = 0;
     await Promise.all(
       routine.exercises.map(async (exercise, index) => {
         const exerciseInstance = new ExerciseInstance(
-          exercise.name, workoutId, 0, index + 1
+          exercise.name, workoutId, 0, -1
         );
         await insertExerciseInstance(exerciseInstance);
-        exerciseStateList.push(exerciseInstance);
+        tempExerAndInstList.push({ exer: exercise, inst: exerciseInstance });
         await insertSet(new Set(
           1, -1, -1, "WORKING", "IN PROGRESS", 
           exercise.name, workoutId));
@@ -89,50 +103,49 @@ export default function ActiveWorkoutScreen({
       })
     );
     setNumSets(numberOfSets);
-    setExerciseStateList(exerciseStateList);
+    setExerAndInstList(tempExerAndInstList);
   };
 
   async function submitPickedExerciseHandler(exercises) {
-    // update exerciseList and exerciseStateList with new
-    // exercises
+    // add new Exercise and ExerciseInstance to exerAndInstList
     // insert new exercise instances
     // insert new sets for new exercises
+    // update set counter
     let curExerciseNames = [];
-    exerciseList.forEach((exercise) => {
-      curExerciseNames.push(exercise.name);
+    exerAndInstList.forEach((exerAndInst) => {
+      curExerciseNames.push(exerAndInst.exer.name);
     });
-    let tempExerList = exerciseList;
-    let tempExerStateList = exerciseStateList;
+    let tempExerAndInstList = exerAndInstList;
     let numberOfSets = 0;
     await Promise.all(
       exercises.map(async (exercise, index) => {
         if (!curExerciseNames.includes(exercise.name)) {
-          tempExerList.push(exercise);
           const exerciseInstance = new ExerciseInstance(
-            exercise.name, workoutId, 0, index + 1
+            exercise.name, workoutId, 0, -1
           );
           await insertExerciseInstance(exerciseInstance);
           await insertSet(new Set(
             1, -1, -1, "WORKING", "IN PROGRESS", 
             exercise.name, workoutId));
-            numberOfSets = index + 1;
-          tempExerStateList.push(exerciseInstance);
+          numberOfSets++;
+          tempExerAndInstList.push({ exer: exercise, inst: exerciseInstance });
         }
       })
     );
     setNumSets(numberOfSets);
-    setExerciseList(tempExerList);
-    setExerciseStateList(tempExerStateList);
-    setModalVisible(false);
+    setExerAndInstList(tempExerAndInstList);
+    setPickExerModalVisible(false);
   }
   
-  const closeModal = () => {
-    setModalVisible(false);
+  const closePickExerModal = () => {
+    setPickExerModalVisible(false);
   };
   
   const endWorkout = () => {
     console.log("numSets: " + numSets);
     console.log("numSetsCompleted: " + numSetsCompleted);
+    const exerList = exerAndInstList.map((exerInst) => {
+      return exerInst.exer; });
     if (numSetsCompleted < 1) {
       Alert.alert(
         `End Current Workout?`,
@@ -149,7 +162,7 @@ export default function ActiveWorkoutScreen({
               await deleteIncompleteSets(workoutId);
               await deleteWorkout(workoutId);
               await deleteExerciseInstancesWithNoCompletedSets(
-                workoutId, exerciseList);
+                workoutId, exerList);
               navigation.navigate("CurrentWorkout", {
                 workoutWasCompleted: false
               });
@@ -176,7 +189,7 @@ export default function ActiveWorkoutScreen({
               await updateWorkoutDuration(duration, workoutId);
               await deleteIncompleteSets(workoutId);
               await deleteExerciseInstancesWithNoCompletedSets(
-                workoutId, exerciseList);
+                workoutId, exerList);
               navigation.navigate("CurrentWorkout", {
                 workoutWasCompleted: true
               });
@@ -231,6 +244,29 @@ export default function ActiveWorkoutScreen({
     await updateWorkoutName(workoutId, workoutName);
   }
 
+  const removeExerFromWorkout = async (
+    exerciseNameToBeDeleted, numSetsInExer, numCompletedSetsInExer) => {
+      console.log("here");
+      console.log(exerciseNameToBeDeleted);
+    // delete exer and inst from exerAndInstList
+    let tempExerAndInstList = exerAndInstList;
+    tempExerAndInstList = tempExerAndInstList.filter((exerInst) => 
+      exerInst.exer.name !== exerciseNameToBeDeleted);
+    console.log("tempExerAndInstList");
+    console.log(tempExerAndInstList);
+    setExerAndInstList(tempExerAndInstList);
+    
+    // delete ExerciseInstance from db
+    await deleteExerciseInstance(exerciseNameToBeDeleted, workoutId);
+    
+    // delete sets from db
+    await deleteAllSetsFromCurrentExercise(workoutId, exerciseNameToBeDeleted);
+
+    // subtract sets from counters
+    setNumSets(numSets - numSetsInExer);
+    setNumSetsCompleted(numSetsCompleted - numCompletedSetsInExer);
+  }
+
 
 
   useEffect(() => {
@@ -250,7 +286,7 @@ export default function ActiveWorkoutScreen({
       <View style={styles.exerciseList}>
         <DraggableFlatList
         onDragEnd={async ({ data }) => {
-          setExerciseList(data);
+          setExerAndInstList(data);
           await updateWorkoutExerciseOrder(data, workoutId, true, -1);
         }}
           ListHeaderComponent={
@@ -288,7 +324,7 @@ export default function ActiveWorkoutScreen({
               </View>
             </View>
           }
-          data={exerciseList}
+          data={exerAndInstList}
           renderItem={({ item, drag, isActive }) => {
             return (
               <ScaleDecorator>
@@ -302,17 +338,19 @@ export default function ActiveWorkoutScreen({
                   ]}
                 >
                   <Exercise
-                    exerciseName={item.name}
+                    exer={item.exer}
+                    inst={item.inst}
                     handleOnSetCompleted={handleOnSetCompleted}
-                    updateNumSetsCompleted={updateNumSetsCompleted}
-                    updateNumSets={updateNumSets}
+                    updateNumSetsCompletedInWkt={updateNumSetsCompleted}
+                    updateNumSetsInWkt={updateNumSets}
                     workoutId={workoutId}
+                    removeExerFromWorkout={removeExerFromWorkout}
                   />
                 </TouchableOpacity>
               </ScaleDecorator>
             );
           }}
-          keyExtractor={(exercise) => exercise.name}
+          keyExtractor={(exerAndInst) => exerAndInst.exer.name}
           ListFooterComponent={
             <>
               <Pressable
@@ -321,7 +359,7 @@ export default function ActiveWorkoutScreen({
                   styles.buttonOpen,
                   pressed && { opacity: 0.75 },
                 ]}
-                onPress={() => setModalVisible(true)}
+                onPress={() => setPickExerModalVisible(true)}
               >
                 <Text style={styles.textStyle}>Add Exercise</Text>
               </Pressable>
@@ -340,10 +378,10 @@ export default function ActiveWorkoutScreen({
         />
       </View>
       <View>
-        {modalVisible && (
+        {pickExerModalVisible && (
           <PickExerciseForActiveWorkoutModal
             submitPickedExerciseHandler={submitPickedExerciseHandler}
-            closeModal={closeModal}
+            closeModal={closePickExerModal}
           />
         )}
       </View>

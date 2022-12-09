@@ -1,4 +1,4 @@
-import { View, Button, StyleSheet, Text, Alert } from "react-native";
+import { View, Button, StyleSheet, Text, Alert, Pressable } from "react-native";
 import { useState } from "react";
 import { Swipeable } from "react-native-gesture-handler";
 import { Row } from "react-native-easy-grid";
@@ -6,18 +6,27 @@ import { useNavigation } from "@react-navigation/native";
 
 import TableHeaderRow from "./UI/table/rows/TableHeaderRow";
 import IncompleteRow from "./UI/table/rows/IncompleteRow";
-import { deleteAllSetsFromCurrentExercise, insertSet, updateSetOrder, updateSetReps, updateSetStatus, updateSetWeight } from "../utils/database";
+import IconButton from "./UI/IconButton";
+import { 
+  deleteAllSetsFromCurrentExercise, 
+  insertSet, 
+  updateSetOrder, 
+  updateSetReps, 
+  updateSetStatus, 
+  updateSetWeight
+} from "../utils/database";
 import Set from "../models/set";
-import Pressable from "react-native/Libraries/Components/Pressable/Pressable";
+import ExerciseOptionsModal from "./UI/modals/ExerciseOptionsModal";
 
 export default function Exercise({ 
-  exerciseName, 
+  exer,
+  inst,
   handleOnSetCompleted, 
-  updateNumSetsCompleted,
-  updateNumSets,
-  workoutId
+  updateNumSetsCompletedInWkt,
+  updateNumSetsInWkt,
+  workoutId,
+  removeExerFromWorkout
 }) {
-  const [currentNumberOfSets, setCurrentNumberOfSets] = useState(1);
   // array of set rows
   const [rowArr, setRowArr] = useState([
     {
@@ -29,6 +38,10 @@ export default function Exercise({
     },
   ]);
   const [restTimeAmount, setRestTimeAmount] = useState("2.25");
+  const [exerOptionsModalVisible, setExerOptionsModalVisible] = useState(false);
+  // set counters for exercise
+  const [currentNumberOfSets, setCurrentNumberOfSets] = useState(1);
+  const [numCompletedSetsInExer, setNumCompletedSetsInExer] = useState(0);
 
   const navigation = useNavigation();
 
@@ -39,7 +52,8 @@ export default function Exercise({
       temp.map(async (set) => {
         if (set.setNumber === setNumber) {
           if (inputIdentifier === "lbs") {
-            await updateSetWeight(setNumber, workoutId, exerciseName, enteredValue);
+            await updateSetWeight(
+              setNumber, workoutId, exer.name, enteredValue);
             return {
               setNumber: set.setNumber,
               previous: set.previous,
@@ -48,7 +62,7 @@ export default function Exercise({
               status: set.status,
             };
           } else if (inputIdentifier === "reps") {
-            await updateSetReps(setNumber, workoutId, exerciseName, enteredValue);
+            await updateSetReps(setNumber, workoutId, exer.name, enteredValue);
             return {
               setNumber: set.setNumber,
               previous: set.previous,
@@ -66,7 +80,8 @@ export default function Exercise({
               if (set.lbs && set.reps) {
                 shouldStatusBeCompleted = true;
                 handleOnSetCompleted(restTimeAmount);
-                updateNumSetsCompleted(true);
+                updateNumSetsCompletedInWkt(true);
+                setNumCompletedSetsInExer(numCompletedSetsInExer + 1);
               } else {
                 shouldStatusBeCompleted = false;
                 Alert.alert(
@@ -83,11 +98,12 @@ export default function Exercise({
               }
             } else {
               shouldStatusBeCompleted = false;
-              updateNumSetsCompleted(false);
+              updateNumSetsCompletedInWkt(false);
+              setNumCompletedSetsInExer(numCompletedSetsInExer - 1);
             }
             const newStatus = shouldStatusBeCompleted ? 
               "COMPLETED" : "IN PROGRESS";
-            await updateSetStatus(setNumber, workoutId, exerciseName, newStatus)
+            await updateSetStatus(setNumber, workoutId, exer.name, newStatus)
             return {
               setNumber: set.setNumber,
               previous: set.previous,
@@ -128,11 +144,6 @@ export default function Exercise({
         </View>
       );
     };
-
-    const setRowCompleted = () => {
-
-    }
-
     return (
       <Swipeable
         renderRightActions={(progress, dragX) =>
@@ -175,42 +186,17 @@ export default function Exercise({
     });
   }
 
-  function deleteSetButtonPressedHandler(setNumberToRemove) {
-    // remove last set
-    let temp = [...rowArr];
-    if (setNumberToRemove === currentNumberOfSets) {
-      temp.pop();
-      setRowArr(temp);
-    } else {
-      let newArr = temp.map((set) => {
-        if (set.setNumber > setNumberToRemove) {
-          return {
-            setNumber: set.setNumber - 1,
-            previous: set.previous,
-            lbs: set.lbs,
-            reps: set.reps,
-            status: set.status,
-          };
-        } else {
-          return set;
-        }
-      });
-      newArr.splice(setNumberToRemove - 1, 1);
-      setRowArr(newArr);
-    }
-    setCurrentNumberOfSets(currentNumberOfSets - 1);
-  }
-
   const deleteItem = async ({ item, index }) => {
     const setNumberToBeDeleted = index + 1;
-    updateNumSets(false);
+    updateNumSetsInWkt(false);
+
     if (rowArr[index].status === "COMPLETED") {
-      updateNumSetsCompleted(false);
+      updateNumSetsCompletedInWkt(false);
     }
     // delete item
     let a = rowArr;
     a.splice(index, 1);
-    setRowArr([...a]);
+    //setRowArr([...a]);
     setCurrentNumberOfSets(currentNumberOfSets - 1);
     // update set numbers of sets after deleted set
     // this code works in reseting the set numbers
@@ -218,25 +204,29 @@ export default function Exercise({
     let b = a.map((set) => {
       if (set.setNumber > setNumberToBeDeleted) {
         return {
+          ...set,
           setNumber: set.setNumber - 1,
-          previous: set.previous,
-          lbs: set.lbs,
-          reps: set.reps,
-          status: set.status,
         };
       } else {
         return set;
       }
     });
     setRowArr([...b]);
-    await deleteAllSetsFromCurrentExercise(workoutId, exerciseName);
+    await deleteAllSetsFromCurrentExercise(workoutId, exer.name);
     await updateSetOrder(
-      workoutId, exerciseName, b);
+      workoutId, exer.name, b);
+  };
+
+  const openExerOptionsModal = () => {
+    setExerOptionsModalVisible(true);
+  }
+  const closeExerOptionsModal = () => {
+    setExerOptionsModalVisible(false);
   };
 
   return (
     <View>
-      <View>
+      <View style={styles.nameAndOptionsRow}>
         <Pressable 
           style={({ pressed }) => [
             styles.exerciseName,
@@ -244,7 +234,7 @@ export default function Exercise({
           ]}
           onPress={() => {
             navigation.navigate("ExerciseScreen", {
-              exerciseName: exerciseName
+              exercise: exer
             });
           }}
         >
@@ -254,9 +244,17 @@ export default function Exercise({
               fontSize: 20,
             }}
           >
-            {exerciseName}
+            {exer.name}
           </Text>
         </Pressable>
+        <IconButton
+          icon="ellipsis-horizontal-circle-outline"
+          size={30}
+          color="white"
+          onPress={() => {
+            openExerOptionsModal();
+          }}
+        />
       </View>
       <TableHeaderRow />
 
@@ -275,13 +273,25 @@ export default function Exercise({
             -1, -1,
             "WORKING",
             "IN PROGRESS",
-            exerciseName,
+            exer.name,
             workoutId
           ));
           setCurrentNumberOfSets(currentNumberOfSets + 1);
-          updateNumSets(true);
+          updateNumSetsInWkt(true);
         }}
       />
+
+        <View>
+          {exerOptionsModalVisible && (
+            <ExerciseOptionsModal 
+              closeExerOptionsModal={closeExerOptionsModal}
+              removeExerFromWorkout={removeExerFromWorkout}
+              exercise={exer}
+              numSetsInExer={currentNumberOfSets}
+              numCompletedSetsInExer={numCompletedSetsInExer}
+            />
+          )}
+      </View>
     </View>
   );
 }
@@ -290,7 +300,13 @@ const styles = StyleSheet.create({
   nameRow: {
     flex: 1,
   },
+  nameAndOptionsRow: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
   exerciseName: {
+    backgroundColor: "maroon"
   },
   grid: {
     borderRadius: 6,

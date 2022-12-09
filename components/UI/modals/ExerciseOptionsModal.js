@@ -1,50 +1,52 @@
-import { View, Text } from "react-native";
+import { View, Text, StyleSheet, Modal, Pressable } from "react-native";
 import React from "react";
 
-export default function ExerciseOptionsModal() {
+export default function ExerciseOptionsModal({
+  closeExerOptionsModal,
+  removeExerFromWorkout,
+  exercise,
+  numSetsInExer,
+  numCompletedSetsInExer
+}) {
   return (
     <View>
       <Modal
         animationType="slide"
         transparent={true}
-        visible={modalVisible}
+        visible={true}
         onRequestClose={() => {
-          Alert.alert("Modal has been closed.");
-          closeModal();
+          closeExerOptionsModal();
         }}
       >
-        <View>
-          <View style={styles.modalView}>
-            <Text style={styles.textStyle}>Enter Timer Amount In Seconds</Text>
-            <View style={styles.inputContainer}>
-              <TextInput
-                style={styles.input}
-                onChangeText={setTimerAmount}
-                value={timerAmount}
-              />
-            </View>
-            <Pressable
-              style={({ pressed }) => [
-                styles.button,
-                styles.buttonClose,
-                pressed && { opacity: 0.75 },
-              ]}
-              onPress={() => handleOnTimerAmountSet(timerAmount)}
-            >
-              <Text style={styles.textStyle}>Start Timer</Text>
-            </Pressable>
-            <Pressable
-              style={({ pressed }) => [
-                styles.button,
-                styles.buttonClose,
-                pressed && { opacity: 0.75 },
-              ]}
-              onPress={() => closeModal()}
-            >
-              <Text style={styles.textStyle}>Cancel</Text>
-            </Pressable>
-          </View>
-        </View>
+      <View style={styles.modalView}>
+        <Pressable
+            style={({ pressed }) => [
+              pressed && { opacity: 0.75 },
+            ]}
+            onPress={() => {
+              removeExerFromWorkout(
+                exercise.name, 
+                numSetsInExer,
+                numCompletedSetsInExer
+              );
+              closeExerOptionsModal();
+            }
+          }
+            
+          >
+            <Text style={styles.textStyle}>
+              Remove Exercise from Workout
+            </Text>
+          </Pressable>
+        <Pressable
+          style={({ pressed }) => [
+            pressed && { opacity: 0.75 },
+          ]}
+          onPress={() => closeExerOptionsModal()}
+        >
+            <Text style={styles.textStyle}>X</Text>
+          </Pressable>
+      </View>
       </Modal>
     </View>
   );
@@ -53,15 +55,13 @@ export default function ExerciseOptionsModal() {
 const styles = StyleSheet.create({
   modalView: {
     margin: 20,
-    marginTop: "14%",
+    marginTop: "80%",
     width: "90%",
-    height: "87%",
-    backgroundColor: "white",
+    height: "50%",
+    backgroundColor: "#3305a0",
     borderRadius: 20,
-    paddingHorizontal: 0,
-    paddingVertical: 0,
+    padding: 10,
     alignItems: "center",
-    justifyContent: "center",
     shadowColor: "#000",
     shadowOffset: {
       width: 0,

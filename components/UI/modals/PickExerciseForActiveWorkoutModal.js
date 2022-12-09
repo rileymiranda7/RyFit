@@ -148,7 +148,6 @@ export default function PickExerciseForActiveWorkoutModal({
         transparent={true}
         visible={true}
         onRequestClose={() => {
-          Alert.alert("Modal has been closed.");
           closeModal();
         }}
       >

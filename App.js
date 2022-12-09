@@ -11,6 +11,7 @@ import "react-native-gesture-handler";
 import * as Notifications from "expo-notifications";
 import * as SplashScreen from "expo-splash-screen";
 import { Ionicons } from "@expo/vector-icons";
+import FlashMessage from "react-native-flash-message";
 
 import PastWorkoutsScreen from "./screens/PastWorkoutsScreen";
 import ProfileScreen from "./screens/ProfileScreen";
@@ -76,7 +77,12 @@ async function requestPermissionsAsync() {
 
 function ExerciseTabNavigator() {
   return (
-    <TopTabs.Navigator>
+    <TopTabs.Navigator
+      screenOptions={{
+        tabBarLabelStyle: { color: "white" },
+        tabBarStyle: { backgroundColor: "#2d0689" },
+      }}
+    >
       <TopTabs.Screen name="History" component={ExerciseHistoryTabScreen} />
       <TopTabs.Screen name="Records" component={ExerciseRecordsTabScreen} />
       <TopTabs.Screen name="Settings" component={ExerciseSettingsTabScreen} />
@@ -131,6 +137,7 @@ function CurrentWorkoutStackNavigator({ handleOnSetCompleted }) {
         options={{
           //presentation: "modal",
           headerShown: false,
+          gestureEnabled: false
         }}
       />
       <Stack.Screen
@@ -138,7 +145,7 @@ function CurrentWorkoutStackNavigator({ handleOnSetCompleted }) {
         component={ExerciseTabNavigator}
         title="Pick Exercise"
         options={{
-          //presentation: "modal",
+          presentation: "modal",
           headerShown: false,
         }}
       />
@@ -197,7 +204,7 @@ function BottomTabsNavigator({ handleOnSetCompleted }) {
         }}
       />
       <BottomTabs.Screen
-        name="Drawer"
+        name="Workout"
         //component={CurrentWorkoutStackNavigator}
         children={() => (
           <CurrentWorkoutStackNavigator
@@ -338,6 +345,7 @@ export default function App() {
           <Drawer.Screen name="Profile" component={ProfileScreen} />
         </Drawer.Navigator>
       </NavigationContainer>
+      <FlashMessage position="top" />
     </View>
   );
 }

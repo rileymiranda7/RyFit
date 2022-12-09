@@ -1,6 +1,7 @@
 import * as SQLite from "expo-sqlite";
 
 import { Exercise } from "../models/exercise";
+import { ExerciseInstance } from "../models/exerciseInstance";
 import { Routine } from "../models/routine";
 import Set from "../models/set";
 import { Workout } from "../models/workout";
@@ -988,15 +989,17 @@ export async function updateWorkoutExerciseOrder(
   ) {
     if (notDeletingExercise) {
       await Promise.all(
-        newExerciseOrder.map(async (exercise, index) => {
-          await updateExerciseNumberInWorkout(workoutId, exercise.name, index + 1);
+        newExerciseOrder.map(async (exerInst, index) => {
+          await updateExerciseNumberInWorkout(
+            workoutId, exerInst.exer.name, index + 1);
         })
       );
     } else {
       await Promise.all(
-        newExerciseOrder.map(async (exercise, index) => {
+        newExerciseOrder.map(async (exerInst, index) => {
           if (index + 1 > exerciseToDeletePosition) {
-            await updateExerciseNumberInWorkout(routineName, exercise.name, index);
+            await updateExerciseNumberInWorkout(
+              routineName, exerInst.exer.name, index);
           }
         })
       );
@@ -1128,6 +1131,17 @@ export async function updateSetOrder(
         await insertSet(new Set(
           set.setNumber, set.lbs, set.reps, "WORKING", 
           set.status, exerciseName, workoutId
+        ));
+    })
+  );
+}
+
+export async function updateExerInstanceOrderInWkt(
+  workoutId, newSetOrder) {
+  await Promise.all(
+    newSetOrder.map(async (exerInst) => {
+        await insertExerciseInstance(new ExerciseInstance(
+          exerInst.name, 
         ));
     })
   );

@@ -3,7 +3,7 @@ import React from 'react'
 
 export default function ExerciseSettingsTabScreen() {
   return (
-    <View>
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <Text>ExerciseSettingsTabScreen</Text>
     </View>
   )
