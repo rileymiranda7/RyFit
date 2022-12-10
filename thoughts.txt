@@ -343,3 +343,12 @@ what we're using for numberInWorkout
 maybe open rest timer picker after user presses button in exercise options modal
 then have "set" button that hides modal or if it is invalid time (0 or >10:00) 
 gives alert error
+
+i think lagging timer error has to do with rest timer amount being set in state
+and then rendering running timer with state val as prop
+state val isnt updating in time
+should just pass prop val to running timer and move checks in parent component
+this was correct
+can remove state and checks for rest timer amount
+
+need to save exercise rest time amount in db when set

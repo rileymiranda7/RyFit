@@ -10,7 +10,6 @@ export default function HeaderTimer({ restTimerAmount, rndm }) {
   const [timerIsRunning, setTimerIsRunning] = useState(false);
   const [showSetTimerModal, setShowSetTimerModal] = useState(false);
   const [timerAmount, setTimerAmount] = useState("5");
-  const [restTime, setRestTime] = useState(3);
   const [useRestTime, setUseRestTime] = useState(false);
   const [initialRender, setInitialRender] = useState(true);
   const [sound, setSound] = useState();
@@ -31,16 +30,10 @@ export default function HeaderTimer({ restTimerAmount, rndm }) {
     }
   };
 
-  const handleOnRestTimeSet = (amount) => {
-    if (Number(amount) > 10) {
-      alert("Timer cannot be over 10 minutes!");
-    } else if (Number(amount) <= 0) {
-      alert("Timer cannot be 0 minutes!");
-    } else {
-      setRestTime(Number(amount));
+  const handleOnRestTimeSet = () => {
       setShowSetTimerModal(false);
       setTimerIsRunning(true);
-    }
+
   };
 
   async function playSound() {
@@ -75,10 +68,7 @@ export default function HeaderTimer({ restTimerAmount, rndm }) {
       setInitialRender(false);
     } else {
       setUseRestTime(true);
-      if (Number(restTimerAmount) > 0) {
-        setRestTime(Number(restTimerAmount));
-        handleOnRestTimeSet(restTimerAmount);
-      }
+      handleOnRestTimeSet(restTimerAmount);
     }
   }, [rndm]);
 
@@ -98,7 +88,7 @@ export default function HeaderTimer({ restTimerAmount, rndm }) {
         timeInMinutes={timerAmount}
         onTimerEnd={onTimerEnd}
         rndm={rndm}
-        restTime={restTime}
+        restTime={restTimerAmount}
         useRestTime={useRestTime}
       />
     );
