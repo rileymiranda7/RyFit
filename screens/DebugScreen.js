@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, Button } from 'react-native'
 import React from 'react'
 
-import { fetchAllExerciseInstances, fetchCompletedWorkouts, fetchSets } from '../utils/database'
+import { fetchAllExerciseInstances, fetchCompletedWorkouts, fetchExercises, fetchSets } from '../utils/database'
 
 export default function DebugScreen() {
   return (
@@ -27,6 +27,13 @@ export default function DebugScreen() {
         onPress={async () => {
           console.log("exerciseInstances")
           console.log(await fetchAllExerciseInstances());
+        }}
+      />
+      <Button 
+        title="print exercises" 
+        onPress={async () => {
+          console.log("exercises")
+          console.log(await fetchExercises());
         }}
       />
 

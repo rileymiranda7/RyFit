@@ -352,3 +352,21 @@ this was correct
 can remove state and checks for rest timer amount
 
 need to save exercise rest time amount in db when set
+
+default time when inserting new exercise is 3:00
+
+db resttime will be loaded in activeworkoutscreen state array
+and is in exer obj passed to exercise component
+
+getting error because exercises in db have "3:00" for rest time instead
+of timeInMin
+
+now newly inserted exercises should be fine
+
+NEED TO SHOW CURRENT EXERCISE REST TIME IN SET REST TIMER AMOUNT MODAL
+
+restime cant be 0
+
+i think working now
+
+problem was selectedValue for min and seconds undefined until user taps

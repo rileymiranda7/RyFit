@@ -1146,3 +1146,24 @@ export async function updateExerInstanceOrderInWkt(
     })
   );
 }
+
+export async function updateExerciseRestTime(exerciseName, newRestTime) {
+  const promise = new Promise((resolve, reject) => {
+    database.transaction((tx) => {
+      tx.executeSql(
+        `UPDATE exercises 
+        SET restTime = ?
+        WHERE exerciseName = ?;`,
+        [newRestTime, exerciseName],
+        (_, result) => {
+          resolve(result);
+        },
+        (_, error) => {
+          reject(error);
+        }
+      );
+    });
+  });
+
+  return promise;
+}

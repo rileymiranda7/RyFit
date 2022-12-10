@@ -77,7 +77,7 @@ export default function PickExerciseForRoutineScreen({ route }) {
   };
 
   async function addExercise() {
-    const newExercise = new Exercise(exerciseNameInput, "3:00", null);
+    const newExercise = new Exercise(exerciseNameInput, "3", null);
     await insertExercise(newExercise);
     submitPickedExerciseHandler([...selectedExercises, newExercise]);
   }

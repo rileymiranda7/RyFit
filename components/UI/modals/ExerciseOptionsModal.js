@@ -10,12 +10,19 @@ export default function ExerciseOptionsModal({
   exercise,
   numSetsInExer,
   numCompletedSetsInExer,
-  handleRestTimeSet
+  handleRestTimeSet,
+  restTimeAmount
 }) {
 
-  const [selectedSecondsVal, setSelectedSecondsVal] = useState();
-  const [selectedMinutesVal, setSelectedMinutesVal] = useState();
+  const [selectedSecondsVal, setSelectedSecondsVal] = useState("00");
+  const [selectedMinutesVal, setSelectedMinutesVal] = useState("00");
   const [shouldShowRestTimerPicker, setShouldShowRestTimePicker] = useState(false);
+
+    const convertToWholeMinsAndSecs = (amount) => {
+    const mins = Math.floor(amount);
+    const secs = (amount - mins) * 60;
+    return { mins, secs};
+  }
 
   return (
     <View>
@@ -46,6 +53,15 @@ export default function ExerciseOptionsModal({
         </Pressable>
         {shouldShowRestTimerPicker && (
           <View style={{ flex: 1, minWidth: "100%"}}>
+            <Text style={styles.textStyle}>
+              {
+                "Current Rest Time: " +
+                convertToWholeMinsAndSecs(restTimeAmount).mins +
+                " min " +
+                convertToWholeMinsAndSecs(restTimeAmount).secs + 
+                " s"
+              }
+            </Text>
             <View style={styles.pressableRow}>
               <Picker
                 style={{ minWidth: "30%" }}
@@ -97,7 +113,7 @@ export default function ExerciseOptionsModal({
                   pressed && { opacity: 0.75 },
                   styles.button, { backgroundColor: "#1db643"}
                 ]}
-                onPress={() => {
+                onPress={async () => {
                   if (selectedMinutesVal === "10" && 
                     selectedSecondsVal !== "00") {
                       showMessage({
@@ -105,8 +121,15 @@ export default function ExerciseOptionsModal({
                         type: "danger",
                         statusBarHeight: 50
                       });
+                  } else if (selectedMinutesVal === "00" && 
+                  selectedSecondsVal === "00") {
+                    showMessage({
+                      message: "Auto Rest Timer cannot be 0 min 0 s!",
+                      type: "danger",
+                      statusBarHeight: 50
+                    });
                   } else {
-                    handleRestTimeSet(selectedMinutesVal + selectedSecondsVal);
+                    await handleRestTimeSet(selectedMinutesVal + selectedSecondsVal);
                     setShouldShowRestTimePicker(false);
                   }
                 }}

@@ -10,6 +10,7 @@ import IconButton from "./UI/IconButton";
 import { 
   deleteAllSetsFromCurrentExercise, 
   insertSet, 
+  updateExerciseRestTime, 
   updateSetOrder, 
   updateSetReps, 
   updateSetStatus, 
@@ -37,7 +38,8 @@ export default function Exercise({
       status: "IN PROGRESS",
     },
   ]);
-  const [restTimeAmount, setRestTimeAmount] = useState("2.25");
+  const [restTimeAmount, setRestTimeAmount] = useState(
+    exer?.restTime ? exer.restTime : "2.25");
   const [exerOptionsModalVisible, setExerOptionsModalVisible] = useState(false);
   // set counters for exercise
   const [currentNumberOfSets, setCurrentNumberOfSets] = useState(1);
@@ -224,9 +226,10 @@ export default function Exercise({
     setExerOptionsModalVisible(false);
   };
 
-  const handleRestTimeSet = (restTime) => {
-    const restTimeInMin = convertToMinutes(restTime);
+  const handleRestTimeSet = async (restTime) => {
+    const restTimeInMin = (convertToMinutes(restTime)).toString();
     setRestTimeAmount(restTimeInMin);
+    await updateExerciseRestTime(exer.name, restTimeInMin);
   }
 
   const convertToMinutes = (input) => {
@@ -301,6 +304,7 @@ export default function Exercise({
               numSetsInExer={currentNumberOfSets}
               numCompletedSetsInExer={numCompletedSetsInExer}
               handleRestTimeSet={handleRestTimeSet}
+              restTimeAmount={restTimeAmount}
             />
           )}
       </View>
