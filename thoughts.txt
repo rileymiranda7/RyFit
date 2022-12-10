@@ -339,3 +339,7 @@ updating workout order after order changed by dragging item
 not updating workout order after updating because it doesn't matter
 indexes of ExerAndInstList array will update automatically and thats
 what we're using for numberInWorkout
+
+maybe open rest timer picker after user presses button in exercise options modal
+then have "set" button that hides modal or if it is invalid time (0 or >10:00) 
+gives alert error

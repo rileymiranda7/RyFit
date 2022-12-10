@@ -21,6 +21,7 @@ export default function TimerInput({ handleTimerAmountChanged }) {
   const handleOnChange = (updatedCode) => {
     setCode(updatedCode);
     handleTimerAmountChanged(updatedCode);
+    console.log(updatedCode);
   };
 
   const handleOnPress = () => {

@@ -224,6 +224,17 @@ export default function Exercise({
     setExerOptionsModalVisible(false);
   };
 
+  const handleRestTimeSet = (restTime) => {
+    const restTimeInMin = convertToMinutes(restTime);
+    setRestTimeAmount(restTimeInMin);
+  }
+
+  const convertToMinutes = (input) => {
+    const minutes = Number(input.substring(0, 2));
+    const seconds = Number(input.substring(2, 4));
+    return minutes + seconds / 60;
+  };
+
   return (
     <View>
       <View style={styles.nameAndOptionsRow}>
@@ -289,6 +300,7 @@ export default function Exercise({
               exercise={exer}
               numSetsInExer={currentNumberOfSets}
               numCompletedSetsInExer={numCompletedSetsInExer}
+              handleRestTimeSet={handleRestTimeSet}
             />
           )}
       </View>
