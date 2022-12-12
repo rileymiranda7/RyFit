@@ -62,6 +62,7 @@ export default function ActiveWorkoutScreen({
     routineName ? routineName : "New Workout");
   const [numSetsCompleted, setNumSetsCompleted] = useState(0);
   const [numSets, setNumSets] = useState(0)
+  const [numExercises, setNumExercises] = useState(0);
 
   const {
     seconds,
@@ -81,7 +82,6 @@ export default function ActiveWorkoutScreen({
   const { routineName, workoutId } = route.params;
 
   const loadRoutine = async (routineName) => {
-    console.log("here")
     console.log(await fetchCompletedWorkouts());
     const routine = await fetchRoutine(routineName);
     // insert exerciseInstances
@@ -187,6 +187,7 @@ export default function ActiveWorkoutScreen({
             onPress: async () => {
               const duration = hours + "h " + minutes + "m"
               await updateWorkoutDuration(duration, workoutId);
+              await updateWorkoutExerciseOrder(exerAndInstList, workoutId, true, -1);
               await deleteIncompleteSets(workoutId);
               await deleteExerciseInstancesWithNoCompletedSets(
                 workoutId, exerList);
@@ -212,7 +213,8 @@ export default function ActiveWorkoutScreen({
           {
             text: "End Workout",
             onPress: async () => {
-              const duration = hours + "h " + minutes + "m"
+              await updateWorkoutExerciseOrder(exerAndInstList, workoutId, true, -1);
+              const duration = hours + "h " + minutes + "m";
               await updateWorkoutDuration(duration, workoutId);
               navigation.navigate("CurrentWorkout", {
                 workoutWasCompleted: true
@@ -246,7 +248,6 @@ export default function ActiveWorkoutScreen({
 
   const removeExerFromWorkout = async (
     exerciseNameToBeDeleted, numSetsInExer, numCompletedSetsInExer) => {
-      console.log("here");
       console.log(exerciseNameToBeDeleted);
     // delete exer and inst from exerAndInstList
     let tempExerAndInstList = exerAndInstList;

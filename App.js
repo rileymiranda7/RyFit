@@ -23,7 +23,6 @@ import RoutineModal from "./components/UI/modals/RoutineModal";
 import ActiveWorkoutScreen from "./screens/ActiveWorkoutScreen";
 import PastWorkoutItemScreen from "./screens/PastWorkoutItemScreen";
 import DebugScreen from "./screens/DebugScreen";
-import ExerciseScreen from "./screens/ExerciseScreen";
 import ExerciseHistoryTabScreen from "./screens/ExerciseHistoryTabScreen";
 import ExerciseRecordsTabScreen from "./screens/ExerciseRecordsTabScreen";
 import ExerciseSettingsTabScreen from "./screens/ExerciseSettingsTabScreen";

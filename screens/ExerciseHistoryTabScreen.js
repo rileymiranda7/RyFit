@@ -10,7 +10,6 @@ export default function ExerciseHistoryTabScreen() {
 
   const isFocused = useIsFocused();
 
-  const [selectedRestTimeAmount, setSelectedRestTimeAmount] = useState();
 
   useEffect(() => {
     if (isFocused) {
@@ -31,15 +30,6 @@ export default function ExerciseHistoryTabScreen() {
         }}
       >
       <Text>ExerciseHistoryTabScreen</Text>
-
-      <Picker
-          selectedValue={selectedRestTimeAmount}
-          onValueChange={(itemValue, itemIndex) =>
-            setSelectedRestTimeAmount(itemValue)
-          }>
-          <Picker.Item label="0:10" value="00:10" />
-          <Picker.Item label="0:20" value="00:20" />
-        </Picker>
 
       </TouchableOpacity>
     </View>

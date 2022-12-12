@@ -1,6 +1,7 @@
 import { View, Text, StyleSheet } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useIsFocused } from '@react-navigation/native';
+import { Ionicons } from "@expo/vector-icons";
 
 import { fetchSetsFromCompletedExercise } from '../../utils/database';
 
@@ -28,9 +29,15 @@ export default function PastExerciseItem({ workoutId, exerciseName }) {
       {loadedSets !== undefined && loadedSets.length > 0 && 
       (loadedSets.map((set, index) => {
         return (
-          <Text style={styles.setTextStyle} key={index}>
-            {set.setNumber}    {set.weight} x {set.reps}
-          </Text>
+          <View key={index} style={{ flexDirection: "row", alignItems: "center"}}>
+            <Text style={styles.setTextStyle} >
+              {set.setNumber}    {set.weight} lbs
+            </Text>
+            <Ionicons name="close-outline" size={28} color="#fff" />
+            <Text style={styles.setTextStyle}>
+              {set.reps}
+            </Text>
+          </View>
         );
       }))}
     </View>

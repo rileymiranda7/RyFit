@@ -370,3 +370,18 @@ restime cant be 0
 i think working now
 
 problem was selectedValue for min and seconds undefined until user taps
+
+got rid of value prop in textInputConfig obj in IncompleteRow
+to get rid of cursor glitching out
+i think still working fine
+
+TODO:
+3 screens in exerciseInfo
+history tab
+records tab
+settings tab
+
+exercise notes and pinning and showing in past workouts
+
+forgot i was going to update all exerciseInstances numberInWorkout when 
+workout done

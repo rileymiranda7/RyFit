@@ -20,7 +20,7 @@ export default function ExerciseOptionsModal({
 
     const convertToWholeMinsAndSecs = (amount) => {
     const mins = Math.floor(amount);
-    const secs = (amount - mins) * 60;
+    const secs = Math.round((amount - mins) * 60);
     return { mins, secs};
   }
 

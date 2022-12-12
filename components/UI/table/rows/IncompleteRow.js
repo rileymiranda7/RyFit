@@ -31,7 +31,10 @@ export default function IncompleteRow({
           textInputConfig={{
             keyboardType: "decimal-pad",
             onChangeText: inputChangedHandler.bind(this, "lbs", setNumber),
-            value: lbsValue,
+            contextMenuHidden: true,
+            keyboardAppearance: 'dark',
+            maxLength: 5,
+            selectTextOnFocus: true
           }}
         />
       </Col>
@@ -41,7 +44,10 @@ export default function IncompleteRow({
           textInputConfig={{
             keyboardType: "decimal-pad",
             onChangeText: inputChangedHandler.bind(this, "reps", setNumber),
-            value: repsValue,
+            contextMenuHidden: true,
+            keyboardAppearance: 'dark',
+            maxLength: 5,
+            selectTextOnFocus: true
           }}
         />
       </Col>

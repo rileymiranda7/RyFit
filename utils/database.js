@@ -19,7 +19,7 @@ export async function init() {
   /* const promise = new Promise((resolve, reject) => {
     database.transaction((tx) => {
       tx.executeSql(
-        `DROP TABLE workouts;`,
+        `DROP TABLE sets;`,
         [],
         () => {
           resolve();
@@ -1131,17 +1131,6 @@ export async function updateSetOrder(
         await insertSet(new Set(
           set.setNumber, set.lbs, set.reps, "WORKING", 
           set.status, exerciseName, workoutId
-        ));
-    })
-  );
-}
-
-export async function updateExerInstanceOrderInWkt(
-  workoutId, newSetOrder) {
-  await Promise.all(
-    newSetOrder.map(async (exerInst) => {
-        await insertExerciseInstance(new ExerciseInstance(
-          exerInst.name, 
         ));
     })
   );
