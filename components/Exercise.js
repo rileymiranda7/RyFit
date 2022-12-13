@@ -1,6 +1,6 @@
 import { View, Button, StyleSheet, Text, Alert, Pressable } from "react-native";
 import { useState } from "react";
-import { Swipeable } from "react-native-gesture-handler";
+import { Swipeable, TextInput } from "react-native-gesture-handler";
 import { Row } from "react-native-easy-grid";
 import { useNavigation } from "@react-navigation/native";
 
@@ -271,6 +271,22 @@ export default function Exercise({
           }}
         />
       </View>
+
+      <TextInput 
+        style={styles.exerNoteInput}
+        multiline={true}
+        keyboardAppearance='dark'
+        placeholder="notes to always show when doing this exercise..."
+        maxLength={200}
+      />
+      <TextInput 
+        style={styles.instNoteInput}
+        multiline={true}
+        keyboardAppearance='dark'
+        placeholder="notes just for this workout..."
+        maxLength={200}
+      />
+
       <TableHeaderRow />
 
       {rowArr.map((item, index) =>
@@ -328,4 +344,18 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     backgroundColor: "white",
   },
+  exerNoteInput: {
+    backgroundColor: "#6704c3",
+    padding: 4,
+    color: "white",
+    minWidth: 65,
+    fontSize: 16,
+  },
+  instNoteInput: {
+    backgroundColor: "#9576eb",
+    padding: 4,
+    color: "white",
+    minWidth: 65,
+    fontSize: 16,
+  }
 });

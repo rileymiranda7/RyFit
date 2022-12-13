@@ -6,7 +6,9 @@ import {
   Pressable,
   TextInput,
   Alert,
-  TouchableOpacity
+  TouchableOpacity,
+  KeyboardAvoidingView,
+  Platform
 } from "react-native";
 import {
   useNavigation,
@@ -283,7 +285,10 @@ export default function ActiveWorkoutScreen({
 
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={styles.container}
+    >
       <View style={styles.exerciseList}>
         <DraggableFlatList
         onDragEnd={async ({ data }) => {
@@ -374,6 +379,7 @@ export default function ActiveWorkoutScreen({
               >
                 <Text style={styles.textStyle}>End Workout</Text>
               </Pressable>
+              <View style={{ marginBottom: 100}}></View>
             </>
           }
         />
@@ -386,7 +392,7 @@ export default function ActiveWorkoutScreen({
           />
         )}
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 

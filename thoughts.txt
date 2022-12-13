@@ -400,3 +400,10 @@ fix set row styling
 make lbs and reps values bold
 
 need to fix keyboard blocking text field
+fixed temporarily with invisible view after buttons at bottom
+
+should add cancel workout button by end workout button so user
+can cancel workout without having to uncheck all completed sets
+
+work on components for exercise notes and exerInst notes
+try to use separation of concerns 

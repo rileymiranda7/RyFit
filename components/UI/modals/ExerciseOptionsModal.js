@@ -130,7 +130,7 @@ export default function ExerciseOptionsModal({
                     });
                   } else {
                     await handleRestTimeSet(selectedMinutesVal + selectedSecondsVal);
-                    setShouldShowRestTimePicker(false);
+                    closeExerOptionsModal();
                   }
                 }}
               >
