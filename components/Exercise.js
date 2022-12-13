@@ -248,7 +248,8 @@ export default function Exercise({
           ]}
           onPress={() => {
             navigation.navigate("ExerciseScreen", {
-              exercise: exer
+              exer: exer,
+              workoutId: workoutId
             });
           }}
         >

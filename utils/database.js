@@ -19,7 +19,7 @@ export async function init() {
   /* const promise = new Promise((resolve, reject) => {
     database.transaction((tx) => {
       tx.executeSql(
-        `DROP TABLE sets;`,
+        `DROP TABLE workouts;`,
         [],
         () => {
           resolve();
@@ -500,7 +500,7 @@ export async function fetchExerciseNumberInRoutine(routineName, exerciseName) {
     return promise;
   
   }
-  export function fetchSetsFromCompletedExercise(exerciseName, workoutId) {
+  export function fetchSetsFromExerciseInstance(exerciseName, workoutId) {
     const promise = new Promise((resolve, reject) => {
       database.transaction((tx) => {
         tx.executeSql(
@@ -528,6 +528,33 @@ export async function fetchExerciseNumberInRoutine(routineName, exerciseName) {
         tx.executeSql(
           `SELECT * FROM exerciseInstances;`,
           [],
+          (_, result) => {
+            resolve(result.rows._array);
+          },
+          (_, error) => {
+            reject(error);
+          }
+        );
+      });
+    });
+  
+    return promise;
+  }
+
+  export function fetchAllSetsFromAllExerciseInstances(
+    exerciseName, workoutIdToNotInclude) {
+    const promise = new Promise((resolve, reject) => {
+      database.transaction((tx) => {
+        tx.executeSql(
+          `SELECT setNumber, weight, reps, dateShort, name, timestamp, workouts.workoutId
+          FROM 
+            sets INNER JOIN workouts
+          ON workouts.workoutId = sets.workoutId
+          WHERE 
+            exerciseName = ? AND 
+            workouts.workoutId != ?
+          ORDER BY timestamp DESC;`,
+          [exerciseName, workoutIdToNotInclude],
           (_, result) => {
             resolve(result.rows._array);
           },
@@ -856,7 +883,7 @@ export async function deleteExerciseInstancesWithNoCompletedSets(
   await Promise.all(
     exerciseList.map(async (exercise) => {
       let exerHasCompletedSet = false;
-      const sets = await fetchSetsFromCompletedExercise(
+      const sets = await fetchSetsFromExerciseInstance(
         exercise.name, workoutId);
       for (let set of sets) {
         if (set.status === "COMPLETED") {

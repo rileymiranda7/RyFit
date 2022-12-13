@@ -385,3 +385,18 @@ exercise notes and pinning and showing in past workouts
 
 forgot i was going to update all exerciseInstances numberInWorkout when 
 workout done
+
+differentiate completed exerciseInstances from current one by
+making sure workoutId doesn't match current workoutId
+
+figure out why fetchAllSetsFromAllExerciseInstances is including current
+exerInst and fix loadPastExerInstances
+
+DON'T REFRESH BEFORE ENDING WORKOUT
+
+put lbs and reps in grid col too?
+
+fix set row styling
+make lbs and reps values bold
+
+need to fix keyboard blocking text field

@@ -1,32 +1,15 @@
 import { View, Text, StyleSheet } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import { useIsFocused } from '@react-navigation/native';
+import React from 'react'
 import { Ionicons } from "@expo/vector-icons";
 import { Col, Row } from "react-native-easy-grid";
 
-import { fetchSetsFromExerciseInstance } from '../../utils/database';
-
-export default function PastExerciseItem({ workoutId, exerciseName }) {
-
-  const [loadedSets, setLoadedSets] = useState();
-
-  const isFocused = useIsFocused();
-
-  const loadSets = async () => {
-    const sets = 
-      await fetchSetsFromExerciseInstance(exerciseName, workoutId);
-    setLoadedSets(sets);
-  };
-
-  useEffect(() => {
-    if (isFocused) {
-      loadSets();
-    }
-  }, [isFocused]);
-
+export default function PastExerInstItem({ setArray, workoutName, date }) {
   return (
     <View style={styles.container}>
-      <Text style={styles.exerciseTitleStyle}>{exerciseName}</Text>
+      <View style={styles.headerContainer}>
+        <Text style={styles.workoutNameStyle}>{workoutName}</Text>
+        <Text style={styles.workoutDateTimeStyle}>{date}</Text>
+      </View>
       <View style={{maxWidth: "50%"}}>
         <Row>
           <Col style={{ flex: 1}}>
@@ -45,12 +28,11 @@ export default function PastExerciseItem({ workoutId, exerciseName }) {
           </Col>
         </Row>
       </View>
-      {loadedSets !== undefined && loadedSets.length > 0 && 
-      (loadedSets.map((set, index) => {
+      {setArray.map((set, index) => {
         return (
-          <View key={index} style={{maxWidth: "50%", marginBottom: 2}}>
+          <View key={index} style={{maxWidth: "50%", marginVertical: 2}}>
             <Row>
-              <Col style={styles.set}>
+            <Col style={styles.set}>
                 <Text style={styles.setNumStyle} >
                   {set.setNumber}
                 </Text>
@@ -61,7 +43,7 @@ export default function PastExerciseItem({ workoutId, exerciseName }) {
                 </Text>
               </Col>
               <Col style={styles.xIcon}>
-                <Ionicons name="close-outline" size={28} color="#fff" />
+                <Ionicons name="close-outline" size={25} color="#fff" />
               </Col>
               <Col style={styles.repsVal}>
                 <Text style={styles.setValTextStyle}>
@@ -71,19 +53,20 @@ export default function PastExerciseItem({ workoutId, exerciseName }) {
             </Row>
           </View>
         );
-      }))}
+      })}
     </View>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
-    minWidth: "100%",
-    minHeight: "100%",
-    flex: 1,
-    marginHorizontal: 10,
-    marginVertical: 4,
-    paddingHorizontal: 5,
+    backgroundColor: "#4e1fbb",
+    margin: 10,
+    minWidth: '80%',
+    padding: 5,
+    borderRadius: 8,
+    borderWidth: 2,
+    borderColor: "white",
   },
   workoutNameStyle: {
     color: "white",
@@ -93,43 +76,31 @@ const styles = StyleSheet.create({
   },
   workoutDateTimeStyle: {
     color: "white",
-    fontSize: 14,
+    fontSize: 16,
     textAlign: "center",
   },
-  exerciseTitleStyle: {
+  exerciseTextStyle: {
     color: "white",
-    fontSize: 22,
-    fontWeight: "bold",
+  },
+  headerContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginBottom: 2
   },
   setTextStyle: {
     color: "#9576eb",
-    fontSize: 18,
-    textAlign: "center",
+    fontSize: 16
   },
   setValTextStyle: {
     color: "white",
-    fontSize: 18,
+    fontSize: 16,
     textAlign: "center",
     fontWeight: "bold"
   },
   setNumStyle: {
     color: "white",
     fontSize: 16
-  },
-  setRow: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  headerContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginHorizontal: 8,
-    marginVertical: 0,
-  },
-  pressed: {
-    opacity: 0.75,
   },
   lbsVal: {
     flex: 3,
@@ -157,7 +128,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderColor: "white",
     borderWidth: 2,
-    borderRadius: 8
+    borderRadius: 8,
   },
   xIcon: {
     flex: 1,

@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, View, Alert } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer, useRoute } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -75,6 +75,10 @@ async function requestPermissionsAsync() {
 }
 
 function ExerciseTabNavigator() {
+  
+  const route = useRoute();
+  const { exer, workoutId } = route.params;
+
   return (
     <TopTabs.Navigator
       screenOptions={{
@@ -82,9 +86,24 @@ function ExerciseTabNavigator() {
         tabBarStyle: { backgroundColor: "#2d0689" },
       }}
     >
-      <TopTabs.Screen name="History" component={ExerciseHistoryTabScreen} />
-      <TopTabs.Screen name="Records" component={ExerciseRecordsTabScreen} />
-      <TopTabs.Screen name="Settings" component={ExerciseSettingsTabScreen} />
+      <TopTabs.Screen 
+        name="History"
+        children={() => (
+            <ExerciseHistoryTabScreen exer={exer} workoutId={workoutId} />
+          )}
+      />
+      <TopTabs.Screen 
+        name="Records"
+        children={() => (
+          <ExerciseRecordsTabScreen exer={exer} workoutId={workoutId} />
+        )}
+      />
+      <TopTabs.Screen 
+        name="Settings"
+        children={() => (
+          <ExerciseSettingsTabScreen exer={exer} workoutId={workoutId} />
+        )}
+      />
     </TopTabs.Navigator>
   );
 }
