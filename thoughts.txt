@@ -407,3 +407,6 @@ can cancel workout without having to uncheck all completed sets
 
 work on components for exercise notes and exerInst notes
 try to use separation of concerns 
+
+need to add create exercise screen to make exercise
+free weight, machine, body weight, etc

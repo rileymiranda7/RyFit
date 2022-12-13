@@ -63,8 +63,7 @@ export default function ActiveWorkoutScreen({
   const [workoutName, setWorkoutName] = useState(
     routineName ? routineName : "New Workout");
   const [numSetsCompleted, setNumSetsCompleted] = useState(0);
-  const [numSets, setNumSets] = useState(0)
-  const [numExercises, setNumExercises] = useState(0);
+  const [numSets, setNumSets] = useState(0);
 
   const {
     seconds,

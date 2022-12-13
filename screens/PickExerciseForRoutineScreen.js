@@ -153,6 +153,17 @@ export default function PickExerciseForRoutineScreen({ route }) {
       <View style={styles.exerciseList}>
         <Text style={styles.smallTitle}>Pick Exercises Below</Text>
         <FlatList
+          ListHeaderComponent={
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={styles.input}
+                onChangeText={setExerciseNameInput}
+                value={exerciseNameInput}
+                maxLength={25}
+                placeholder="Enter an Exercise"
+              />
+            </View>
+          }
           data={loadedExercises}
           renderItem={(e) => {
             return (
@@ -164,6 +175,23 @@ export default function PickExerciseForRoutineScreen({ route }) {
             );
           }}
           keyExtractor={(e) => e.name}
+          ListFooterComponent={
+            <View style={styles.addButtonContainer}>
+              <Pressable
+                style={({ pressed }) => [
+                  styles.button,
+                  styles.buttonClose,
+                  {marginBottom: 100},
+                  pressed && { opacity: 0.75 },
+                ]}
+                onPress={() => combineExercises()}
+              >
+                <Text style={styles.textStyle}>
+                  {routineName ? "Add to " + routineName : "Add to Workout"}
+                </Text>
+              </Pressable>
+            </View>
+          }
         />
       </View>
     );
@@ -188,29 +216,7 @@ export default function PickExerciseForRoutineScreen({ route }) {
             color={"#7145eb"}
           />
         </View>
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.input}
-            onChangeText={setExerciseNameInput}
-            value={exerciseNameInput}
-            placeholder="Enter an Exercise"
-          />
-        </View>
         {pickExerciseList}
-        <View style={styles.addButtonContainer}>
-          <Pressable
-            style={({ pressed }) => [
-              styles.button,
-              styles.buttonClose,
-              pressed && { opacity: 0.75 },
-            ]}
-            onPress={() => combineExercises()}
-          >
-            <Text style={styles.textStyle}>
-              {routineName ? "Add to " + routineName : "Add to Workout"}
-            </Text>
-          </Pressable>
-        </View>
       </View>
     </SafeAreaView>
   );
@@ -265,18 +271,17 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   input: {
-    fontSize: 25,
+    fontSize: 20,
     backgroundColor: "#b8bbbe",
     padding: 4,
     minWidth: "78%",
-    minHeight: "7%",
+    minHeight: "70%",
   },
   inputContainer: {
-    backgroundColor: "#b8bbbe",
-    height: "8%",
+    minHeight: " 10%",
     alignItems: "center",
     justifyContent: "center",
-    marginVertical: 20,
-    marginHorizontal: 35,
+    marginVertical: 5,
+    marginHorizontal: 10,
   },
 });
