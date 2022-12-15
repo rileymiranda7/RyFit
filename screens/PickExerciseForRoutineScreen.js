@@ -7,6 +7,7 @@ import {
   FlatList,
   Alert,
   SafeAreaView,
+  Keyboard
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
@@ -23,12 +24,14 @@ import { Exercise } from "../models/exercise";
 import { RoutineExercise } from "../models/routineExercise";
 import IconButton from "../components/UI/IconButton";
 import BackButton from "../components/UI/BackButton";
+import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 
 export default function PickExerciseForRoutineScreen({ route }) {
   const [selectedExercises, setSelectedExercises] = useState([]);
   const [exerciseNameInput, setExerciseNameInput] = useState("");
   const [loadedExercises, setLoadedExercises] = useState([]);
   const [loadedRoutineExercises, setLoadedRoutineExercises] = useState([]);
+  const [inputFocused, setInputFocused] = useState(false)
 
   const { routineName } = route.params;
   const navigation = useNavigation();
@@ -153,17 +156,6 @@ export default function PickExerciseForRoutineScreen({ route }) {
       <View style={styles.exerciseList}>
         <Text style={styles.smallTitle}>Pick Exercises Below</Text>
         <FlatList
-          ListHeaderComponent={
-            <View style={styles.inputContainer}>
-              <TextInput
-                style={styles.input}
-                onChangeText={setExerciseNameInput}
-                value={exerciseNameInput}
-                maxLength={25}
-                placeholder="Enter an Exercise"
-              />
-            </View>
-          }
           data={loadedExercises}
           renderItem={(e) => {
             return (
@@ -175,56 +167,88 @@ export default function PickExerciseForRoutineScreen({ route }) {
             );
           }}
           keyExtractor={(e) => e.name}
-          ListFooterComponent={
-            <View style={styles.addButtonContainer}>
-              <Pressable
-                style={({ pressed }) => [
-                  styles.button,
-                  styles.buttonClose,
-                  {marginBottom: 100},
-                  pressed && { opacity: 0.75 },
-                ]}
-                onPress={() => combineExercises()}
-              >
-                <Text style={styles.textStyle}>
-                  {routineName ? "Add to " + routineName : "Add to Workout"}
-                </Text>
-              </Pressable>
-            </View>
-          }
         />
       </View>
     );
   } else {
-    pickExerciseList = <Text>no exercises found</Text>;
+    pickExerciseList = (
+      <Text
+        style={{color: "white", padding: 6, textAlign: "center"}}
+      >
+        No exercises found. {"\n"}Type an exercise in the field above
+        and hit Add Exercise to create a new exercise.
+      </Text>);;
   }
 
   return (
-    <SafeAreaView>
       <View style={styles.container}>
-        <View style={styles.header}>
-          <IconButton
-            icon="trash"
-            onPress={() => {}}
-            size={40}
-            color={"#3e04c3"}
-          />
-          <Text style={styles.title}>Select Exercises</Text>
-          <BackButton
-            onPress={() => navigation.goBack()}
-            size={40}
-            color={"#7145eb"}
-          />
-        </View>
-        {pickExerciseList}
+          <View style={styles.header}>
+            <IconButton
+              icon="trash"
+              onPress={() => {}}
+              size={40}
+              color={"#3e04c3"}
+            />
+            <Text style={styles.title}>Select Exercises</Text>
+            <BackButton
+              onPress={() => navigation.goBack()}
+              size={40}
+              color={"#7145eb"}
+            />
+          </View>
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={[
+                styles.input, 
+                inputFocused && {
+                  borderWidth: 2,
+                  borderColor: "white"
+                }
+              ]}
+              onChangeText={setExerciseNameInput}
+              value={exerciseNameInput}
+              placeholder="Enter an Exercise"
+              maxLength={50}
+              onFocus={() => {
+                setInputFocused(!inputFocused);
+              }}
+              onBlur={() => {
+                setInputFocused(!inputFocused);
+              }}
+            />
+          </View>
+          {pickExerciseList}
+          <View style={styles.addButtonContainer}>
+            <Pressable
+              style={({ pressed }) => [
+                styles.button,
+                styles.buttonClose,
+                pressed && { opacity: 0.75 },
+              ]}
+              onPress={() => {
+                if (inputFocused && exerciseNameInput === "") {
+                  Keyboard.dismiss();
+                } else {
+                  combineExercises();
+                }
+              }}
+            >
+              <Text style={styles.textStyle}>
+                {routineName ? "Add to " + routineName : "Add to Workout"}
+              </Text>
+            </Pressable>
+          </View>
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <View style={{ minHeight: "100%"}}>
+            </View>
+          </TouchableWithoutFeedback>
       </View>
-    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   addButtonContainer: {
-    marginVertical: 10,
+    marginTop: 10,
   },
   title: {
     color: "white",
@@ -245,7 +269,6 @@ const styles = StyleSheet.create({
     marginVertical: 12,
   },
   exerciseList: {
-    flex: 1,
     minWidth: "100%",
     padding: 10,
   },
@@ -271,17 +294,15 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   input: {
-    fontSize: 20,
+    fontSize: 22,
     backgroundColor: "#b8bbbe",
-    padding: 4,
+    padding: 6,
     minWidth: "78%",
-    minHeight: "70%",
+    borderRadius: 8
   },
   inputContainer: {
-    minHeight: " 10%",
     alignItems: "center",
     justifyContent: "center",
-    marginVertical: 5,
-    marginHorizontal: 10,
+    marginVertical: 20,
   },
 });

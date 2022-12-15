@@ -19,7 +19,7 @@ export async function init() {
  /*  const promise = new Promise((resolve, reject) => {
     database.transaction((tx) => {
       tx.executeSql(
-        `DROP TABLE sets;`,
+        `DROP TABLE workouts;`,
         [],
         () => {
           resolve();

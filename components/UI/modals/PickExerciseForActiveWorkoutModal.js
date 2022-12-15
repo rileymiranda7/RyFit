@@ -137,7 +137,13 @@ export default function PickExerciseForActiveWorkoutModal({
       </View>
     );
   } else {
-    pickExerciseList = <Text>loading exercises...</Text>;
+    pickExerciseList = (
+    <Text
+      style={{color: "white", padding: 6, textAlign: "center"}}
+    >
+      No exercises found. {"\n"}Type an exercise in the field above
+      and hit Add Exercise to create a new exercise.
+    </Text>);
   }
 
   return (

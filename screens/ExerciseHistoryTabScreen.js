@@ -23,7 +23,7 @@ export default function ExerciseHistoryTabScreen({ exer, workoutId }) {
     // sets are already in order, just need to group by workout
     let setsGrouped = [];
     let currentGroupOfSets = [];
-    let currentWktId = pastInstancesSets[0].workoutId;
+    let currentWktId = pastInstancesSets[0]?.workoutId;
     for (let set of pastInstancesSets) {
       if (set.workoutId === currentWktId) {
         currentGroupOfSets.push(set);
@@ -61,9 +61,9 @@ export default function ExerciseHistoryTabScreen({ exer, workoutId }) {
         renderItem={(inst) => {
           return (
             <PastExerInstItem 
-              setArray={inst.item}
-              workoutName={inst.item[0].name}
-              date={inst.item[0].dateShort}
+              setArray={inst?.item}
+              workoutName={inst?.item[0]?.name}
+              date={inst?.item[0]?.dateShort}
             />
           )
         }}
