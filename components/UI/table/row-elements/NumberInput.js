@@ -1,10 +1,17 @@
 import { View, TextInput, StyleSheet } from "react-native";
 import { Colors } from "../../../../constants/colors";
 
-export default function NumberInput({ textInputConfig }) {
+export default function NumberInput({ textInputConfig, isFocused }) {
   return (
     <View>
-      <TextInput style={styles.input} {...textInputConfig} />
+      <TextInput 
+        style={[
+          styles.input, 
+          isFocused && {
+            borderWidth: 1,
+            borderColor: "white"
+          }]} 
+        {...textInputConfig} />
     </View>
   );
 }

@@ -15,6 +15,9 @@ export default function IncompleteRow({
   inputChangedHandler,
 }) {
 
+  const [lbsInputFocused, setLbsInputFocused] = useState(false);
+  const [repsInputFocused, setRepsInputFocused] = useState(false);
+
   return (
     <>
       <Col style={[styles.set, 
@@ -25,8 +28,11 @@ export default function IncompleteRow({
         {backgroundColor: setIsCompleted ? "green" : "black",}]}>
         <Previous />
       </Col>
-      <Col style={[styles.lbs, 
-        {backgroundColor: setIsCompleted ? "green" : "black",}]}>
+      <Col 
+        style={[
+          styles.lbs, 
+          {backgroundColor: setIsCompleted ? "green" : "black",}
+        ]}>
         <NumberInput
           textInputConfig={{
             keyboardType: "decimal-pad",
@@ -34,12 +40,22 @@ export default function IncompleteRow({
             contextMenuHidden: true,
             keyboardAppearance: 'dark',
             maxLength: 5,
-            selectTextOnFocus: true
+            selectTextOnFocus: true,
+            onFocus: () => {
+              setLbsInputFocused(!lbsInputFocused);
+            },
+            onBlur: () => {
+              setLbsInputFocused(!lbsInputFocused);
+            }
           }}
+          isFocused={lbsInputFocused}
         />
       </Col>
-      <Col style={[styles.reps, 
-        {backgroundColor: setIsCompleted ? "green" : "black",}]}>
+      <Col 
+        style={[
+          styles.reps, 
+          {backgroundColor: setIsCompleted ? "green" : "black",}
+        ]}>
         <NumberInput
           textInputConfig={{
             keyboardType: "decimal-pad",
@@ -47,8 +63,15 @@ export default function IncompleteRow({
             contextMenuHidden: true,
             keyboardAppearance: 'dark',
             maxLength: 5,
-            selectTextOnFocus: true
+            selectTextOnFocus: true,
+            onFocus: () => {
+              setRepsInputFocused(!repsInputFocused);
+            },
+            onBlur: () => {
+              setRepsInputFocused(!repsInputFocused);
+            }
           }}
+          isFocused={repsInputFocused}
         />
       </Col>
       <Col style={[styles.completed, 

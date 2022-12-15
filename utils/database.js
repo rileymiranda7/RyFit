@@ -16,10 +16,10 @@ export async function init() {
   await initSets();
   await initExerciseInstances();
 
-  /* const promise = new Promise((resolve, reject) => {
+ /*  const promise = new Promise((resolve, reject) => {
     database.transaction((tx) => {
       tx.executeSql(
-        `DROP TABLE workouts;`,
+        `DROP TABLE sets;`,
         [],
         () => {
           resolve();
@@ -178,6 +178,7 @@ export function initExerciseInstances() {
           exerciseName TEXT NOT NULL,
           workoutId INT NOT NULL,
           numberInWorkout INT NOT NULL,
+          exerInstNotes TEXT,
           PRIMARY KEY (exerciseName, workoutId),
           FOREIGN KEY(exerciseName) REFERENCES exercises(exerciseName),
           FOREIGN KEY(workoutId) REFERENCES workouts(workoutId)
@@ -500,6 +501,32 @@ export async function fetchExerciseNumberInRoutine(routineName, exerciseName) {
     return promise;
   
   }
+
+  export function fetchExersAndInstsFromPastWorkout(workoutId) {
+    const promise = new Promise((resolve, reject) => {
+      database.transaction((tx) => {
+        tx.executeSql(
+          `SELECT * FROM
+            (SELECT * FROM exerciseInstances
+            WHERE workoutId = ?
+            ORDER BY numberInWorkout) as insts
+          INNER JOIN exercises
+          ON exercises.exerciseName = insts.exerciseName
+            ;`,
+          [workoutId],
+          (_, result) => {
+            resolve(result.rows._array);
+          },
+          (_, error) => {
+            reject(error);
+          }
+        );
+      });
+    });
+  
+    return promise;
+  }
+
   export function fetchSetsFromExerciseInstance(exerciseName, workoutId) {
     const promise = new Promise((resolve, reject) => {
       database.transaction((tx) => {
@@ -1171,6 +1198,49 @@ export async function updateExerciseRestTime(exerciseName, newRestTime) {
         SET restTime = ?
         WHERE exerciseName = ?;`,
         [newRestTime, exerciseName],
+        (_, result) => {
+          resolve(result);
+        },
+        (_, error) => {
+          reject(error);
+        }
+      );
+    });
+  });
+
+  return promise;
+}
+
+export async function updateExerciseNotes(newNotes, exerciseName) {
+  const promise = new Promise((resolve, reject) => {
+    database.transaction((tx) => {
+      tx.executeSql(
+        `UPDATE exercises 
+        SET exerciseNotes = ?
+        WHERE exerciseName = ?;`,
+        [newNotes, exerciseName],
+        (_, result) => {
+          resolve(result);
+        },
+        (_, error) => {
+          reject(error);
+        }
+      );
+    });
+  });
+
+  return promise;
+}
+
+export async function updateExerInstNotes(newNotes, exerciseName, workoutId) {
+  const promise = new Promise((resolve, reject) => {
+    database.transaction((tx) => {
+      tx.executeSql(
+        `UPDATE exerciseInstances 
+        SET exerInstNotes = ?
+        WHERE exerciseName = ?
+        AND workoutId = ?;`,
+        [newNotes, exerciseName, workoutId],
         (_, result) => {
           resolve(result);
         },

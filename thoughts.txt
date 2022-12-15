@@ -410,3 +410,9 @@ try to use separation of concerns
 
 need to add create exercise screen to make exercise
 free weight, machine, body weight, etc
+
+refactor db functions to use joins
+
+need to add delete workout button
+
+add white border to focused text fields

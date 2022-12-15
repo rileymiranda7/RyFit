@@ -6,7 +6,12 @@ import { Col, Row } from "react-native-easy-grid";
 
 import { fetchSetsFromExerciseInstance } from '../../utils/database';
 
-export default function PastExerciseItem({ workoutId, exerciseName }) {
+export default function PastExerciseItem({ 
+  workoutId, 
+  exerciseName,
+  exerNotes,
+  exerInstNotes
+}) {
 
   const [loadedSets, setLoadedSets] = useState();
 
@@ -27,6 +32,19 @@ export default function PastExerciseItem({ workoutId, exerciseName }) {
   return (
     <View style={styles.container}>
       <Text style={styles.exerciseTitleStyle}>{exerciseName}</Text>
+      <View style={{ flexDirection: "row", marginLeft: "1%", alignItems: "center",
+        padding: 5}}>
+        <Ionicons name="document-text-outline" color={"#fff"} size={20} />
+        <Text style={{color: "white", fontSize: 16,}}>Exercise Notes</Text>
+      </View>
+      <View style={styles.notesContainer}>
+        <View style={{ borderRadius: 8, backgroundColor: "#9e76c3", marginBottom: 2 }}>
+          <Text style={styles.exerNotesStyle}>{exerNotes}</Text>
+        </View>
+        <View style={{ borderRadius: 8, backgroundColor: "#835eeb" }}>
+        <Text style={styles.exerInstNotesStyle}>{exerInstNotes}</Text>
+        </View>
+      </View>
       <View style={{maxWidth: "50%"}}>
         <Row>
           <Col style={{ flex: 1}}>
@@ -78,8 +96,6 @@ export default function PastExerciseItem({ workoutId, exerciseName }) {
 
 const styles = StyleSheet.create({
   container: {
-    minWidth: "100%",
-    minHeight: "100%",
     flex: 1,
     marginHorizontal: 10,
     marginVertical: 4,
@@ -95,6 +111,22 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 14,
     textAlign: "center",
+  },
+  notesContainer: {
+    marginLeft: "4%",
+    marginBottom: 5,
+  },
+  exerNotesStyle: {
+    color: "white",
+    fontSize: 15,
+    textAlign: "left",
+    padding: 5,
+  },
+  exerInstNotesStyle: {
+    color: "white",
+    fontSize: 15,
+    textAlign: "left",
+    padding: 5
   },
   exerciseTitleStyle: {
     color: "white",

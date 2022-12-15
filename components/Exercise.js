@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Swipeable, TextInput } from "react-native-gesture-handler";
 import { Row } from "react-native-easy-grid";
 import { useNavigation } from "@react-navigation/native";
+import { Ionicons } from "@expo/vector-icons";
 
 import TableHeaderRow from "./UI/table/rows/TableHeaderRow";
 import IncompleteRow from "./UI/table/rows/IncompleteRow";
@@ -10,7 +11,9 @@ import IconButton from "./UI/IconButton";
 import { 
   deleteAllSetsFromCurrentExercise, 
   insertSet, 
+  updateExerciseNotes, 
   updateExerciseRestTime, 
+  updateExerInstNotes, 
   updateSetOrder, 
   updateSetReps, 
   updateSetStatus, 
@@ -44,6 +47,11 @@ export default function Exercise({
   // set counters for exercise
   const [currentNumberOfSets, setCurrentNumberOfSets] = useState(1);
   const [numCompletedSetsInExer, setNumCompletedSetsInExer] = useState(0);
+
+  const [exerciseNotes, setExerciseNotes] = useState(exer.notes);
+  const [exerInstNotes, setExerInstNotes] = useState(inst.exerInstNotes);
+  const [exerNoteInputFocused, setExerNoteInputFocused] = useState(false);
+  const [exerInstNoteInputFocused, setExerInstNoteInputFocused] = useState(false);
 
   const navigation = useNavigation();
 
@@ -272,19 +280,59 @@ export default function Exercise({
         />
       </View>
 
+      <View style={{ flexDirection: "row", marginLeft: "1%", alignItems: "center",
+        padding: 5}}>
+        <Ionicons name="document-text-outline" color={"#fff"} size={20} />
+        <Text style={{color: "white", fontSize: 16,}}>Exercise Notes</Text>
+      </View>
+
       <TextInput 
-        style={styles.exerNoteInput}
+        style={[styles.exerNoteInput, exerNoteInputFocused && { 
+          borderRadius: 8,
+          borderWidth: 1,
+          borderColor: "white" 
+        }]}
         multiline={true}
         keyboardAppearance='dark'
         placeholder="notes to always show when doing this exercise..."
-        maxLength={200}
+        maxLength={250}
+        placeholderTextColor="#9e76c3"
+        onChangeText={async (text) => {
+          setExerciseNotes(text);
+          await updateExerciseNotes(text, exer.name);
+        }}
+        defaultValue={exer.notes}
+        value={exerciseNotes}
+        onFocus={() => {
+          setExerNoteInputFocused(!exerNoteInputFocused);
+        }}
+        onBlur={() => {
+          setExerNoteInputFocused(!exerNoteInputFocused);
+        }}
       />
       <TextInput 
-        style={styles.instNoteInput}
+        style={[styles.instNoteInput, exerInstNoteInputFocused && { 
+          borderRadius: 8,
+          borderWidth: 1,
+          borderColor: "white" 
+        }]}
         multiline={true}
         keyboardAppearance='dark'
         placeholder="notes just for this workout..."
-        maxLength={200}
+        maxLength={250}
+        placeholderTextColor="#835eeb"
+        onChangeText={async (text) => {
+          setExerInstNotes(text);
+          await updateExerInstNotes(text, exer.name, workoutId)
+        }}
+        defaultValue={inst.exerInstNotes}
+        value={exerInstNotes}
+        onFocus={() => {
+          setExerInstNoteInputFocused(!exerInstNoteInputFocused);
+        }}
+        onBlur={() => {
+          setExerInstNoteInputFocused(!exerInstNoteInputFocused);
+        }}
       />
 
       <TableHeaderRow />
@@ -346,16 +394,21 @@ const styles = StyleSheet.create({
   },
   exerNoteInput: {
     backgroundColor: "#6704c3",
-    padding: 4,
+    padding: 5,
     color: "white",
     minWidth: 65,
-    fontSize: 16,
+    fontSize: 15,
+    marginLeft: "4%",
+    borderRadius: 8,
+    marginBottom: 2
   },
   instNoteInput: {
     backgroundColor: "#9576eb",
-    padding: 4,
+    padding: 5,
     color: "white",
     minWidth: 65,
-    fontSize: 16,
+    fontSize: 15,
+    marginLeft: "4%",
+    borderRadius: 8,
   }
 });

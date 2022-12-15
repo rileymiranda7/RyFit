@@ -6,12 +6,12 @@ import { FlatList } from 'react-native-gesture-handler';
 
 
 import BackButton from '../components/UI/BackButton';
-import { fetchExercisesFromPastWorkout } from '../utils/database';
+import { fetchExercisesFromPastWorkout, fetchExersAndInstsFromPastWorkout } from '../utils/database';
 import PastExerciseItem from '../components/UI/PastExerciseItem';
 
 export default function PastWorkoutItemScreen() {
   
-  const [loadedExercises, setLoadedExercises] = useState();
+  const [loadedExersAndInsts, setLoadedExersAndInsts] = useState();
 
   const isFocused = useIsFocused();
   const navigation = useNavigation();
@@ -19,8 +19,12 @@ export default function PastWorkoutItemScreen() {
   const { workout } = route.params;
 
   const loadExercises = async () => {
-    const exercises = await fetchExercisesFromPastWorkout(workout.workoutId);
-    setLoadedExercises(exercises);
+    //const exercises = await fetchExercisesFromPastWorkout(workout.workoutId);
+    const exercisesAndInsts = await 
+      fetchExersAndInstsFromPastWorkout(workout.workoutId)
+    console.log("fetchExersAndInsts");
+    console.log(exercisesAndInsts);
+    setLoadedExersAndInsts(exercisesAndInsts);
   };
 
   useEffect(() => {
@@ -60,12 +64,14 @@ export default function PastWorkoutItemScreen() {
       </View>
             </>
           }
-          data={loadedExercises}
-          renderItem={(en) => {
+          data={loadedExersAndInsts}
+          renderItem={(exerInst) => {
             return (
               <PastExerciseItem 
                 workoutId={workout.workoutId}
-                exerciseName={en.item.exerciseName}
+                exerciseName={exerInst.item.exerciseName}
+                exerNotes={exerInst.item.exerciseNotes}
+                exerInstNotes={exerInst.item.exerInstNotes}
               />
             )
           }}
