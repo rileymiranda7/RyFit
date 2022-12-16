@@ -88,7 +88,9 @@ export default function PickExerciseForRoutineScreen({ route }) {
   function shouldAddExercise() {
     Alert.alert(
       "Create New Exercise",
-      `${exerciseNameInput} not found. Create and add to workout?`,
+      `${exerciseNameInput.length > 20 ? 
+        exerciseNameInput.substring(0,15) + "...": 
+        exerciseNameInput} not found. Create and add to workout?`,
       [
         {
           text: "Cancel",
