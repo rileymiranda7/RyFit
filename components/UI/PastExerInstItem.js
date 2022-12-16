@@ -3,12 +3,15 @@ import React from 'react'
 import { Ionicons } from "@expo/vector-icons";
 import { Col, Row } from "react-native-easy-grid";
 
-export default function PastExerInstItem({ setArray, workoutName, date }) {
+export default function PastExerInstItem({ setArray, workoutName, date, notes }) {
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
         <Text style={styles.workoutNameStyle}>{workoutName}</Text>
         <Text style={styles.workoutDateTimeStyle}>{date}</Text>
+      </View>
+      <View style={{ borderRadius: 8, backgroundColor: "#835eeb" }}>
+          <Text style={styles.exerInstNotesStyle}>{notes}</Text>
       </View>
       <View style={{maxWidth: "50%"}}>
         <Row>
@@ -134,5 +137,11 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+  },
+  exerInstNotesStyle: {
+    color: "white",
+    fontSize: 15,
+    textAlign: "left",
+    padding: 5
   },
 })

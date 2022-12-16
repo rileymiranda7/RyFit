@@ -430,3 +430,11 @@ TO FIX KEYBOARD NOT DISMISSING PROPERLY PUT TOUCHABLEWITHOUTFEEDBACK
 WITH ONPRESS KEYBOARD DISMISS INSIDE OUTSIDE VIEW
 
 need to add way to delete exercises need exercises screen
+
+add notes to exercise history and fix active workout pick exercise
+
+plan to get exercise notes and exercise instance notes in set array
+get exercise notes - display at top beneath title
+get exercise instance notes - should match length of setsGrouped array
+then just add exerciseInstance notes to each outer array element
+just push on as second element after set array

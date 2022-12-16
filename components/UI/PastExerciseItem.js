@@ -42,7 +42,7 @@ export default function PastExerciseItem({
           <Text style={styles.exerNotesStyle}>{exerNotes}</Text>
         </View>
         <View style={{ borderRadius: 8, backgroundColor: "#835eeb" }}>
-        <Text style={styles.exerInstNotesStyle}>{exerInstNotes}</Text>
+          <Text style={styles.exerInstNotesStyle}>{exerInstNotes}</Text>
         </View>
       </View>
       <View style={{maxWidth: "50%"}}>

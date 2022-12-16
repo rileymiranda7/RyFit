@@ -302,7 +302,7 @@ export default function ActiveWorkoutScreen({
                   onChangeText={setWorkoutName}
                   onBlur={() => resetWorkoutName()}
                   value={workoutName}
-                  maxLength={14}
+                  maxLength={20}
                 />
               </View>
               <View style={styles.timerContainer}>

@@ -595,6 +595,52 @@ export async function fetchExerciseNumberInRoutine(routineName, exerciseName) {
     return promise;
   }
 
+  export function fetchExerciseNotes(exerciseName) {
+    const promise = new Promise((resolve, reject) => {
+      database.transaction((tx) => {
+        tx.executeSql(
+          `SELECT exerciseNotes FROM exercises WHERE
+          exerciseName = ?;`,
+          [exerciseName],
+          (_, result) => {
+            resolve(result.rows._array);
+          },
+          (_, error) => {
+            reject(error);
+          }
+        );
+      });
+    });
+  
+    return promise;
+  }
+
+  export function fetchExerciseInstanceNotes(exerciseName, workoutId) {
+    const promise = new Promise((resolve, reject) => {
+      database.transaction((tx) => {
+        tx.executeSql(
+          `SELECT exerInstNotes, workouts.timestamp, workouts.workoutId
+          FROM 
+            exerciseInstances INNER JOIN workouts
+          ON workouts.workoutId = exerciseInstances.workoutId
+          WHERE 
+            exerciseName = ? AND 
+            workouts.workoutId != ?
+          ORDER BY timestamp DESC;`,
+          [exerciseName, workoutId],
+          (_, result) => {
+            resolve(result.rows._array);
+          },
+          (_, error) => {
+            reject(error);
+          }
+        );
+      });
+    });
+  
+    return promise;
+  }
+
 
 
 

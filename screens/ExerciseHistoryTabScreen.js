@@ -5,21 +5,39 @@ import { useIsFocused } from '@react-navigation/native'
 import { showMessage, hideMessage } from "react-native-flash-message";
 
 import {Picker} from '@react-native-picker/picker';
-import { fetchAllSetsFromAllExerciseInstances } from '../utils/database';
+import { fetchAllSetsFromAllExerciseInstances, fetchExerciseInstanceNotes, fetchExerciseNotes } from '../utils/database';
 import PastExerInstItem from '../components/UI/PastExerInstItem';
 
 export default function ExerciseHistoryTabScreen({ exer, workoutId }) {
 
-  const [loadedPastInstances, setLoadedPastInstances] = useState()
+  const [loadedPastInstances, setLoadedPastInstances] = useState();
+  /* 
+  [
+    {
+      setArray: [ {reps, setNumber, weight}],
+      instNotes: "",
+      dateShort: "",
+      workoutName: "",
+    } 
+  ]
+  */
+  const [loadedExerciseNotes, setLoadedExerciseNotes] = useState();
 
   const isFocused = useIsFocused();
 
-  const loadPastExerInstances = async () => {
+  const loadData = async () => {
+    // set exercise notes
+    const exerNotes = await fetchExerciseNotes(exer.name);
+    setLoadedExerciseNotes(exerNotes[0].exerciseNotes);
+
+    // set set data
     const pastInstancesSets = await fetchAllSetsFromAllExerciseInstances(
       exer.name, workoutId);
-    console.log("pastInstancesSets");
-    console.log(pastInstancesSets);
-    
+    if (pastInstancesSets?.length < 1) {
+      setLoadedPastInstances([]);
+      return;
+    }
+
     // sets are already in order, just need to group by workout
     let setsGrouped = [];
     let currentGroupOfSets = [];
@@ -35,10 +53,29 @@ export default function ExerciseHistoryTabScreen({ exer, workoutId }) {
     }
     // push last group of sets
     setsGrouped.push(currentGroupOfSets);
+    
+    // get inst notes
+    const exerInstNotes = await fetchExerciseInstanceNotes(exer.name, workoutId);
+    console.log("exerInstNotes");
+    console.log(exerInstNotes);
 
-    console.log("setsGrouped")
-    console.log(setsGrouped)
-    setLoadedPastInstances(setsGrouped);
+    // create inst array
+    let instArr = [];
+    let i = 0;
+    for (let setArr of setsGrouped) {
+      instArr.push({
+        setArray: setArr,
+        instNotes: exerInstNotes[i].exerInstNotes,
+        dateShort: setArr[0].dateShort,
+        workoutName: setArr[0].name,
+      });
+      i++;
+    }
+    console.log("instArr")
+    console.log(instArr)
+    
+    
+    setLoadedPastInstances(instArr);
   }
 
 
@@ -49,7 +86,7 @@ export default function ExerciseHistoryTabScreen({ exer, workoutId }) {
         type: "info",
         statusBarHeight: 50
       });
-      loadPastExerInstances()
+      loadData()
     }
   }, [isFocused])
 
@@ -61,9 +98,10 @@ export default function ExerciseHistoryTabScreen({ exer, workoutId }) {
         renderItem={(inst) => {
           return (
             <PastExerInstItem 
-              setArray={inst?.item}
-              workoutName={inst?.item[0]?.name}
-              date={inst?.item[0]?.dateShort}
+              setArray={inst?.item?.setArray}
+              workoutName={inst?.item?.workoutName}
+              date={inst?.item?.dateShort}
+              notes={inst?.item?.instNotes}
             />
           )
         }}
@@ -80,9 +118,12 @@ export default function ExerciseHistoryTabScreen({ exer, workoutId }) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.textStyle}>
-      ExerciseHistoryTabScreen - {exer.name}
-      </Text>
+      <Text style={styles.textStyle}>{exer.name}</Text>
+      {loadedExerciseNotes && (
+        <View style={{ borderRadius: 8, backgroundColor: "#9e76c3", marginBottom: 2 }}>
+          <Text style={styles.exerNotesStyle}>{loadedExerciseNotes}</Text>
+        </View>
+      )}
       {renderPastInstances}
     </View>
   )
@@ -107,5 +148,11 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 15,
     marginVertical: 5,
+  },
+  exerNotesStyle: {
+    color: "white",
+    fontSize: 15,
+    textAlign: "left",
+    padding: 5,
   },
 })
