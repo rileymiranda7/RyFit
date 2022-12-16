@@ -35,33 +35,32 @@ export default function PastWorkoutItemScreen() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.headerContainer}>
-        <Text style={styles.workoutNameStyle}>{workout.name}</Text>
-        <BackButton
-            onPress={() => {
-              navigation.goBack();
-            }}
-            size={40}
-            color={"#6737eb"}
-          />
-      </View>
-      
-      <View style={styles.pastExerListContainer}>
+      <View style={{ marginBottom: 10}}>
         <FlatList
           ListHeaderComponent={
             <>
-            <View style={styles.rowContainer}>
-        <Ionicons name="calendar-outline" size={30} color="#6737eb" />
-        <Text style={styles.infoTextStyle}> {workout.dateFull}</Text>
-      </View>
-      <View style={styles.rowContainer}>
-        <Ionicons name="time-outline" size={30} color="#6737eb" />
-        <Text style={styles.infoTextStyle}> {workout.startTime}</Text>
-      </View>
-      <View style={styles.rowContainer}>
-        <Ionicons name="timer-outline" size={30} color="#6737eb" />
-        <Text style={styles.infoTextStyle}> {workout.duration}</Text>
-      </View>
+            <View style={styles.headerContainer}>
+              <Text style={styles.workoutNameStyle}>{workout.name}</Text>
+              <BackButton
+                onPress={() => {
+                  navigation.goBack();
+                }}
+                size={40}
+                color={"#6737eb"}
+              />
+            </View>
+              <View style={styles.rowContainer}>
+                <Ionicons name="calendar-outline" size={30} color="#6737eb" />
+                <Text style={styles.infoTextStyle}> {workout.dateFull}</Text>
+              </View>
+              <View style={styles.rowContainer}>
+                <Ionicons name="time-outline" size={30} color="#6737eb" />
+                <Text style={styles.infoTextStyle}> {workout.startTime}</Text>
+              </View>
+              <View style={styles.rowContainer}>
+                <Ionicons name="timer-outline" size={30} color="#6737eb" />
+                <Text style={styles.infoTextStyle}> {workout.duration}</Text>
+              </View>
             </>
           }
           data={loadedExersAndInsts}
@@ -87,12 +86,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#3e04c3",
     minWidth: "100%",
     minHeight: "100%",
-    flex: 1
-  },
-  pastExerListContainer: {
-    minWidth: "100%",
-    minHeight: "100%",
-    flex: 1
+    flex: 1,
   },
   workoutNameStyle: {
     color: "white",

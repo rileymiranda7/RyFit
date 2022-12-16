@@ -439,5 +439,5 @@ get exercise instance notes - should match length of setsGrouped array
 then just add exerciseInstance notes to each outer array element
 just push on as second element after set array
 
-need to fix current workoutscreen
-if exercise name too long it pushes other routine off screen
+should fix exercise name being too long in active workout, Exercise
+history, everywhere
