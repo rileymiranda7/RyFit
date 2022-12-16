@@ -2,6 +2,7 @@ import { View, Text, StyleSheet, Pressable, Modal } from "react-native";
 import React, { useState, useEffect } from "react";
 import useCountDown from "react-countdown-hook";
 import IconButton from "../IconButton";
+import { Ionicons } from "@expo/vector-icons";
 
 // 1 hour
 const initialTime = 1 * 60 * 60 * 1000; // initial time in milliseconds
@@ -25,6 +26,7 @@ export default function RunningTimer({
   const [deficit, setDeficit] = useState(
     (60 - Number(timeInMinutes)) * 60 * 1000
   );
+  const [humanReadableTime, setHumanReadableTime] = useState()
 
   /**COMPONENT FUNCTIONS */
   // returns when updated timer should end at
@@ -74,6 +76,15 @@ export default function RunningTimer({
     }
     setDeficit(deficit - 10000);
   };
+
+  const convertToWholeMinsAndSecs = (amount) => {
+    let mins = Math.floor(amount);
+    if (mins < 10) { mins = "0" + mins; }
+    let secs = Math.round((amount - mins) * 60);
+    if (secs === 0) { secs = "00"; }
+    return mins + ":" + secs;
+  }
+
 
   /**COMPONENT USEEFFECTS */
   // start the timer during the first render
@@ -131,9 +142,12 @@ export default function RunningTimer({
 
   useEffect(() => {
     if (restTime && useRestTime) {
+      setHumanReadableTime(convertToWholeMinsAndSecs(restTime));
       reset();
       setDeficit((60 - Number(restTime)) * 60 * 1000);
       start();
+    } else {
+      setHumanReadableTime(convertToWholeMinsAndSecs(timeInMinutes));
     }
   }, [rndm, useRestTime]);
 
@@ -159,6 +173,18 @@ export default function RunningTimer({
                   {minDigit1}
                   {minDigit2}:{secDigit1}
                   {secDigit2}
+                </Text>
+              </View>
+              <View 
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center", 
+                  justifyContent: "center"
+                  
+                }}>
+                <Ionicons name="timer-outline" color={"#9e76c3"} size={40} />
+                <Text style={[styles.timerText, {color: "#9e76c3", minWidth: "0%"}]}>
+                  {humanReadableTime}
                 </Text>
               </View>
               <Pressable

@@ -18,7 +18,7 @@ export default function ExerciseOptionsModal({
   const [selectedMinutesVal, setSelectedMinutesVal] = useState("00");
   const [shouldShowRestTimerPicker, setShouldShowRestTimePicker] = useState(false);
 
-    const convertToWholeMinsAndSecs = (amount) => {
+  const convertToWholeMinsAndSecs = (amount) => {
     const mins = Math.floor(amount);
     const secs = Math.round((amount - mins) * 60);
     return { mins, secs};

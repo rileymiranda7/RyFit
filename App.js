@@ -245,7 +245,6 @@ SplashScreen.preventAutoHideAsync();
 
 export default function App() {
   requestPermissionsAsync();
-  const [showSetTimer, setShowSetTimer] = useState(false);
   const [timerIsRunning, setTimerIsRunning] = useState(false);
   const [restTimerAmount, setRestTimerAmount] = useState("0");
   const [resetTimer, setResetTimer] = useState(false);
