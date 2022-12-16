@@ -66,7 +66,11 @@ export default function RoutineItem({ routineName, exercises }) {
       {exerciseList.map((exercise, index) => {
         return (
           <Text style={styles.exerciseTextStyle} key={index}>
-            {exercise.name}
+            {
+              exercise.name.length > 20 ? 
+                exercise.name.substring(0,15) + "...": 
+                exercise.name
+            }
           </Text>
         );
       })}

@@ -23,6 +23,7 @@ export default function PickExerciseForActiveWorkoutModal({
   const [selectedExercises, setSelectedExercises] = useState([]);
   const [exerciseNameInput, setExerciseNameInput] = useState("");
   const [loadedExercises, setLoadedExercises] = useState([]);
+  const [inputIsFocused, setInputIsFocused] = useState(false);
 
   const isFocused = useIsFocused();
 
@@ -159,12 +160,22 @@ export default function PickExerciseForActiveWorkoutModal({
       >
         <View style={styles.modalView}>
           <Text style={styles.modalText}>Select Exercise</Text>
-          <View style={styles.inputContainer}>
+          <View style={[styles.inputContainer, inputIsFocused && {
+                  borderWidth: 2,
+                  borderColor: "white"
+                }]}>
             <TextInput
               style={styles.input}
               onChangeText={setExerciseNameInput}
               value={exerciseNameInput}
               placeholder="Enter an Exercise"
+              maxLength={50}
+              onFocus={() => {
+                setInputIsFocused(!inputIsFocused);
+              }}
+              onBlur={() => {
+                setInputIsFocused(!inputIsFocused);
+              }}
             />
           </View>
           <View style={styles.exerciseListContainer}>
@@ -253,11 +264,10 @@ const styles = StyleSheet.create({
     color: "white",
   },
   input: {
-    fontSize: 25,
+    fontSize: 22,
     backgroundColor: "#b8bbbe",
-    padding: 4,
+    padding: 6,
     minWidth: "78%",
-    minHeight: "7%",
   },
   inputContainer: {
     backgroundColor: "#b8bbbe",
@@ -266,5 +276,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginVertical: 20,
+    borderRadius: 8
   },
 });
