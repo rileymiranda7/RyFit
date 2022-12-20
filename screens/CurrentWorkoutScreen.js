@@ -41,6 +41,7 @@ export default function CurrentWorkoutScreen() {
       loadRoutines();
       setAddingRoutine(false);
     }
+    setRoutineName("");
   };
 
   useEffect(() => {
@@ -75,6 +76,8 @@ export default function CurrentWorkoutScreen() {
           onChangeText={setRoutineName}
           value={routineName}
           placeholder="Enter Routine Name"
+          maxLength={25}
+          keyboardAppearance='dark'
         />
         <View style={styles.routineInputRow}>
           <Pressable

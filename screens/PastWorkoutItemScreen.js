@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, useWindowDimensions } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useIsFocused, useNavigation, useRoute } from '@react-navigation/native'
 import { Ionicons } from "@expo/vector-icons";
@@ -17,13 +17,12 @@ export default function PastWorkoutItemScreen() {
   const navigation = useNavigation();
   const route = useRoute();
   const { workout } = route.params;
+  const { width: windowWidth } = useWindowDimensions();
 
   const loadExercises = async () => {
     //const exercises = await fetchExercisesFromPastWorkout(workout.workoutId);
     const exercisesAndInsts = await 
-      fetchExersAndInstsFromPastWorkout(workout.workoutId)
-    console.log("fetchExersAndInsts");
-    console.log(exercisesAndInsts);
+      fetchExersAndInstsFromPastWorkout(workout.workoutId);
     setLoadedExersAndInsts(exercisesAndInsts);
   };
 
@@ -40,7 +39,11 @@ export default function PastWorkoutItemScreen() {
           ListHeaderComponent={
             <>
             <View style={styles.headerContainer}>
-              <Text style={styles.workoutNameStyle}>{workout.name}</Text>
+              <Text 
+                style={styles.workoutNameStyle}
+              >
+                {workout.name}
+              </Text>
               <BackButton
                 onPress={() => {
                   navigation.goBack();
@@ -92,7 +95,8 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 25,
     fontWeight: "bold",
-    textAlign: "center",
+    textAlign: "left",
+    maxWidth: "80%"
   },
   workoutDateTimeStyle: {
     color: "white",

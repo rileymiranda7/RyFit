@@ -262,13 +262,8 @@ export default function Exercise({
           }}
         >
           <Text
-            style={{
-              color: "white",
-              fontSize: 20,
-            }}
-          >
-            {exer.name}
-          </Text>
+            style={styles.exerciseTitleStyle}
+          >{exer.name}</Text>
         </Pressable>
         <IconButton
           icon="ellipsis-horizontal-circle-outline"
@@ -410,5 +405,10 @@ const styles = StyleSheet.create({
     fontSize: 15,
     marginLeft: "4%",
     borderRadius: 8,
+  },
+  exerciseTitleStyle: {
+    color: "white",
+    fontSize: 17,
+    fontWeight: "bold"
   }
 });

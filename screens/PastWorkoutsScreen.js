@@ -1,7 +1,6 @@
 import { useIsFocused } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { View, Text, StyleSheet, FlatList } from "react-native";
-import { Col, Row, Grid } from "react-native-easy-grid";
 
 import { fetchCompletedWorkouts } from "../utils/database";
 import PastWorkoutItem from "../components/UI/PastWorkoutItem"

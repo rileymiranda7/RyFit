@@ -441,3 +441,19 @@ just push on as second element after set array
 
 should fix exercise name being too long in active workout, Exercise
 history, everywhere
+
+what is involved in deleting an exercise?
+delete from routine 
+have to update order of routine but function for that is 
+already there
+wont show up in exercise list so dont have to worry about
+active workout 
+should still show up in past workouts 
+
+uppercase letters take up space than undercase
+need to test textinputs with capital words
+
+should use width instead of text length?
+how to use conditional with width value?
+
+use numberOfLines prop 

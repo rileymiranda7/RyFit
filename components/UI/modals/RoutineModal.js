@@ -93,7 +93,13 @@ export default function RoutineModal({ navigation, route }) {
             size={40}
             color={"#1f0263"}
           />
-          <Text style={styles.routineName}>{routineName}</Text>
+          <Text style={styles.routineName}>
+            {
+              routineName.length > 20 ? 
+                routineName.substring(0,10) + "...": 
+                routineName
+            }
+          </Text>
           <BackButton
             onPress={() => {
               navigation.goBack();
@@ -141,7 +147,13 @@ export default function RoutineModal({ navigation, route }) {
                       color={"#1f0263"}
                     />
                   </Pressable>
-                  <Text style={styles.exerciseTextStyle}>{item.name}</Text>
+                  <Text style={styles.exerciseTextStyle}>
+                    {
+                    item.name.length > 27 ? 
+                      item.name.substring(0,27) + "...": 
+                      item.name
+                    }
+                  </Text>
                 </View>
                     </TouchableOpacity>
                   </ScaleDecorator>

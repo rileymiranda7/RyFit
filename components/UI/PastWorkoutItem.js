@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Pressable } from 'react-native'
+import { View, Text, StyleSheet, Pressable, useWindowDimensions } from 'react-native'
 import { useState, useEffect } from 'react'
 import { useIsFocused, useNavigation } from '@react-navigation/native'
 import { fetchExercisesFromPastWorkout } from '../../utils/database';
@@ -11,6 +11,7 @@ export default function PastWorkoutItem({
 
   const isFocused = useIsFocused();
   const navigation = useNavigation();
+  const { width: windowWidth, height: windowHeight } = useWindowDimensions();
 
   const loadExercises = async () => {
     const exercises = await fetchExercisesFromPastWorkout(workout.workoutId);
@@ -33,7 +34,13 @@ export default function PastWorkoutItem({
       }}
     >
       <View style={styles.headerContainer}>
-        <Text style={styles.workoutNameStyle}>{workout.name}</Text>
+        <Text 
+          numberOfLines={1}
+          ellipsizeMode="clip"
+          style={styles.workoutNameStyle}
+        >
+          {workout.name}
+        </Text>
         <Text style={styles.workoutDateTimeStyle}>
           {workout.dateShort + ' | ' + workout.startTime}
         </Text>
@@ -42,7 +49,11 @@ export default function PastWorkoutItem({
       (loadedExercises.map((en, index) => {
         return (
           <Text style={styles.exerciseTextStyle} key={index}>
-            {en.exerciseName}
+            {
+              en.exerciseName.length > 40 ? 
+                en.exerciseName.substring(0,40) + "...": 
+                en.exerciseName
+            }
           </Text>
         );
       }))}
@@ -62,9 +73,10 @@ const styles = StyleSheet.create({
   },
   workoutNameStyle: {
     color: "white",
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: "bold",
     textAlign: "center",
+    maxWidth: "55%",
   },
   workoutDateTimeStyle: {
     color: "white",

@@ -30,7 +30,13 @@ export default function ExerciseOption({
         onPress={onPress}
       >
         <Ionicons name={"radio-button-on-outline"} size={24} color={"white"} />
-        <Text style={styles.exerciseItemText}>{exercise.name}</Text>
+        <Text style={styles.exerciseItemText}>
+          {
+            exercise.name.length > 27 ? 
+            exercise.name.substring(0, 27) + "..." :
+            exercise.name
+          }
+        </Text>
       </Pressable>
     );
   } else {
@@ -43,7 +49,13 @@ export default function ExerciseOption({
         onPress={onPress}
       >
         <Ionicons name={"radio-button-off-outline"} size={24} color={"white"} />
-        <Text style={styles.exerciseItemText}>{exercise.name}</Text>
+        <Text style={styles.exerciseItemText}>
+          {
+            exercise.name.length > 27 ? 
+            exercise.name.substring(0,27) + "..." :
+            exercise.name
+          }
+        </Text>
       </Pressable>
     );
   }

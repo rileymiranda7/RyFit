@@ -236,7 +236,11 @@ export default function PickExerciseForRoutineScreen({ route }) {
               }}
             >
               <Text style={styles.textStyle}>
-                {routineName ? "Add to " + routineName : "Add to Workout"}
+                Add to {
+                  routineName.length > 20 ? 
+                    routineName.substring(0,20) + "...": 
+                    routineName
+                }
               </Text>
             </Pressable>
           </View>

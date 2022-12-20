@@ -4,7 +4,6 @@ import {
   Modal,
   StyleSheet,
   Pressable,
-  TextInput,
   SafeAreaView,
 } from "react-native";
 import React, { useState } from "react";

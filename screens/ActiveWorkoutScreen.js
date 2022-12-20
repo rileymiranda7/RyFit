@@ -296,7 +296,6 @@ export default function ActiveWorkoutScreen({
         }}
           ListHeaderComponent={
             <View style={[styles.rowSpread, { marginBottom: 12}]}>
-              <View style={styles.rowTogether}>
                 <TextInput
                   style={[styles.textStyle, styles.textInput]}
                   onChangeText={setWorkoutName}
@@ -304,7 +303,6 @@ export default function ActiveWorkoutScreen({
                   value={workoutName}
                   maxLength={20}
                 />
-              </View>
               <View style={styles.timerContainer}>
                 <Text style={styles.timerDigit}>{
                   hours < 10 ? 0 : hours % 10
@@ -396,9 +394,6 @@ export default function ActiveWorkoutScreen({
 }
 
 const styles = StyleSheet.create({
-  rowTogether: {
-    flexDirection: "row",
-  },
   rowSpread: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -437,6 +432,7 @@ const styles = StyleSheet.create({
   },
   textInput: {
     minWidth: "50%",
+    maxWidth: "71%",
     textAlign: "left"
   },
   modalText: {

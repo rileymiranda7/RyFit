@@ -35,13 +35,44 @@ export default function RoutineItem({ routineName, exercises }) {
     );
   }
 
-  if (exercises.length > 4) {
+  let renderList;
+  if (exercises.length === 0) {
+    renderList = (
+      <Text style={styles.exerciseTextStyle}>
+        no exercises yet...
+      </Text>
+    );
+  } else if (exercises.length > 4) {
     let shortenedList = exercises.slice(0, 4);
     shortenedList.push(new Exercise("..."));
     exerciseList = shortenedList;
+    renderList = exerciseList.map((exercise, index) => {
+      return (
+        <Text style={styles.exerciseTextStyle} key={index}>
+          {
+            exercise.name.length > 20 ? 
+              exercise.name.substring(0,15) + "...": 
+              exercise.name
+          }
+        </Text>
+      );
+    });
   } else {
     exerciseList = exercises;
+    renderList = exerciseList.map((exercise, index) => {
+      return (
+        <Text style={styles.exerciseTextStyle} key={index}>
+          {
+            exercise.name.length > 20 ? 
+              exercise.name.substring(0,15) + "...": 
+              exercise.name
+          }
+        </Text>
+      );
+    });
   }
+
+
 
   return (
     <Pressable
@@ -51,7 +82,13 @@ export default function RoutineItem({ routineName, exercises }) {
       }}
     >
       <View style={styles.headerContainer}>
-        <Text style={styles.routineNameStyle}>{routineName}</Text>
+        <Text 
+          style={styles.routineNameStyle}
+          numberOfLines={2}
+          ellipsizeMode="clip"
+        >
+          {routineName}
+        </Text>
         <IconButton
           icon="ellipsis-horizontal-circle-outline"
           size={35}
@@ -63,17 +100,7 @@ export default function RoutineItem({ routineName, exercises }) {
           }}
         />
       </View>
-      {exerciseList.map((exercise, index) => {
-        return (
-          <Text style={styles.exerciseTextStyle} key={index}>
-            {
-              exercise.name.length > 20 ? 
-                exercise.name.substring(0,15) + "...": 
-                exercise.name
-            }
-          </Text>
-        );
-      })}
+      {renderList}
     </Pressable>
   );
 }
@@ -81,18 +108,18 @@ export default function RoutineItem({ routineName, exercises }) {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "#4e1fbb",
-    margin: 10,
-    minWidth: "45%",
+    margin: 2,
+    minWidth: "50%",
+    maxWidth: "50%",
     padding: 5,
-    borderRadius: 8,
-    borderWidth: 2,
-    borderColor: "white",
   },
   routineNameStyle: {
     color: "white",
-    fontSize: 18,
+    fontSize: 15,
     fontWeight: "bold",
     textAlign: "center",
+    maxWidth: "75%",
+    textAlign: "left"
   },
   exerciseTextStyle: {
     color: "white",

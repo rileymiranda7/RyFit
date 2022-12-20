@@ -31,7 +31,9 @@ export default function PastExerciseItem({
 
   return (
     <View style={styles.container}>
-      <Text style={styles.exerciseTitleStyle}>{exerciseName}</Text>
+      <Text style={styles.exerciseTitleStyle}>
+        {exerciseName}
+      </Text>
       <View style={{ flexDirection: "row", marginLeft: "1%", alignItems: "center",
         padding: 5}}>
         <Ionicons name="document-text-outline" color={"#fff"} size={20} />
@@ -130,7 +132,7 @@ const styles = StyleSheet.create({
   },
   exerciseTitleStyle: {
     color: "white",
-    fontSize: 22,
+    fontSize: 18,
     fontWeight: "bold",
     marginBottom: 2
   },
