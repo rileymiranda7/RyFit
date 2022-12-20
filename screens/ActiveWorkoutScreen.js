@@ -23,7 +23,9 @@ import DraggableFlatList, {
 import Exercise from "../components/Exercise";
 import PickExerciseForActiveWorkoutModal from "../components/UI/modals/PickExerciseForActiveWorkoutModal";
 import { 
+  deleteAllExerciseInstancesFromWorkout,
   deleteAllSetsFromCurrentExercise,
+  deleteAllSetsFromWorkout,
   deleteExerciseInstance,
   deleteExerciseInstancesWithNoCompletedSets,
   deleteIncompleteSets,
@@ -227,6 +229,32 @@ export default function ActiveWorkoutScreen({
       }
     }
 
+    const cancelWorkout = async () => {
+      Alert.alert(
+        `Cancel Workout?`,
+        "All workout data will be deleted",
+        [
+          {
+            text: "Continue Workout",
+            onPress: () => {},
+            style: "cancel",
+          },
+          {
+            text: "Cancel Workout",
+            onPress: async () => {
+              await deleteAllSetsFromWorkout(workoutId);
+              await deleteAllExerciseInstancesFromWorkout(workoutId);
+              await deleteWorkout(workoutId);
+              navigation.navigate("CurrentWorkout", {
+                workoutWasCompleted: false
+              });
+            },
+            style: "destructive",
+          },
+        ]
+      );
+    }
+
   const updateNumSetsCompleted = (shouldAddOneSet) => {
     if (shouldAddOneSet) {
       setNumSetsCompleted(numSetsCompleted + 1);
@@ -366,16 +394,29 @@ export default function ActiveWorkoutScreen({
               >
                 <Text style={styles.textStyle}>Add Exercise</Text>
               </Pressable>
-              <Pressable
-                style={({ pressed }) => [
-                  styles.button,
-                  styles.endWorkoutButton,
-                  pressed && { opacity: 0.75 },
-                ]}
-                onPress={() => endWorkout()}
-              >
-                <Text style={styles.textStyle}>End Workout</Text>
-              </Pressable>
+              <View style={{ flexDirection: "row", justifyContent: "center"}}>
+                <Pressable
+                  style={({ pressed }) => [
+                    styles.button,
+                    styles.endWorkoutButton,
+                    pressed && { opacity: 0.75 },
+                  ]}
+                  onPress={() => endWorkout()}
+                >
+                  <Text style={styles.buttonTextStyle}>End Workout</Text>
+                </Pressable>
+                <Pressable
+                  style={({ pressed }) => [
+                    styles.button,
+                    styles.cancelWorkoutButton,
+                    pressed && { opacity: 0.75 },
+                  ]}
+                  onPress={() => cancelWorkout()}
+                >
+                  <Text style={styles.buttonTextStyle}>Cancel Workout</Text>
+                </Pressable>
+
+              </View>
               <View style={{ marginBottom: 100}}></View>
             </>
           }
@@ -419,7 +460,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#F194FF",
   },
   endWorkoutButton: {
+    backgroundColor: "green",
+    margin: 5
+  },
+  cancelWorkoutButton: {
     backgroundColor: "#ff0000",
+    margin: 5
   },
   buttonClose: {
     backgroundColor: "#2196F3",
@@ -429,6 +475,12 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     fontSize: 20,
+  },
+  buttonTextStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
+    fontSize: 19,
   },
   textInput: {
     minWidth: "50%",

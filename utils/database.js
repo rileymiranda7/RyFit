@@ -905,6 +905,25 @@ export async function deleteIncompleteSets(workoutId) {
   return promise;
 }
 
+export async function deleteAllSetsFromWorkout(workoutId) {
+  const promise = new Promise((resolve, reject) => {
+    database.transaction((tx) => {
+      tx.executeSql(
+        `DELETE FROM sets WHERE workoutId = ?;`,
+        [workoutId],
+        (_, result) => {
+          resolve(result);
+        },
+        (_, error) => {
+          reject(error);
+        }
+      );
+    });
+  });
+
+  return promise;
+}
+
 export async function deleteSet(
   workoutId, exerciseName, setNumberToBeDeleted
 ) {
@@ -979,6 +998,26 @@ export function deleteExerciseInstance(exerciseName, workoutId) {
         WHERE exerciseName = ?
         AND workoutId = ?;`,
         [exerciseName, workoutId],
+        (_, result) => {
+          resolve(result);
+        },
+        (_, error) => {
+          reject(error);
+        }
+      );
+    });
+  });
+
+  return promise;
+}
+
+export function deleteAllExerciseInstancesFromWorkout(workoutId) {
+  const promise = new Promise((resolve, reject) => {
+    database.transaction((tx) => {
+      tx.executeSql(
+        `DELETE FROM exerciseInstances 
+        WHERE workoutId = ?;`,
+        [workoutId],
         (_, result) => {
           resolve(result);
         },

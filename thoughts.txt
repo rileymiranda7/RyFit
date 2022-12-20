@@ -413,34 +413,7 @@ free weight, machine, body weight, etc
 
 refactor db functions to use joins
 
-need to add delete workout button
-
-add white border to focused text fields
-
-DONT MAKE ADD NEW EXERCISE PARTS OF PICK EXERCISE modals
-PART OF FLATLIST BECAUSE THEY WILL NOT SHOW UP IF THERE ARE 
-NO EXERCISES
-
-space beneath add button in add exercise to routine modal
-doesnt dismiss keyboard
-
-need to fix add exercise screen stylings
-
-TO FIX KEYBOARD NOT DISMISSING PROPERLY PUT TOUCHABLEWITHOUTFEEDBACK
-WITH ONPRESS KEYBOARD DISMISS INSIDE OUTSIDE VIEW
-
 need to add way to delete exercises need exercises screen
-
-add notes to exercise history and fix active workout pick exercise
-
-plan to get exercise notes and exercise instance notes in set array
-get exercise notes - display at top beneath title
-get exercise instance notes - should match length of setsGrouped array
-then just add exerciseInstance notes to each outer array element
-just push on as second element after set array
-
-should fix exercise name being too long in active workout, Exercise
-history, everywhere
 
 what is involved in deleting an exercise?
 delete from routine 
@@ -452,8 +425,16 @@ should still show up in past workouts
 
 uppercase letters take up space than undercase
 need to test textinputs with capital words
+use maxwidth and numberOfLines prop 
 
-should use width instead of text length?
-how to use conditional with width value?
+add dismiss keyboard button to show when keyboard is up
+to fix dismiss problem
 
-use numberOfLines prop 
+should user be able to delete a workout?
+not yet
+
+NEED TO ADD CANCEL WORKOUT BUTTON IN ACTIVE WORKOUT
+what goes into cancelling a workout?
+deleting all sets, regardless if completed or not
+deleting all exercise instances
+delete workout
