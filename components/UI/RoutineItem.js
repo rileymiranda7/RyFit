@@ -89,18 +89,22 @@ export default function RoutineItem({ routineName, exercises }) {
         >
           {routineName}
         </Text>
-        <IconButton
-          icon="ellipsis-horizontal-circle-outline"
-          size={35}
-          color="white"
-          onPress={() => {
-            navigation.navigate("RoutineModal", {
-              routineName: routineName,
-            });
-          }}
-        />
+        <View style={styles.buttonContainer}>
+          <IconButton
+            icon="ellipsis-horizontal-circle-outline"
+            size={35}
+            color="white"
+            onPress={() => {
+              navigation.navigate("RoutineModal", {
+                routineName: routineName,
+              });
+            }}
+          />
+        </View>
       </View>
-      {renderList}
+      <View style={{paddingBottom: 5}}>
+        {renderList}
+      </View>
     </Pressable>
   );
 }
@@ -109,25 +113,29 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "#4e1fbb",
     margin: 2,
-    minWidth: "50%",
-    maxWidth: "50%",
-    padding: 5,
+    minWidth: "49%",
+    maxWidth: "49%",
   },
   routineNameStyle: {
     color: "white",
     fontSize: 15,
     fontWeight: "bold",
     textAlign: "center",
-    maxWidth: "75%",
-    textAlign: "left"
+    maxWidth: "60%",
+    textAlign: "left",
+    padding: 5
   },
   exerciseTextStyle: {
     color: "white",
+    paddingHorizontal: 5
+  },
+  buttonContainer: {
+    paddingTop: 5,
+    paddingRight: 5
   },
   headerContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center",
   },
   pressed: {
     opacity: 0.75,
