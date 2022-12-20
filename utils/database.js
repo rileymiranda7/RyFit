@@ -16,7 +16,7 @@ export async function init() {
   await initSets();
   await initExerciseInstances();
 
- /*  const promise = new Promise((resolve, reject) => {
+  /* const promise = new Promise((resolve, reject) => {
     database.transaction((tx) => {
       tx.executeSql(
         `DROP TABLE workouts;`,
@@ -71,7 +71,13 @@ export function initExercises() {
         CREATE TABLE IF NOT EXISTS exercises (
           exerciseName TEXT PRIMARY KEY NOT NULL,
           restTime TEXT,
-          exerciseNotes TEXT
+          exerciseNotes TEXT,
+          maxWeight REAL,
+          maxWeightDate TEXT,
+          maxReps INT,
+          maxRepsDate TEXT,
+          maxVolume REAL,
+          maxVolumeDate TEXT
         );
       `,
         [],
@@ -378,7 +384,12 @@ export async function fetchExerciseNumberInRoutine(routineName, exerciseName) {
                   e.exerciseName,
                   e.restTime,
                   e.exerciseNotes,
-                  e.routineName
+                  e.maxWeight,
+                  e.maxWeightDate,
+                  e.maxReps,
+                  e.maxRepsDate,
+                  e.maxVolume,
+                  e.maxVolumeDate
                 )
               );
             }
@@ -403,6 +414,25 @@ export async function fetchExerciseNumberInRoutine(routineName, exerciseName) {
           [workoutId],
           (_, result) => {
             resolve(result);
+          },
+          (_, error) => {
+            reject(error);
+          }
+        );
+      });
+    });
+    return promise;
+  }
+
+  export async function fetchWorkoutDateShort(workoutId) {
+    const promise = new Promise((resolve, reject) => {
+      database.transaction((tx) => {
+        tx.executeSql(
+          `SELECT dateShort FROM workouts
+          WHERE workoutId = ?;`,
+          [workoutId],
+          (_, result) => {
+            resolve(result.rows._array);
           },
           (_, error) => {
             reject(error);
@@ -640,6 +670,27 @@ export async function fetchExerciseNumberInRoutine(routineName, exerciseName) {
   
     return promise;
   }
+  
+  export function fetchExerciseRecords(exerciseName) {
+    const promise = new Promise((resolve, reject) => {
+      database.transaction((tx) => {
+        tx.executeSql(
+          `SELECT maxWeight, maxReps, maxVolume
+          FROM exercises 
+          WHERE exerciseName = ?;`,
+          [exerciseName],
+          (_, result) => {
+            resolve(result.rows._array);
+          },
+          (_, error) => {
+            reject(error);
+          }
+        );
+      });
+    });
+  
+    return promise;
+  }
 
 
 
@@ -690,12 +741,16 @@ export async function insertEmptyRoutine(routineName) {
 }
 
 
-export function insertExercise(exercise) {
+export function insertExercise(e) {
   const promise = new Promise((resolve, reject) => {
     database.transaction((tx) => {
       tx.executeSql(
-        `INSERT INTO exercises (exerciseName, restTime, exerciseNotes) VALUES (?, ?, ?);`,
-        [exercise.name, exercise.restTime, exercise.notes],
+        `INSERT INTO exercises (
+          exerciseName, restTime, exerciseNotes, maxWeight, maxWeightDate,
+          maxReps, maxRepsDate, maxVolume, maxVolumeDate)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);`,
+        [e.name, e.restTime, e.notes, e.maxWeight, e.maxWeightDate, e.maxReps,
+          e.maxRepsDate, e.maxVolume, e.maxVolumeDate],
         (_, result) => {
           resolve(result);
         },
@@ -1326,6 +1381,108 @@ export async function updateExerInstNotes(newNotes, exerciseName, workoutId) {
         WHERE exerciseName = ?
         AND workoutId = ?;`,
         [newNotes, exerciseName, workoutId],
+        (_, result) => {
+          resolve(result);
+        },
+        (_, error) => {
+          reject(error);
+        }
+      );
+    });
+  });
+
+  return promise;
+}
+
+export async function updateRecords(
+  workoutId, exerciseList
+) {
+  await Promise.all(
+    exerciseList.map(async (exercise) => {
+      const dateSqlResult = await fetchWorkoutDateShort(workoutId);
+      console.log("dateSqlResult");
+      console.log(dateSqlResult);
+      const date = dateSqlResult[0].dateShort;
+      const records = await fetchExerciseRecords(exercise.name);
+      const { maxWeight, maxVolume, maxReps } = records[0];
+      console.log("maxWeight");
+      console.log(maxWeight);
+      const sets = await fetchSetsFromExerciseInstance(
+        exercise.name, workoutId);
+      for (let set of sets) {
+        if (set.status === "COMPLETED") {
+          if (set.weight > maxWeight) {
+            await updateExerciseMaxWeight(set.weight, date, exercise.name);
+          }
+          if (set.reps > maxReps) {
+            await updateExerciseMaxReps(set.reps, date, exercise.name);
+          }
+          if ((set.weight * set.reps) > maxVolume) {
+            await updateExerciseMaxVolume(
+              (set.weight * set.reps), date, exercise.name);
+          } 
+        }
+      }
+    })
+  );
+}
+
+export async function updateExerciseMaxWeight(
+  newMaxWeight, newMaxWeightDate, exerciseName) {
+  const promise = new Promise((resolve, reject) => {
+    database.transaction((tx) => {
+      tx.executeSql(
+        `UPDATE exercises 
+        SET maxWeight = ?,
+        maxWeightDate = ?
+        WHERE exerciseName = ?;`,
+        [newMaxWeight, newMaxWeightDate, exerciseName],
+        (_, result) => {
+          resolve(result);
+        },
+        (_, error) => {
+          reject(error);
+        }
+      );
+    });
+  });
+
+  return promise;
+}
+
+export async function updateExerciseMaxReps(
+  newMaxReps, newMaxRepsDate, exerciseName) {
+  const promise = new Promise((resolve, reject) => {
+    database.transaction((tx) => {
+      tx.executeSql(
+        `UPDATE exercises 
+        SET maxReps = ?,
+        maxRepsDate = ?
+        WHERE exerciseName = ?;`,
+        [newMaxReps, newMaxRepsDate, exerciseName],
+        (_, result) => {
+          resolve(result);
+        },
+        (_, error) => {
+          reject(error);
+        }
+      );
+    });
+  });
+
+  return promise;
+}
+
+export async function updateExerciseMaxVolume(
+  newMaxVolume, newMaxVolumeDate, exerciseName) {
+  const promise = new Promise((resolve, reject) => {
+    database.transaction((tx) => {
+      tx.executeSql(
+        `UPDATE exercises 
+        SET maxVolume = ?,
+        maxVolumeDate = ?
+        WHERE exerciseName = ?;`,
+        [newMaxVolume, newMaxVolumeDate, exerciseName],
         (_, result) => {
           resolve(result);
         },

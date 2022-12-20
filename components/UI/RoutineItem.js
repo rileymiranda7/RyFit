@@ -85,7 +85,7 @@ export default function RoutineItem({ routineName, exercises }) {
         <Text 
           style={styles.routineNameStyle}
           numberOfLines={2}
-          ellipsizeMode="clip"
+          ellipsizeMode="tail"
         >
           {routineName}
         </Text>

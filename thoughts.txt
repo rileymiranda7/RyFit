@@ -381,39 +381,28 @@ history tab
 records tab
 settings tab
 
-exercise notes and pinning and showing in past workouts
-
-forgot i was going to update all exerciseInstances numberInWorkout when 
-workout done
-
-differentiate completed exerciseInstances from current one by
-making sure workoutId doesn't match current workoutId
-
-figure out why fetchAllSetsFromAllExerciseInstances is including current
-exerInst and fix loadPastExerInstances
-
 DON'T REFRESH BEFORE ENDING WORKOUT
-
-put lbs and reps in grid col too?
-
-fix set row styling
-make lbs and reps values bold
-
-need to fix keyboard blocking text field
-fixed temporarily with invisible view after buttons at bottom
-
-should add cancel workout button by end workout button so user
-can cancel workout without having to uncheck all completed sets
 
 work on components for exercise notes and exerInst notes
 try to use separation of concerns 
 
-need to add create exercise screen to make exercise
-free weight, machine, body weight, etc
+"need to add create exercise screen to make exercise
+free weight, machine, body weight, etc"
 
 refactor db functions to use joins
 
-need to add way to delete exercises need exercises screen
+uppercase letters take up space than undercase
+need to test textinputs with capital words
+use maxwidth and numberOfLines prop 
+
+"add dismiss keyboard button to show when keyboard is up
+to fix dismiss problem"
+
+should user be able to delete a workout?
+not yet
+
+
+"need to add way to delete exercises need exercises screen
 
 what is involved in deleting an exercise?
 delete from routine 
@@ -421,20 +410,27 @@ have to update order of routine but function for that is
 already there
 wont show up in exercise list so dont have to worry about
 active workout 
-should still show up in past workouts 
+should still show up in past workouts "
 
-uppercase letters take up space than undercase
-need to test textinputs with capital words
-use maxwidth and numberOfLines prop 
+what is involved in implementing records for an exercise?
 
-add dismiss keyboard button to show when keyboard is up
-to fix dismiss problem
+3 records for each exercise
+highest set weight
+highest set reps
+highest set volume
 
-should user be able to delete a workout?
-not yet
+give each of these a color
 
-NEED TO ADD CANCEL WORKOUT BUTTON IN ACTIVE WORKOUT
-what goes into cancelling a workout?
-deleting all sets, regardless if completed or not
-deleting all exercise instances
-delete workout
+add boolean field for each of these in exercise table?
+add date field for each record
+
+after workout is completed check all sets to see if 
+there are new records by comparing to old records
+
+make db function to go through all exercises and all
+their completed sets and compare to records and update
+records
+
+NEED TO WORK ON PREVIOUS AFTER RECORDS DONE
+
+does deleteIncompleteSets update set order??

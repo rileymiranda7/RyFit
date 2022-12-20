@@ -45,7 +45,8 @@ export default function PickExerciseForActiveWorkoutModal({
   };
 
   async function addExercise() {
-    const newExercise = new Exercise(exerciseNameInput, "3", null);
+    const newExercise = new Exercise(
+      exerciseNameInput, "3", null, 0, "", 0, "", 0, "");
     await insertExercise(newExercise);
     await submitPickedExerciseHandler([...selectedExercises, newExercise]);
   }

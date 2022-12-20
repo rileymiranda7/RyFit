@@ -35,6 +35,7 @@ import {
   insertExerciseInstance, 
   insertSet, 
   updateExerciseNumberInWorkout, 
+  updateRecords, 
   updateWorkoutDuration, 
   updateWorkoutExerciseOrder, 
   updateWorkoutName 
@@ -191,6 +192,7 @@ export default function ActiveWorkoutScreen({
               const duration = hours + "h " + minutes + "m"
               await updateWorkoutDuration(duration, workoutId);
               await updateWorkoutExerciseOrder(exerAndInstList, workoutId, true, -1);
+              await updateRecords(workoutId, exerList);
               await deleteIncompleteSets(workoutId);
               await deleteExerciseInstancesWithNoCompletedSets(
                 workoutId, exerList);
@@ -219,6 +221,7 @@ export default function ActiveWorkoutScreen({
               await updateWorkoutExerciseOrder(exerAndInstList, workoutId, true, -1);
               const duration = hours + "h " + minutes + "m";
               await updateWorkoutDuration(duration, workoutId);
+              await updateRecords(workoutId, exerList);
               navigation.navigate("CurrentWorkout", {
                 workoutWasCompleted: true
               });
