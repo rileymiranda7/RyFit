@@ -115,6 +115,7 @@ const styles = StyleSheet.create({
     margin: 2,
     minWidth: "49%",
     maxWidth: "49%",
+    borderRadius: 5
   },
   routineNameStyle: {
     color: "white",
