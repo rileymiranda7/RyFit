@@ -28,7 +28,7 @@ import {
   deleteAllSetsFromWorkout,
   deleteExerciseInstance,
   deleteExerciseInstancesWithNoCompletedSets,
-  deleteIncompleteSets,
+  deleteIncompleteSetsFromWorkout,
   deleteWorkout, 
   fetchCompletedWorkouts, 
   fetchRoutine,
@@ -163,7 +163,7 @@ export default function ActiveWorkoutScreen({
           {
             text: "End Workout",
             onPress: async () => {
-              await deleteIncompleteSets(workoutId);
+              await deleteAllSetsFromWorkout(workoutId);
               await deleteWorkout(workoutId);
               await deleteExerciseInstancesWithNoCompletedSets(
                 workoutId, exerList);
@@ -193,9 +193,9 @@ export default function ActiveWorkoutScreen({
               await updateWorkoutDuration(duration, workoutId);
               await updateWorkoutExerciseOrder(exerAndInstList, workoutId, true, -1);
               await updateRecords(workoutId, exerList);
-              await deleteIncompleteSets(workoutId);
               await deleteExerciseInstancesWithNoCompletedSets(
                 workoutId, exerList);
+              await deleteIncompleteSetsFromWorkout(workoutId);
               navigation.navigate("CurrentWorkout", {
                 workoutWasCompleted: true
               });

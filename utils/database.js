@@ -19,7 +19,7 @@ export async function init() {
   /* const promise = new Promise((resolve, reject) => {
     database.transaction((tx) => {
       tx.executeSql(
-        `DROP TABLE workouts;`,
+        `DROP TABLE exerciseInstances;`,
         [],
         () => {
           resolve();
@@ -940,24 +940,45 @@ export async function deleteWorkout(workoutId) {
   return promise;
 }
 
-export async function deleteIncompleteSets(workoutId) {
-  const promise = new Promise((resolve, reject) => {
-    database.transaction((tx) => {
-      tx.executeSql(
-        `DELETE FROM sets WHERE workoutId = ?
-        AND status = "IN PROGRESS";`,
-        [workoutId],
-        (_, result) => {
-          resolve(result);
-        },
-        (_, error) => {
-          reject(error);
+export async function deleteIncompleteSetsFromWorkout(workoutId) {
+  // get names of each exercise instance from workout
+  const exerList = await fetchExercisesFromPastWorkout(workoutId);
+  Promise.all(
+    exerList.map(async (e) => {
+      // for each array of sets belonging to each exercise, get set indices for
+      // sets in progress in order to delete these sets
+      let finalSetArr;
+      const sets = await fetchSetsFromExerciseInstance(e.exerciseName, workoutId);
+      let setNumsToDelete = [];
+      for (let set of sets) {
+        if (set.status === "IN PROGRESS") {
+          setNumsToDelete.push(set.setNumber);
         }
-      );
-    });
-  });
-
-  return promise;
+      }
+      // delete each set in progress and update order each time
+      // work off up to date set array using finalSetArr
+      finalSetArr = [...sets];
+      if (setNumsToDelete.length > 0) {
+        setNumsToDelete.map(async (setNumToDelete) => {
+          let temp = finalSetArr;
+          temp.splice(setNumToDelete - 1, 1);
+          let newSetsArr = temp.map((set) => {
+            if (set.setNumber > setNumToDelete) {
+              return {
+                ...set,
+                setNumber: set.setNumber - 1,
+              };
+            } else {
+              return set;
+            }
+          });
+          finalSetArr = newSetsArr;
+        });
+      }
+      await deleteAllSetsFromCurrentExercise(workoutId, e.exerciseName);
+      await updateSetOrder(workoutId, e.exerciseName, finalSetArr);
+    })
+  );
 }
 
 export async function deleteAllSetsFromWorkout(workoutId) {
@@ -1323,7 +1344,7 @@ export async function updateSetOrder(
   await Promise.all(
     newSetOrder.map(async (set) => {
         await insertSet(new Set(
-          set.setNumber, set.lbs, set.reps, "WORKING", 
+          set.setNumber, set.weight, set.reps, "WORKING", 
           set.status, exerciseName, workoutId
         ));
     })
@@ -1400,13 +1421,9 @@ export async function updateRecords(
   await Promise.all(
     exerciseList.map(async (exercise) => {
       const dateSqlResult = await fetchWorkoutDateShort(workoutId);
-      console.log("dateSqlResult");
-      console.log(dateSqlResult);
       const date = dateSqlResult[0].dateShort;
       const records = await fetchExerciseRecords(exercise.name);
       const { maxWeight, maxVolume, maxReps } = records[0];
-      console.log("maxWeight");
-      console.log(maxWeight);
       const sets = await fetchSetsFromExerciseInstance(
         exercise.name, workoutId);
       for (let set of sets) {

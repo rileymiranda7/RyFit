@@ -36,7 +36,7 @@ export default function Exercise({
     {
       setNumber: 1,
       previous: "",
-      lbs: "",
+      weight: "",
       reps: "",
       status: "IN PROGRESS",
     },
@@ -71,7 +71,7 @@ export default function Exercise({
             return {
               setNumber: set.setNumber,
               previous: set.previous,
-              lbs: enteredValue,
+              weight: enteredValue,
               reps: set.reps,
               status: "IN PROGRESS",
             };
@@ -81,7 +81,7 @@ export default function Exercise({
             return {
               setNumber: set.setNumber,
               previous: set.previous,
-              lbs: set.lbs,
+              weight: set.weight,
               reps: enteredValue,
               status: "IN PROGRESS",
             };
@@ -91,9 +91,9 @@ export default function Exercise({
             // and we get the signal to try to set to completed
             let shouldStatusBeCompleted;
             if (set.status === "IN PROGRESS") {
-              // if lbs and reps are filled out and valid we can set to completed
-              if (set.lbs && set.reps && 
-                isNumeric(set.lbs) && isNumeric(set.reps)) {
+              // if weight and reps are filled out and valid we can set to completed
+              if (set.weight && set.reps && 
+                isNumeric(set.weight) && isNumeric(set.reps)) {
                 shouldStatusBeCompleted = true;
                 handleOnSetCompleted(restTimeAmount);
                 updateNumSetsCompletedInWkt(true);
@@ -121,13 +121,13 @@ export default function Exercise({
               "COMPLETED" : "IN PROGRESS";
             await updateSetStatus(setNumber, workoutId, exer.name, newStatus);
             await updateSetWeight(setNumber, workoutId, exer.name, 
-              Number(set.lbs).toString());
+              Number(set.weight).toString());
             await updateSetReps(setNumber, workoutId, exer.name, 
               Number(set.reps).toString());
             return {
               setNumber: set.setNumber,
               previous: set.previous,
-              lbs: shouldStatusBeCompleted ? Number(set.lbs).toString() : set.lbs,
+              weight: shouldStatusBeCompleted ? Number(set.weight).toString() : set.weight,
               reps: shouldStatusBeCompleted ? Number(set.reps).toString() : set.reps,
               status: newStatus,
             };
@@ -181,7 +181,7 @@ export default function Exercise({
         >
           <IncompleteRow
             setNumber={item.setNumber}
-            lbsValue={item.lbs}
+            lbsValue={item.weight}
             repsValue={item.reps}
             setIsCompleted={item.status === "COMPLETED"}
             inputChangedHandler={inputChangedHandler}
@@ -198,7 +198,7 @@ export default function Exercise({
         {
           setNumber: currentNumberOfSets + 1,
           previous: "",
-          lbs: "",
+          weight: "",
           reps: "",
           status: "IN PROGRESS",
         },

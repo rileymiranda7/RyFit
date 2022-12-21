@@ -6,7 +6,7 @@ import { FlatList } from 'react-native-gesture-handler';
 
 
 import BackButton from '../components/UI/BackButton';
-import { fetchExercisesFromPastWorkout, fetchExersAndInstsFromPastWorkout } from '../utils/database';
+import { fetchExersAndInstsFromPastWorkout } from '../utils/database';
 import PastExerciseItem from '../components/UI/PastExerciseItem';
 
 export default function PastWorkoutItemScreen() {
@@ -20,7 +20,6 @@ export default function PastWorkoutItemScreen() {
   const { width: windowWidth } = useWindowDimensions();
 
   const loadExercises = async () => {
-    //const exercises = await fetchExercisesFromPastWorkout(workout.workoutId);
     const exercisesAndInsts = await 
       fetchExersAndInstsFromPastWorkout(workout.workoutId);
     setLoadedExersAndInsts(exercisesAndInsts);
