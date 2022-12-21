@@ -58,7 +58,7 @@ export default function IncompleteRow({
         ]}>
         <NumberInput
           textInputConfig={{
-            keyboardType: "decimal-pad",
+            keyboardType: "number-pad",
             onChangeText: inputChangedHandler.bind(this, "reps", setNumber),
             contextMenuHidden: true,
             keyboardAppearance: 'dark',
