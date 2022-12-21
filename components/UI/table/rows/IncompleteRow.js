@@ -39,7 +39,7 @@ export default function IncompleteRow({
             onChangeText: inputChangedHandler.bind(this, "lbs", setNumber),
             contextMenuHidden: true,
             keyboardAppearance: 'dark',
-            maxLength: 5,
+            maxLength: 6,
             selectTextOnFocus: true,
             onFocus: () => {
               setLbsInputFocused(!lbsInputFocused);

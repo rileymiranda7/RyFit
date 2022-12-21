@@ -55,6 +55,10 @@ export default function Exercise({
 
   const navigation = useNavigation();
 
+  function isNumeric(n) {
+    return !isNaN(parseFloat(n)) && isFinite(n);
+  }
+
   // updates rowArr state when any input on any row is changed
   async function inputChangedHandler(inputIdentifier, setNumber, enteredValue) {
     let temp = rowArr;
@@ -62,23 +66,24 @@ export default function Exercise({
       temp.map(async (set) => {
         if (set.setNumber === setNumber) {
           if (inputIdentifier === "lbs") {
-            await updateSetWeight(
-              setNumber, workoutId, exer.name, enteredValue);
+            await updateSetWeight(setNumber, workoutId, exer.name, enteredValue);
+              await updateSetStatus(setNumber, workoutId, exer.name, "IN PROGRESS");
             return {
               setNumber: set.setNumber,
               previous: set.previous,
               lbs: enteredValue,
               reps: set.reps,
-              status: set.status,
+              status: "IN PROGRESS",
             };
           } else if (inputIdentifier === "reps") {
             await updateSetReps(setNumber, workoutId, exer.name, enteredValue);
+            await updateSetStatus(setNumber, workoutId, exer.name, "IN PROGRESS");
             return {
               setNumber: set.setNumber,
               previous: set.previous,
               lbs: set.lbs,
               reps: enteredValue,
-              status: set.status,
+              status: "IN PROGRESS",
             };
           } else {
             // inputIdentifier === "status"
@@ -86,8 +91,9 @@ export default function Exercise({
             // and we get the signal to try to set to completed
             let shouldStatusBeCompleted;
             if (set.status === "IN PROGRESS") {
-              // if lbs and reps are filled out we can set to completed
-              if (set.lbs && set.reps) {
+              // if lbs and reps are filled out and valid we can set to completed
+              if (set.lbs && set.reps && 
+                isNumeric(set.lbs) && isNumeric(set.reps)) {
                 shouldStatusBeCompleted = true;
                 handleOnSetCompleted(restTimeAmount);
                 updateNumSetsCompletedInWkt(true);
@@ -95,7 +101,7 @@ export default function Exercise({
               } else {
                 shouldStatusBeCompleted = false;
                 Alert.alert(
-                  `Missing Weight and/or Reps`,
+                  `Invalid/Missing Weight and/or Reps`,
                   "",
                   [
                     {
@@ -113,12 +119,16 @@ export default function Exercise({
             }
             const newStatus = shouldStatusBeCompleted ? 
               "COMPLETED" : "IN PROGRESS";
-            await updateSetStatus(setNumber, workoutId, exer.name, newStatus)
+            await updateSetStatus(setNumber, workoutId, exer.name, newStatus);
+            await updateSetWeight(setNumber, workoutId, exer.name, 
+              Number(set.lbs).toString());
+            await updateSetReps(setNumber, workoutId, exer.name, 
+              Number(set.reps).toString());
             return {
               setNumber: set.setNumber,
               previous: set.previous,
-              lbs: set.lbs,
-              reps: set.reps,
+              lbs: shouldStatusBeCompleted ? Number(set.lbs).toString() : set.lbs,
+              reps: shouldStatusBeCompleted ? Number(set.reps).toString() : set.reps,
               status: newStatus,
             };
           }
@@ -173,7 +183,7 @@ export default function Exercise({
             setNumber={item.setNumber}
             lbsValue={item.lbs}
             repsValue={item.reps}
-            setIsCompleted={item.status === "COMPLETED" ? true : false}
+            setIsCompleted={item.status === "COMPLETED"}
             inputChangedHandler={inputChangedHandler}
           />
         </Row>
