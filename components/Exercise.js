@@ -17,6 +17,7 @@ import {
   updateSetOrder, 
   updateSetReps, 
   updateSetStatus, 
+  updateSetType, 
   updateSetWeight
 } from "../utils/database";
 import Set from "../models/set";
@@ -39,6 +40,7 @@ export default function Exercise({
       weight: "",
       reps: "",
       status: "IN PROGRESS",
+      type: "WORKING",
       isWeightRecord: 0,
       isRepsRecord: 0,
       isVolumeRecord: 0
@@ -72,35 +74,24 @@ export default function Exercise({
             await updateSetWeight(setNumber, workoutId, exer.name, enteredValue);
               await updateSetStatus(setNumber, workoutId, exer.name, "IN PROGRESS");
             return {
-              setNumber: set.setNumber,
-              previous: set.previous,
+              ...set,
               weight: enteredValue,
-              reps: set.reps,
-              status: "IN PROGRESS",
-              isWeightRecord: set.isWeightRecord,
-              isRepsRecord: set.isRepsRecord,
-              isVolumeRecord: set.isVolumeRecord
             };
           } else if (inputIdentifier === "reps") {
             await updateSetReps(setNumber, workoutId, exer.name, enteredValue);
             await updateSetStatus(setNumber, workoutId, exer.name, "IN PROGRESS");
             return {
-              setNumber: set.setNumber,
-              previous: set.previous,
-              weight: set.weight,
+              ...set,
               reps: enteredValue,
-              status: "IN PROGRESS",
-              isWeightRecord: set.isWeightRecord,
-              isRepsRecord: set.isRepsRecord,
-              isVolumeRecord: set.isVolumeRecord
             };
-          } else {
-            // inputIdentifier === "status"
-            // if set status is currently in progress
+          } else if (inputIdentifier === "status") {
+            // If set status is currently IN PROGRESS
             // and we get the signal to try to set to completed
+            // Sets are created with default status IN PROGRESS
             let shouldStatusBeCompleted;
             if (set.status === "IN PROGRESS") {
-              // if weight and reps are filled out and valid we can set to completed
+              // if weight and reps are filled out and valid we can 
+              // set to completed
               if (set.weight && set.reps && 
                 isNumeric(set.weight) && isNumeric(set.reps)) {
                 shouldStatusBeCompleted = true;
@@ -134,14 +125,25 @@ export default function Exercise({
             await updateSetReps(setNumber, workoutId, exer.name, 
               Number(set.reps).toString());
             return {
-              setNumber: set.setNumber,
-              previous: set.previous,
+              ...set,
               weight: shouldStatusBeCompleted ? Number(set.weight).toString() : set.weight,
               reps: shouldStatusBeCompleted ? Number(set.reps).toString() : set.reps,
               status: newStatus,
-              isWeightRecord: set.isWeightRecord,
-              isRepsRecord: set.isRepsRecord,
-              isVolumeRecord: set.isVolumeRecord
+            };
+          } else {
+            // inputIdentifier === "setType"
+            // If set type is currently WORKING
+            // and we get the signal to try to set to WARMUP
+            // Sets are created with default type WORKING
+            
+            const newType = set.type === "WORKING" ? "WARMUP" 
+              : set.type === "WARMUP" ? "LEFT"
+              : set.type === "LEFT" ? "RIGHT"
+              : "WORKING" // set.type === "RIGHT"
+            await updateSetType(setNumber, workoutId, exer.name, newType)
+            return {
+              ...set,
+              type: newType
             };
           }
         }
@@ -197,6 +199,8 @@ export default function Exercise({
             repsValue={item.reps}
             setIsCompleted={item.status === "COMPLETED"}
             inputChangedHandler={inputChangedHandler}
+            isWarmupSet={item.type === "WARMUP"}
+            type={item.type}
           />
         </Row>
       </Swipeable>

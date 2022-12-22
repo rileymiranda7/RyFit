@@ -9,10 +9,10 @@ import { useState } from "react";
 
 export default function IncompleteRow({
   setNumber,
-  lbsValue,
-  repsValue,
   setIsCompleted,
   inputChangedHandler,
+  isWarmupSet,
+  type
 }) {
 
   const [lbsInputFocused, setLbsInputFocused] = useState(false);
@@ -21,18 +21,31 @@ export default function IncompleteRow({
   return (
     <>
       <Col style={[styles.set, 
-        {backgroundColor: setIsCompleted ? "green" : "black",}]}>
-        <SetNumber>{setNumber}</SetNumber>
+        {backgroundColor: 
+          isWarmupSet && setIsCompleted ? "#9a2c0a" 
+          : setIsCompleted ? "green" : "black",}]}>
+        <SetNumber
+          inputChangedHandler={inputChangedHandler.bind(
+            this,
+            "setType",
+            setNumber
+          )}
+          isWarmupSet={isWarmupSet}
+          type={type}
+        >{setNumber}</SetNumber>
       </Col>
       <Col style={[styles.previous, 
-        {backgroundColor: setIsCompleted ? "green" : "black",}]}>
+        {backgroundColor: 
+          isWarmupSet && setIsCompleted ? "#9a2c0a" 
+          : setIsCompleted ? "green" : "black",}]}>
         <Previous />
       </Col>
       <Col 
         style={[
           styles.lbs, 
-          {backgroundColor: setIsCompleted ? "green" : "black",}
-        ]}>
+          {backgroundColor: 
+            isWarmupSet && setIsCompleted ? "#9a2c0a" 
+            : setIsCompleted ? "green" : "black",}]}>
         <NumberInput
           textInputConfig={{
             keyboardType: "decimal-pad",
@@ -52,10 +65,10 @@ export default function IncompleteRow({
         />
       </Col>
       <Col 
-        style={[
-          styles.reps, 
-          {backgroundColor: setIsCompleted ? "green" : "black",}
-        ]}>
+        style={[styles.reps, 
+          {backgroundColor: 
+            isWarmupSet && setIsCompleted ? "#9a2c0a" 
+            : setIsCompleted ? "green" : "black",}]}>
         <NumberInput
           textInputConfig={{
             keyboardType: "number-pad",
@@ -75,7 +88,9 @@ export default function IncompleteRow({
         />
       </Col>
       <Col style={[styles.completed, 
-        {backgroundColor: setIsCompleted ? "green" : "black",}]}>
+        {backgroundColor: 
+          isWarmupSet && setIsCompleted ? "#9a2c0a" 
+          : setIsCompleted ? "green" : "black",}]}>
         <CompletedButton
           inputChangedHandler={inputChangedHandler.bind(
             this,

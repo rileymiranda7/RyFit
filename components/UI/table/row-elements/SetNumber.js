@@ -1,20 +1,45 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Pressable } from "react-native";
 
 import { Colors } from "../../../../constants/colors";
 
-export default function SetNumber({ children }) {
+export default function SetNumber({ 
+  children, 
+  isWarmupSet, 
+  inputChangedHandler,
+  type 
+}) {
+
+  const onPress = async () => {
+    await inputChangedHandler("dont matter");
+  }
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>{children}</Text>
-    </View>
+    <Pressable
+      onPress={async () => await onPress()}
+    >
+      <View 
+        style={[styles.container, 
+          {backgroundColor: type === "WARMUP" ? "#F15900" 
+            : type === "LEFT" ? "#1300ea"
+            : type === "RIGHT" ? "#8000b8"
+            : Colors.gray0}
+        ]}
+      >
+        <Text style={styles.text}>{children}{
+        type === "WARMUP" ? "W" 
+        : type === "LEFT" ? "L" 
+        : type === "RIGHT" ? "R" 
+        : ""
+        }</Text>
+      </View>
+    </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     borderRadius: 6,
-    backgroundColor: Colors.gray0,
-    width: 40,
+    minWidth: 40,
     borderWidth: 2,
     borderColor: "white"
   },

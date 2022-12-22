@@ -419,16 +419,60 @@ highest set weight
 highest set reps
 highest set volume
 
-give each of these a color
-
-add boolean field for each of these in exercise table?
-add date field for each record
-
-after workout is completed check all sets to see if 
-there are new records by comparing to old records
-
-make db function to go through all exercises and all
-their completed sets and compare to records and update
-records
-
 NEED TO WORK ON PREVIOUS AFTER RECORDS DONE
+
+should implement set types before doing previous?
+when implementing warmup sets ignore warmup sets for
+records only use sets of type working for records
+
+warmup sets should work same as working sets
+with regard to completed status
+
+warmup sets have to be before all working sets
+if a set is to be turned into a warmup set it 
+either has to be the first set or the set before
+must be a warmup set also
+
+this way the working sets after can have their 
+set numbers updated
+
+if user tries to set a warmup set back to working,
+it has to be the last warmup set
+aka the next set must be a working set or the current
+set is the last set
+
+should i care if the user has warmup sets 
+wherever they want them??
+no
+user may want warmup sets mid
+exercise
+for unilateral work or whatever
+just inform them that warmup sets 
+aren't counted toward records
+
+what is logic for unilateral sets?
+Left and right sets are really 
+two set arrays combined
+L1
+L2
+R1
+R2
+
+use separate column for L R?
+
+if user can make any set a warmup set
+then need logic to update all working set
+numbers
+
+maybe add props to set
+for left and right set number
+
+maybe keep setnumber as it is and add column 
+for set type where user can choose
+working, warmup, left, right
+
+should start with working and cycle
+thru warmup left right
+
+maybe keep state counters of left right and 
+warmup sets 

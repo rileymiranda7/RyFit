@@ -47,7 +47,7 @@ export default function PastExerciseItem({
           <Text style={styles.exerInstNotesStyle}>{exerInstNotes}</Text>
         </View>
       </View>
-      <View style={{maxWidth: "50%"}}>
+      <View style={{maxWidth: "50%", marginLeft: "4%"}}>
         <Row>
           <Col style={{ flex: 1}}>
           </Col>
@@ -71,9 +71,18 @@ export default function PastExerciseItem({
           <View key={index} style={{marginTop: 2}}>
             <View style={{minWidth: "50%", maxWidth: "50%" }}>
               <Row>
-                <Col style={styles.set}>
+                <Col style={[styles.set, 
+                  {backgroundColor: set.type === "WARMUP" ? "#F15900" 
+                      : set.type === "LEFT" ? "#1300ea"
+                      : set.type === "RIGHT" ? "#8000b8"
+                      : ""}]}
+                >
                   <Text style={styles.setNumStyle} >
                     {set.setNumber}
+                    {set.type === "WARMUP" ? "W" 
+                      : set.type === "LEFT" ? "L" 
+                      : set.type === "RIGHT" ? "R" 
+                      : ""}
                   </Text>
                 </Col>
                 <Col style={styles.lbsVal}>
@@ -208,7 +217,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   set: {
-    flex: 1,
+    flex: 2,
     alignItems: "center",
     justifyContent: "center",
     borderColor: "white",

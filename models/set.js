@@ -9,7 +9,7 @@ class Set {
     setNumber,
     weight,
     reps,
-    type, // "WORKING", "WARMUP", "DROPSET"
+    type, // "WORKING", "WARMUP"
     status, // "COMPLETED", "FAILED", "IN PROGRESS"
     exerciseName,
     workoutId,

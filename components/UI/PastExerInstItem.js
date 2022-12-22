@@ -13,7 +13,7 @@ export default function PastExerInstItem({ setArray, workoutName, date, notes })
       <View style={{ borderRadius: 8, backgroundColor: "#835eeb" }}>
           <Text style={styles.exerInstNotesStyle}>{notes}</Text>
       </View>
-      <View style={{maxWidth: "50%"}}>
+      <View style={{maxWidth: "50%", marginLeft: "4%"}}>
         <Row>
           <Col style={{ flex: 1}}>
           </Col>
@@ -35,9 +35,18 @@ export default function PastExerInstItem({ setArray, workoutName, date, notes })
         return (
           <View key={index} style={{maxWidth: "50%", marginVertical: 2}}>
             <Row>
-            <Col style={styles.set}>
+            <Col style={[styles.set,
+              {backgroundColor: set.type === "WARMUP" ? "#F15900" 
+              : set.type === "LEFT" ? "#1300ea"
+              : set.type === "RIGHT" ? "#8000b8"
+              : ""}]}
+            >
                 <Text style={styles.setNumStyle} >
                   {set.setNumber}
+                  {set.type === "WARMUP" ? "W" 
+                      : set.type === "LEFT" ? "L" 
+                      : set.type === "RIGHT" ? "R" 
+                      : ""}
                 </Text>
               </Col>
               <Col style={styles.lbsVal}>
@@ -126,7 +135,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   set: {
-    flex: 1,
+    flex: 2,
     alignItems: "center",
     justifyContent: "center",
     borderColor: "white",

@@ -606,7 +606,7 @@ export async function fetchExerciseNumberInRoutine(routineName, exerciseName) {
     const promise = new Promise((resolve, reject) => {
       database.transaction((tx) => {
         tx.executeSql(
-          `SELECT setNumber, weight, reps, dateShort, name, timestamp, workouts.workoutId
+          `SELECT type, setNumber, weight, reps, dateShort, name, timestamp, workouts.workoutId
           FROM 
             sets INNER JOIN workouts
           ON workouts.workoutId = sets.workoutId
@@ -1349,12 +1349,36 @@ export async function updateSetStatus(
   return promise;
 }
 
+export async function updateSetType(
+  setNumber, workoutId, exerciseName, newType) {
+  const promise = new Promise((resolve, reject) => {
+    database.transaction((tx) => {
+      tx.executeSql(
+        `UPDATE sets 
+        SET type = ?
+        WHERE setNumber = ?
+        AND workoutId = ?
+        AND exerciseName = ?;`,
+        [newType, setNumber, workoutId, exerciseName],
+        (_, result) => {
+          resolve(result);
+        },
+        (_, error) => {
+          reject(error);
+        }
+      );
+    });
+  });
+
+  return promise;
+}
+
 export async function updateSetOrder(
   workoutId, exerciseName, newSetOrder) {
   await Promise.all(
     newSetOrder.map(async (set) => {
         await insertSet(new Set(
-          set.setNumber, set.weight, set.reps, "WORKING", 
+          set.setNumber, set.weight, set.reps, set.type, 
           set.status, exerciseName, workoutId, set.isWeightRecord,
           set.isRepsRecord, set.isVolumeRecord
         ));
