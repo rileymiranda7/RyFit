@@ -12,7 +12,11 @@ class Set {
     type, // "WORKING", "WARMUP", "DROPSET"
     status, // "COMPLETED", "FAILED", "IN PROGRESS"
     exerciseName,
-    workoutId
+    workoutId,
+    isWeightRecord,
+    isRepsRecord,
+    isVolumeRecord,
+
   ) {
     this.setNumber = setNumber;
     this.weight = weight;
@@ -21,6 +25,9 @@ class Set {
     this.workoutId = workoutId;
     this.type = type;
     this.status = status;
+    this.isWeightRecord = isWeightRecord;
+    this.isRepsRecord = isRepsRecord;
+    this.isVolumeRecord = isVolumeRecord;
   }
 }
 

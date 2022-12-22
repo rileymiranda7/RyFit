@@ -432,5 +432,3 @@ their completed sets and compare to records and update
 records
 
 NEED TO WORK ON PREVIOUS AFTER RECORDS DONE
-
-does deleteIncompleteSets update set order??

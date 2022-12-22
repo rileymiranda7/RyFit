@@ -68,27 +68,49 @@ export default function PastExerciseItem({
       {loadedSets !== undefined && loadedSets.length > 0 && 
       (loadedSets.map((set, index) => {
         return (
-          <View key={index} style={{maxWidth: "50%", marginBottom: 2}}>
-            <Row>
-              <Col style={styles.set}>
-                <Text style={styles.setNumStyle} >
-                  {set.setNumber}
-                </Text>
-              </Col>
-              <Col style={styles.lbsVal}>
-                <Text style={styles.setValTextStyle} >
-                  {set.weight}
-                </Text>
-              </Col>
-              <Col style={styles.xIcon}>
-                <Ionicons name="close-outline" size={28} color="#fff" />
-              </Col>
-              <Col style={styles.repsVal}>
-                <Text style={styles.setValTextStyle}>
-                  {set.reps}
-                </Text>
-              </Col>
-            </Row>
+          <View key={index} style={{marginTop: 2}}>
+            <View style={{minWidth: "50%", maxWidth: "50%" }}>
+              <Row>
+                <Col style={styles.set}>
+                  <Text style={styles.setNumStyle} >
+                    {set.setNumber}
+                  </Text>
+                </Col>
+                <Col style={styles.lbsVal}>
+                  <Text style={styles.setValTextStyle} >
+                    {set.weight}
+                  </Text>
+                </Col>
+                <Col style={styles.xIcon}>
+                  <Ionicons name="close-outline" size={28} color="#fff" />
+                </Col>
+                <Col style={styles.repsVal}>
+                  <Text style={styles.setValTextStyle}>
+                    {set.reps}
+                  </Text>
+                </Col>
+              </Row>
+            </View>
+            <View style={{ flexDirection: "row", marginTop: 5, marginLeft: 10 }}>
+              {set.isWeightRecord === 1 && (
+                <View style={styles.recordContainerRow}>
+                  <Ionicons name="medal-outline" color={"#FF4747"} size={26} />
+                  <Text style={styles.recordWeightTextStyle}>weight</Text>
+                </View>
+              )}
+              {set.isRepsRecord === 1 && (
+                <View style={styles.recordContainerRow}>
+                  <Ionicons name="medal-outline" color={"#00FFFF"} size={26} />
+                  <Text style={styles.recordRepsTextStyle}>reps</Text>
+                </View>
+              )}
+              {set.isVolumeRecord === 1 && (
+                <View style={styles.recordContainerRow}>
+                  <Ionicons name="medal-outline" color={"#00FF00"} size={26} />
+                  <Text style={styles.recordVolumeTextStyle}>volume</Text>
+                </View>
+              )}
+            </View>
           </View>
         );
       }))}
@@ -198,4 +220,30 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  recordWeightTextStyle: {
+    color: "#FF4747",
+    fontWeight: "bold",
+    textAlign: "center",
+    fontSize: 12,
+    marginHorizontal: 2
+  },
+  recordRepsTextStyle: {
+    color: "#00FFFF",
+    fontWeight: "bold",
+    textAlign: "center",
+    fontSize: 12,
+    marginHorizontal: 2
+  },
+  recordVolumeTextStyle: {
+    color: "#00FF00",
+    fontWeight: "bold",
+    textAlign: "center",
+    fontSize: 12,
+    marginHorizontal: 2
+  },
+  recordContainerRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginHorizontal: 2
+  }
 })

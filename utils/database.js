@@ -19,7 +19,7 @@ export async function init() {
   /* const promise = new Promise((resolve, reject) => {
     database.transaction((tx) => {
       tx.executeSql(
-        `DROP TABLE exerciseInstances;`,
+        `DROP TABLE routines;`,
         [],
         () => {
           resolve();
@@ -157,6 +157,9 @@ export function initSets() {
           status TEXT NOT NULL,
           exerciseName TEXT NOT NULL,
           workoutId INT NOT NULL,
+          isWeightRecord INT NOT NULL,
+          isRepsRecord INT NOT NULL,
+          isVolumeRecord INT NOT NULL,
           PRIMARY KEY (exerciseName, workoutId, setNumber),
           FOREIGN KEY(exerciseName) REFERENCES exerciseInstances(exerciseName),
           FOREIGN KEY(workoutId) REFERENCES exerciseInstances(workoutId)
@@ -823,9 +826,12 @@ export async function insertSet(set) {
           type,
           status,
           exerciseName,
-          workoutId
+          workoutId,
+          isWeightRecord,
+          isRepsRecord,
+          isVolumeRecord
           ) 
-        VALUES (?, ?, ?, ?, ?, ?, ?);`,
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
         [
           set.setNumber,
           set.weight,
@@ -833,7 +839,10 @@ export async function insertSet(set) {
           set.type,
           set.status,
           set.exerciseName,
-          set.workoutId
+          set.workoutId,
+          set.isWeightRecord,
+          set.isRepsRecord,
+          set.isVolumeRecord
         ],
         (_, result) => {
           resolve(result);
@@ -1345,7 +1354,8 @@ export async function updateSetOrder(
     newSetOrder.map(async (set) => {
         await insertSet(new Set(
           set.setNumber, set.weight, set.reps, "WORKING", 
-          set.status, exerciseName, workoutId
+          set.status, exerciseName, workoutId, set.isWeightRecord,
+          set.isRepsRecord, set.isVolumeRecord
         ));
     })
   );
@@ -1423,20 +1433,32 @@ export async function updateRecords(
       const dateSqlResult = await fetchWorkoutDateShort(workoutId);
       const date = dateSqlResult[0].dateShort;
       const records = await fetchExerciseRecords(exercise.name);
-      const { maxWeight, maxVolume, maxReps } = records[0];
+      let { maxWeight, maxVolume, maxReps } = records[0];
       const sets = await fetchSetsFromExerciseInstance(
         exercise.name, workoutId);
       for (let set of sets) {
         if (set.status === "COMPLETED") {
-          if (set.weight > maxWeight) {
+          if (set.weight > maxWeight && set.reps !== 0) {
+            maxWeight = set.weight
+            await removeWeightRecord(exercise.name);
             await updateExerciseMaxWeight(set.weight, date, exercise.name);
+            await updateIsWeightRecord(
+              1, exercise.name, workoutId, set.setNumber)
           }
           if (set.reps > maxReps) {
+            maxReps = set.reps;
+            await removeRepsRecord(exercise.name);
             await updateExerciseMaxReps(set.reps, date, exercise.name);
+            await updateIsRepsRecord(
+              1, exercise.name, workoutId, set.setNumber)
           }
           if ((set.weight * set.reps) > maxVolume) {
+            maxVolume = set.weight * set.reps
+            await removeVolumeRecord(exercise.name);
             await updateExerciseMaxVolume(
               (set.weight * set.reps), date, exercise.name);
+            await updateIsVolumeRecord(
+              1, exercise.name, workoutId, set.setNumber)
           } 
         }
       }
@@ -1512,3 +1534,141 @@ export async function updateExerciseMaxVolume(
 
   return promise;
 }
+
+export async function updateIsWeightRecord(
+  isWeightRecord, exerciseName, workoutId, setNumber) {
+  const promise = new Promise((resolve, reject) => {
+    database.transaction((tx) => {
+      tx.executeSql(
+        `UPDATE sets 
+        SET isWeightRecord = ?
+        WHERE exerciseName = ?
+        AND workoutId = ?
+        AND setNumber = ?;`,
+        [isWeightRecord, exerciseName, workoutId, setNumber],
+        (_, result) => {
+          resolve(result);
+        },
+        (_, error) => {
+          reject(error);
+        }
+      );
+    });
+  });
+
+  return promise;
+}
+
+export async function updateIsRepsRecord(
+  isRepsRecord, exerciseName, workoutId, setNumber) {
+  const promise = new Promise((resolve, reject) => {
+    database.transaction((tx) => {
+      tx.executeSql(
+        `UPDATE sets 
+        SET isRepsRecord = ?
+        WHERE exerciseName = ?
+        AND workoutId = ?
+        AND setNumber = ?;`,
+        [isRepsRecord, exerciseName, workoutId, setNumber],
+        (_, result) => {
+          resolve(result);
+        },
+        (_, error) => {
+          reject(error);
+        }
+      );
+    });
+  });
+
+  return promise;
+}
+
+export async function updateIsVolumeRecord(
+  isVolumeRecord, exerciseName, workoutId, setNumber) {
+  const promise = new Promise((resolve, reject) => {
+    database.transaction((tx) => {
+      tx.executeSql(
+        `UPDATE sets 
+        SET isVolumeRecord = ?
+        WHERE exerciseName = ?
+        AND workoutId = ?
+        AND setNumber = ?;`,
+        [isVolumeRecord, exerciseName, workoutId, setNumber],
+        (_, result) => {
+          resolve(result);
+        },
+        (_, error) => {
+          reject(error);
+        }
+      );
+    });
+  });
+
+  return promise;
+}
+export async function removeWeightRecord(exerciseName) {
+  const promise = new Promise((resolve, reject) => {
+    database.transaction((tx) => {
+      tx.executeSql(
+        `UPDATE sets 
+        SET isWeightRecord = 0
+        WHERE isWeightRecord = 1
+        AND exerciseName = ?;`,
+        [exerciseName],
+        (_, result) => {
+          resolve(result);
+        },
+        (_, error) => {
+          reject(error);
+        }
+      );
+    });
+  });
+
+  return promise;
+}
+
+export async function removeRepsRecord(exerciseName) {
+  const promise = new Promise((resolve, reject) => {
+    database.transaction((tx) => {
+      tx.executeSql(
+        `UPDATE sets 
+        SET isRepsRecord = 0
+        WHERE isRepsRecord = 1
+        AND exerciseName = ?;`,
+        [exerciseName],
+        (_, result) => {
+          resolve(result);
+        },
+        (_, error) => {
+          reject(error);
+        }
+      );
+    });
+  });
+
+  return promise;
+}
+
+export async function removeVolumeRecord(exerciseName) {
+  const promise = new Promise((resolve, reject) => {
+    database.transaction((tx) => {
+      tx.executeSql(
+        `UPDATE sets 
+        SET isVolumeRecord = 0
+        WHERE isVolumeRecord = 1
+        AND exerciseName = ?;`,
+        [exerciseName],
+        (_, result) => {
+          resolve(result);
+        },
+        (_, error) => {
+          reject(error);
+        }
+      );
+    });
+  });
+
+  return promise;
+}
+

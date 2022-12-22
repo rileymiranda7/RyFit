@@ -102,7 +102,7 @@ export default function ActiveWorkoutScreen({
         tempExerAndInstList.push({ exer: exercise, inst: exerciseInstance });
         await insertSet(new Set(
           1, -1, -1, "WORKING", "IN PROGRESS", 
-          exercise.name, workoutId));
+          exercise.name, workoutId, 0, 0, 0));
         numberOfSets = index + 1;
       })
     );
@@ -130,7 +130,7 @@ export default function ActiveWorkoutScreen({
           await insertExerciseInstance(exerciseInstance);
           await insertSet(new Set(
             1, -1, -1, "WORKING", "IN PROGRESS", 
-            exercise.name, workoutId));
+            exercise.name, workoutId, 0, 0, 0));
           numberOfSets++;
           tempExerAndInstList.push({ exer: exercise, inst: exerciseInstance });
         }

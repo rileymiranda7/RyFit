@@ -39,6 +39,9 @@ export default function Exercise({
       weight: "",
       reps: "",
       status: "IN PROGRESS",
+      isWeightRecord: 0,
+      isRepsRecord: 0,
+      isVolumeRecord: 0
     },
   ]);
   const [restTimeAmount, setRestTimeAmount] = useState(
@@ -74,6 +77,9 @@ export default function Exercise({
               weight: enteredValue,
               reps: set.reps,
               status: "IN PROGRESS",
+              isWeightRecord: set.isWeightRecord,
+              isRepsRecord: set.isRepsRecord,
+              isVolumeRecord: set.isVolumeRecord
             };
           } else if (inputIdentifier === "reps") {
             await updateSetReps(setNumber, workoutId, exer.name, enteredValue);
@@ -84,6 +90,9 @@ export default function Exercise({
               weight: set.weight,
               reps: enteredValue,
               status: "IN PROGRESS",
+              isWeightRecord: set.isWeightRecord,
+              isRepsRecord: set.isRepsRecord,
+              isVolumeRecord: set.isVolumeRecord
             };
           } else {
             // inputIdentifier === "status"
@@ -130,6 +139,9 @@ export default function Exercise({
               weight: shouldStatusBeCompleted ? Number(set.weight).toString() : set.weight,
               reps: shouldStatusBeCompleted ? Number(set.reps).toString() : set.reps,
               status: newStatus,
+              isWeightRecord: set.isWeightRecord,
+              isRepsRecord: set.isRepsRecord,
+              isVolumeRecord: set.isVolumeRecord
             };
           }
         }
@@ -201,6 +213,9 @@ export default function Exercise({
           weight: "",
           reps: "",
           status: "IN PROGRESS",
+          isWeightRecord: 0,
+          isRepsRecord: 0,
+          isVolumeRecord: 0
         },
       ];
     });
@@ -358,7 +373,8 @@ export default function Exercise({
             "WORKING",
             "IN PROGRESS",
             exer.name,
-            workoutId
+            workoutId,
+            0, 0, 0
           ));
           setCurrentNumberOfSets(currentNumberOfSets + 1);
           updateNumSetsInWkt(true);
