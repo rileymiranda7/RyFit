@@ -678,7 +678,8 @@ export async function fetchExerciseNumberInRoutine(routineName, exerciseName) {
     const promise = new Promise((resolve, reject) => {
       database.transaction((tx) => {
         tx.executeSql(
-          `SELECT maxWeight, maxReps, maxVolume
+          `SELECT maxWeight, maxReps, maxVolume, 
+          maxWeightDate, maxRepsDate, maxVolumeDate
           FROM exercises 
           WHERE exerciseName = ?;`,
           [exerciseName],

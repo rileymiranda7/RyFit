@@ -35,7 +35,7 @@ export default function ExerciseRecordsTabScreen({ exer, workoutId}) {
           </View>
           <View style={styles.recordRowVal}>
             <Text style={styles.maxWeightTextStyle}>{loadedRecords.maxWeight} lbs</Text>
-            <Text style={styles.dateTextStyle}>on 03/12/22</Text>
+            <Text style={styles.dateTextStyle}>on {loadedRecords.maxWeightDate}</Text>
           </View>
           <View style={styles.recordRowLabel}>
             <Ionicons name="medal-outline" color={"#00FFFF"} size={26} />
@@ -43,7 +43,7 @@ export default function ExerciseRecordsTabScreen({ exer, workoutId}) {
           </View>
           <View style={styles.recordRowVal}>
             <Text style={styles.maxRepsTextStyle}>{loadedRecords.maxReps} reps</Text>
-            <Text style={styles.dateTextStyle}>on 03/12/22</Text>
+            <Text style={styles.dateTextStyle}>on {loadedRecords.maxRepsDate}</Text>
           </View>
           <View style={styles.recordRowLabel}>
             <Ionicons name="medal-outline" color={"#00FF00"} size={26} />
@@ -51,7 +51,7 @@ export default function ExerciseRecordsTabScreen({ exer, workoutId}) {
           </View>
           <View style={styles.recordRowVal}>
             <Text style={styles.maxVolumeTextStyle}>{loadedRecords.maxVolume} lbs</Text>
-            <Text style={styles.dateTextStyle}>on 03/12/22</Text>
+            <Text style={styles.dateTextStyle}>on {loadedRecords.maxVolumeDate}</Text>
           </View>
         </View>
     );
