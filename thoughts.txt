@@ -375,3 +375,7 @@ already there
 wont show up in exercise list so dont have to worry about
 active workout 
 should still show up in past workouts "
+
+publish new plate calc update
+
+make screen for plate calc in ryfit

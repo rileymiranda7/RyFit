@@ -26,6 +26,7 @@ import DebugScreen from "./screens/DebugScreen";
 import ExerciseHistoryTabScreen from "./screens/ExerciseHistoryTabScreen";
 import ExerciseRecordsTabScreen from "./screens/ExerciseRecordsTabScreen";
 import ExerciseSettingsTabScreen from "./screens/ExerciseSettingsTabScreen";
+import PlateCalc from "./PlateCalc/PlateCalc";
 
 const Drawer = createDrawerNavigator();
 const BottomTabs = createMaterialBottomTabNavigator();
@@ -219,6 +220,17 @@ function BottomTabsNavigator({ handleOnSetCompleted }) {
             <Ionicons name="sad-outline" color={"#fff"} size={25} />
           ),
           tabBarColor: "red"
+        }}
+      />
+      <BottomTabs.Screen
+        name="PlateCalc"
+        component={PlateCalc}
+        options={{
+          tabBarLabel: 'Plate Calc',
+          tabBarIcon: () => (
+            <Ionicons name="calculator-outline" color={"#fff"} size={25} />
+          ),
+          tabBarColor: "pink"
         }}
       />
       <BottomTabs.Screen
