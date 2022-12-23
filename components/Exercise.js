@@ -322,7 +322,8 @@ export default function Exercise({
         }]}
         multiline={true}
         keyboardAppearance='dark'
-        placeholder="notes to always show when doing this exercise..."
+        placeholder="notes to always show when doing this exercise:
+         technique, machine settings, etc"
         maxLength={250}
         placeholderTextColor="#9e76c3"
         onChangeText={async (text) => {
@@ -346,7 +347,8 @@ export default function Exercise({
         }]}
         multiline={true}
         keyboardAppearance='dark'
-        placeholder="notes just for this workout..."
+        placeholder="notes just for this workout: soreness, tiredness,
+         mood, etc"
         maxLength={250}
         placeholderTextColor="#835eeb"
         onChangeText={async (text) => {
