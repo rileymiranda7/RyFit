@@ -318,62 +318,24 @@ deleted or when workout is ended?
 lets just set every exerciseInstance's numberInWorkout when workout is done
 also makes deleting easier cuz dont have to worry ab updating order
 
-when new exerciseInstance obj created just put -1 for numberInWorkout
 
 if you want to pass both Exercise and ExerciseInstance objs to 
 Exercise component than both need to be in array for flatlist
 
-instead of object of objects, just use object of two arrays:
-{
-  exerList: [],
-  instList: []
-}
-
-passing instList to flatlist now
-
 MAIN STATE LIST NEEDS TO BE AN ARRAY LIKE BEFORE
 SO YOU CAN PASS EACH OBJECT TO EXERCISE COMPONENT
-
 
 updating workout order after order changed by dragging item
 not updating workout order after updating because it doesn't matter
 indexes of ExerAndInstList array will update automatically and thats
 what we're using for numberInWorkout
 
-maybe open rest timer picker after user presses button in exercise options modal
-then have "set" button that hides modal or if it is invalid time (0 or >10:00) 
-gives alert error
-
-i think lagging timer error has to do with rest timer amount being set in state
-and then rendering running timer with state val as prop
-state val isnt updating in time
-should just pass prop val to running timer and move checks in parent component
-this was correct
-can remove state and checks for rest timer amount
-
-need to save exercise rest time amount in db when set
-
-default time when inserting new exercise is 3:00
-
-db resttime will be loaded in activeworkoutscreen state array
-and is in exer obj passed to exercise component
-
 getting error because exercises in db have "3:00" for rest time instead
 of timeInMin
 
 now newly inserted exercises should be fine
 
-NEED TO SHOW CURRENT EXERCISE REST TIME IN SET REST TIMER AMOUNT MODAL
-
 restime cant be 0
-
-i think working now
-
-problem was selectedValue for min and seconds undefined until user taps
-
-got rid of value prop in textInputConfig obj in IncompleteRow
-to get rid of cursor glitching out
-i think still working fine
 
 TODO:
 3 screens in exerciseInfo
@@ -381,10 +343,7 @@ history tab
 records tab
 settings tab
 
-DON'T REFRESH BEFORE ENDING WORKOUT
-
-work on components for exercise notes and exerInst notes
-try to use separation of concerns 
+DON'T REFRESH BEFORE ENDING/Canceling WORKOUT
 
 "need to add create exercise screen to make exercise
 free weight, machine, body weight, etc"
@@ -395,22 +354,8 @@ uppercase letters take up space than undercase
 need to test textinputs with capital words
 use maxwidth and numberOfLines prop 
 
-"add dismiss keyboard button to show when keyboard is up
-to fix dismiss problem"
-
 should user be able to delete a workout?
 not yet
-
-
-"need to add way to delete exercises need exercises screen
-
-what is involved in deleting an exercise?
-delete from routine 
-have to update order of routine but function for that is 
-already there
-wont show up in exercise list so dont have to worry about
-active workout 
-should still show up in past workouts "
 
 what is involved in implementing records for an exercise?
 
@@ -419,60 +364,14 @@ highest set weight
 highest set reps
 highest set volume
 
-NEED TO WORK ON PREVIOUS AFTER RECORDS DONE
+"add dismiss keyboard button to show when keyboard is up
+to fix dismiss problem"
 
-should implement set types before doing previous?
-when implementing warmup sets ignore warmup sets for
-records only use sets of type working for records
-
-warmup sets should work same as working sets
-with regard to completed status
-
-warmup sets have to be before all working sets
-if a set is to be turned into a warmup set it 
-either has to be the first set or the set before
-must be a warmup set also
-
-this way the working sets after can have their 
-set numbers updated
-
-if user tries to set a warmup set back to working,
-it has to be the last warmup set
-aka the next set must be a working set or the current
-set is the last set
-
-should i care if the user has warmup sets 
-wherever they want them??
-no
-user may want warmup sets mid
-exercise
-for unilateral work or whatever
-just inform them that warmup sets 
-aren't counted toward records
-
-what is logic for unilateral sets?
-Left and right sets are really 
-two set arrays combined
-L1
-L2
-R1
-R2
-
-use separate column for L R?
-
-if user can make any set a warmup set
-then need logic to update all working set
-numbers
-
-maybe add props to set
-for left and right set number
-
-maybe keep setnumber as it is and add column 
-for set type where user can choose
-working, warmup, left, right
-
-should start with working and cycle
-thru warmup left right
-
-maybe keep state counters of left right and 
-warmup sets 
+"need to add way to delete exercises need exercises screen
+what is involved in deleting an exercise?
+delete from routine 
+have to update order of routine but function for that is 
+already there
+wont show up in exercise list so dont have to worry about
+active workout 
+should still show up in past workouts "

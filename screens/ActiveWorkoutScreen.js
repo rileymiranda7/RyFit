@@ -8,7 +8,8 @@ import {
   Alert,
   TouchableOpacity,
   KeyboardAvoidingView,
-  Platform
+  Platform,
+  Keyboard
 } from "react-native";
 import {
   useNavigation,
@@ -19,6 +20,7 @@ import { useStopwatch } from 'react-timer-hook';
 import DraggableFlatList, {
   ScaleDecorator,
 } from "react-native-draggable-flatlist";
+import { Ionicons } from "@expo/vector-icons";
 
 import Exercise from "../components/Exercise";
 import PickExerciseForActiveWorkoutModal from "../components/UI/modals/PickExerciseForActiveWorkoutModal";
@@ -71,6 +73,8 @@ export default function ActiveWorkoutScreen({
     routineName ? routineName : "New Workout");
   const [numSetsCompleted, setNumSetsCompleted] = useState(0);
   const [numSets, setNumSets] = useState(0);
+  const [shouldShowKeyboardDismiss, setShouldShowKeyboardDismiss] = useState(false);
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
 
   const {
     seconds,
@@ -386,6 +390,20 @@ export default function ActiveWorkoutScreen({
     }
   }, [isFocused, routineName]);
 
+  useEffect(() => {
+    const showSubscription = Keyboard.addListener("keyboardDidShow", (event) => {
+      setKeyboardHeight(event.endCoordinates.height);
+      setShouldShowKeyboardDismiss(true);
+    });
+    const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
+      setShouldShowKeyboardDismiss(false);
+    });
+
+    return () => {
+      showSubscription.remove();
+      hideSubscription.remove();
+    };
+  }, [])
 
 
   return (
@@ -508,6 +526,27 @@ export default function ActiveWorkoutScreen({
           />
         )}
       </View>
+      {shouldShowKeyboardDismiss && (
+      <View 
+        style={{
+          position: "absolute",
+          bottom: keyboardHeight + 20,
+          right: "8%",
+        }}
+      >
+        <Pressable
+          onPress={() => {
+            Keyboard.dismiss();
+            setShouldShowKeyboardDismiss(false);
+          }}
+        >
+          <Ionicons 
+            name="arrow-down-circle-outline" 
+            size={60} 
+            color={"yellow"} 
+          />
+        </Pressable>
+      </View>)}
     </KeyboardAvoidingView>
   );
 }

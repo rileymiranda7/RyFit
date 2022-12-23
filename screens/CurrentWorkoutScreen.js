@@ -7,9 +7,11 @@ import {
   FlatList,
   TextInput,
   Alert,
+  Keyboard
 } from "react-native";
 import React, { useState, useLayoutEffect, useEffect } from "react";
 import { useIsFocused, useNavigation, useRoute } from "@react-navigation/native";
+import { Ionicons } from "@expo/vector-icons";
 
 import { createWorkout, fetchRoutines, fetchSets, insertEmptyRoutine } from "../utils/database";
 import RoutineItem from "../components/UI/RoutineItem";
@@ -18,6 +20,8 @@ export default function CurrentWorkoutScreen() {
   const [loadedRoutines, setLoadedRoutines] = useState();
   const [addingRoutine, setAddingRoutine] = useState(false);
   const [routineName, setRoutineName] = useState("");
+  const [shouldShowKeyboardDismiss, setShouldShowKeyboardDismiss] = useState(false);
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
 
   const isFocused = useIsFocused();
 
@@ -65,6 +69,21 @@ export default function CurrentWorkoutScreen() {
         workoutWasCompleted = false;
     }
   }, [route.params?.workoutWasCompleted]);
+
+  useEffect(() => {
+    const showSubscription = Keyboard.addListener("keyboardDidShow", (event) => {
+      setKeyboardHeight(event.endCoordinates.height);
+      setShouldShowKeyboardDismiss(true);
+    });
+    const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
+      setShouldShowKeyboardDismiss(false);
+    });
+
+    return () => {
+      showSubscription.remove();
+      hideSubscription.remove();
+    };
+  }, [])
 
   let createRoutineRender;
 
@@ -144,6 +163,27 @@ export default function CurrentWorkoutScreen() {
       />
       {createRoutineRender}
       {renderRoutines}
+      {shouldShowKeyboardDismiss && (
+          <View 
+            style={{
+              position: "absolute",
+              bottom: keyboardHeight + 20,
+              right: "8%",
+            }}
+          >
+            <Pressable
+              onPress={() => {
+                Keyboard.dismiss();
+                setShouldShowKeyboardDismiss(false);
+              }}
+            >
+              <Ionicons 
+                name="arrow-down-circle-outline" 
+                size={60} 
+                color={"yellow"} 
+              />
+            </Pressable>
+          </View>)}
     </View>
   );
 

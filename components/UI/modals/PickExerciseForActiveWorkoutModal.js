@@ -8,9 +8,11 @@ import {
   FlatList,
   Alert,
   SafeAreaView,
+  Keyboard
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import { useIsFocused } from "@react-navigation/native";
+import { Ionicons } from "@expo/vector-icons";
 
 import { fetchExercises, insertExercise } from "../../../utils/database";
 import ExerciseOption from "../ExerciseOption";
@@ -24,6 +26,8 @@ export default function PickExerciseForActiveWorkoutModal({
   const [exerciseNameInput, setExerciseNameInput] = useState("");
   const [loadedExercises, setLoadedExercises] = useState([]);
   const [inputIsFocused, setInputIsFocused] = useState(false);
+  const [shouldShowKeyboardDismiss, setShouldShowKeyboardDismiss] = useState(false);
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
 
   const isFocused = useIsFocused();
 
@@ -150,6 +154,21 @@ export default function PickExerciseForActiveWorkoutModal({
     </Text>);
   }
 
+  useEffect(() => {
+    const showSubscription = Keyboard.addListener("keyboardDidShow", (event) => {
+      setKeyboardHeight(event.endCoordinates.height);
+      setShouldShowKeyboardDismiss(true);
+    });
+    const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
+      setShouldShowKeyboardDismiss(false);
+    });
+
+    return () => {
+      showSubscription.remove();
+      hideSubscription.remove();
+    };
+  }, [])
+
   return (
     <SafeAreaView>
 
@@ -172,6 +191,7 @@ export default function PickExerciseForActiveWorkoutModal({
               onChangeText={setExerciseNameInput}
               value={exerciseNameInput}
               placeholder="Enter an Exercise"
+              returnKeyType="done"
               maxLength={50}
               onFocus={() => {
                 setInputIsFocused(!inputIsFocused);
@@ -204,6 +224,27 @@ export default function PickExerciseForActiveWorkoutModal({
           >
             <Text style={styles.textStyle}>Cancel</Text>
           </Pressable>
+          {shouldShowKeyboardDismiss && (
+          <View 
+            style={{
+              position: "absolute",
+              bottom: keyboardHeight - 30,
+              right: "3%",
+            }}
+          >
+            <Pressable
+              onPress={() => {
+                Keyboard.dismiss();
+                setShouldShowKeyboardDismiss(false);
+              }}
+            >
+              <Ionicons 
+                name="arrow-down-circle-outline" 
+                size={60} 
+                color={"yellow"} 
+              />
+            </Pressable>
+          </View>)}
         </View>
       </Modal>
     </SafeAreaView>

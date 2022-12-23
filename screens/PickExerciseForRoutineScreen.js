@@ -6,11 +6,11 @@ import {
   TextInput,
   FlatList,
   Alert,
-  SafeAreaView,
   Keyboard
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
+import { Ionicons } from "@expo/vector-icons";
 
 import {
   fetchExercises,
@@ -31,7 +31,9 @@ export default function PickExerciseForRoutineScreen({ route }) {
   const [exerciseNameInput, setExerciseNameInput] = useState("");
   const [loadedExercises, setLoadedExercises] = useState([]);
   const [loadedRoutineExercises, setLoadedRoutineExercises] = useState([]);
-  const [inputFocused, setInputFocused] = useState(false)
+  const [inputFocused, setInputFocused] = useState(false);
+  const [shouldShowKeyboardDismiss, setShouldShowKeyboardDismiss] = useState(false);
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
 
   const { routineName } = route.params;
   const navigation = useNavigation();
@@ -152,6 +154,21 @@ export default function PickExerciseForRoutineScreen({ route }) {
     }
   }, [isFocused, routineName]);
 
+  useEffect(() => {
+    const showSubscription = Keyboard.addListener("keyboardDidShow", (event) => {
+      setKeyboardHeight(event.endCoordinates.height);
+      setShouldShowKeyboardDismiss(true);
+    });
+    const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
+      setShouldShowKeyboardDismiss(false);
+    });
+
+    return () => {
+      showSubscription.remove();
+      hideSubscription.remove();
+    };
+  }, [])
+
   let pickExerciseList;
 
   if (loadedExercises && loadedExercises.length > 0) {
@@ -211,7 +228,9 @@ export default function PickExerciseForRoutineScreen({ route }) {
               onChangeText={setExerciseNameInput}
               value={exerciseNameInput}
               placeholder="Enter an Exercise"
+              returnKeyType="done"
               maxLength={50}
+              keyboardAppearance='dark'
               onFocus={() => {
                 setInputFocused(!inputFocused);
               }}
@@ -249,6 +268,27 @@ export default function PickExerciseForRoutineScreen({ route }) {
             <View style={{ minHeight: "100%"}}>
             </View>
           </TouchableWithoutFeedback>
+          {shouldShowKeyboardDismiss && (
+          <View 
+            style={{
+              position: "absolute",
+              bottom: keyboardHeight + 20,
+              right: "8%",
+            }}
+          >
+            <Pressable
+              onPress={() => {
+                Keyboard.dismiss();
+                setShouldShowKeyboardDismiss(false);
+              }}
+            >
+              <Ionicons 
+                name="arrow-down-circle-outline" 
+                size={60} 
+                color={"yellow"} 
+              />
+            </Pressable>
+          </View>)}
       </View>
   );
 }
