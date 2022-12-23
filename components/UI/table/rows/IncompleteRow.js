@@ -5,7 +5,7 @@ import SetNumber from "../row-elements/SetNumber";
 import NumberInput from "../row-elements/NumberInput";
 import Previous from "../row-elements/Previous";
 import CompletedButton from "../row-elements/CompletedButton";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 export default function IncompleteRow({
   setNumber,
@@ -18,6 +18,8 @@ export default function IncompleteRow({
 
   const [lbsInputFocused, setLbsInputFocused] = useState(false);
   const [repsInputFocused, setRepsInputFocused] = useState(false);
+
+  const repsInputRef = useRef();
 
   return (
     <>
@@ -53,6 +55,9 @@ export default function IncompleteRow({
             onChangeText: inputChangedHandler.bind(this, "lbs", setNumber),
             contextMenuHidden: true,
             keyboardAppearance: 'dark',
+            returnKeyType: "done",
+            onSubmitEditing: () => repsInputRef.current.focus(),
+            blurOnSubmit: false,
             maxLength: 6,
             selectTextOnFocus: true,
             onFocus: () => {
@@ -60,7 +65,7 @@ export default function IncompleteRow({
             },
             onBlur: () => {
               setLbsInputFocused(!lbsInputFocused);
-            }
+            },
           }}
           isFocused={lbsInputFocused}
         />
@@ -76,6 +81,10 @@ export default function IncompleteRow({
             onChangeText: inputChangedHandler.bind(this, "reps", setNumber),
             contextMenuHidden: true,
             keyboardAppearance: 'dark',
+            returnKeyType: "done",
+            onSubmitEditing: inputChangedHandler.bind(
+              this, "status", setNumber, ""),
+            blurOnSubmit: false,
             maxLength: 5,
             selectTextOnFocus: true,
             onFocus: () => {
@@ -83,7 +92,8 @@ export default function IncompleteRow({
             },
             onBlur: () => {
               setRepsInputFocused(!repsInputFocused);
-            }
+            },
+            ref: repsInputRef
           }}
           isFocused={repsInputFocused}
         />
