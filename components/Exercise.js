@@ -10,6 +10,8 @@ import IncompleteRow from "./UI/table/rows/IncompleteRow";
 import IconButton from "./UI/IconButton";
 import { 
   deleteAllSetsFromCurrentExercise, 
+  fetchAllSetsFromAllExerciseInstances, 
+  fetchPreviousSet, 
   insertSet, 
   updateExerciseNotes, 
   updateExerciseRestTime, 
@@ -26,6 +28,7 @@ import ExerciseOptionsModal from "./UI/modals/ExerciseOptionsModal";
 export default function Exercise({ 
   exer,
   inst,
+  previous,
   handleOnSetCompleted, 
   updateNumSetsCompletedInWkt,
   updateNumSetsInWkt,
@@ -36,7 +39,7 @@ export default function Exercise({
   const [rowArr, setRowArr] = useState([
     {
       setNumber: 1,
-      previous: "",
+      previous: previous,
       weight: "",
       reps: "",
       status: "IN PROGRESS",
@@ -201,19 +204,20 @@ export default function Exercise({
             inputChangedHandler={inputChangedHandler}
             isWarmupSet={item.type === "WARMUP"}
             type={item.type}
+            previous={item.previous}
           />
         </Row>
       </Swipeable>
     );
   };
 
-  function addRowButtonPressedHandler() {
+  function addRowButtonPressedHandler(previousSet) {
     setRowArr((currRowArr) => {
       return [
         ...currRowArr,
         {
           setNumber: currentNumberOfSets + 1,
-          previous: "",
+          previous: previousSet,
           weight: "",
           reps: "",
           status: "IN PROGRESS",
@@ -370,7 +374,29 @@ export default function Exercise({
       <Button 
         title="Add Set" 
         onPress={async () => {
-          addRowButtonPressedHandler();
+          // get previous set of this exercise from the previous workout
+          // if it exists
+          let previousSet = {
+            weight: "",
+            reps: ""
+          }
+          // get all previous sets of this exercise
+          const pastInstancesSets = await fetchAllSetsFromAllExerciseInstances(
+            exer.name, workoutId);
+          if (pastInstancesSets?.length > 0) {
+            // get last completed wkt id with this exercise
+            let currentWktId = pastInstancesSets[0]?.workoutId;
+            for (let set of pastInstancesSets) {
+              if (set.workoutId === currentWktId) {
+                // if there is a set number that matches the number
+                // of the set we are adding
+                if (set.setNumber === currentNumberOfSets + 1) {
+                  previousSet = set;
+                }
+              }
+            }
+          }
+          addRowButtonPressedHandler(previousSet);
           await insertSet(new Set(
             currentNumberOfSets + 1,
             -1, -1,
@@ -378,7 +404,8 @@ export default function Exercise({
             "IN PROGRESS",
             exer.name,
             workoutId,
-            0, 0, 0
+            0, 0, 0,
+            previousSet
           ));
           setCurrentNumberOfSets(currentNumberOfSets + 1);
           updateNumSetsInWkt(true);

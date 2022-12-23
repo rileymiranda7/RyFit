@@ -16,6 +16,7 @@ class Set {
     isWeightRecord,
     isRepsRecord,
     isVolumeRecord,
+    previous
 
   ) {
     this.setNumber = setNumber;

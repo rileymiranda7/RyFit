@@ -30,6 +30,7 @@ import {
   deleteExerciseInstancesWithNoCompletedSets,
   deleteIncompleteSetsFromWorkout,
   deleteWorkout, 
+  fetchAllSetsFromAllExerciseInstances, 
   fetchCompletedWorkouts, 
   fetchRoutine,
   insertExerciseInstance, 
@@ -59,6 +60,9 @@ export default function ActiveWorkoutScreen({
       workoutId,
       numSetsCompleted,
       numberInWorkout
+    },
+    firstSet: {
+      previous: {}
     }
   } */
 
@@ -95,14 +99,51 @@ export default function ActiveWorkoutScreen({
     let numberOfSets = 0;
     await Promise.all(
       routine.exercises.map(async (exercise, index) => {
+
         const exerciseInstance = new ExerciseInstance(
           exercise.name, workoutId, 0, -1
         );
+        
         await insertExerciseInstance(exerciseInstance);
-        tempExerAndInstList.push({ exer: exercise, inst: exerciseInstance });
+
+        // get previous set of this exercise from the previous workout
+        // if it exists
+        let previousSet = {
+          weight: "",
+          reps: ""
+        }
+        // get all previous sets of this exercise
+        const pastInstancesSets = await fetchAllSetsFromAllExerciseInstances(
+          exercise.name, workoutId);
+          console.log("pastInstancesSets");
+          console.log(pastInstancesSets);
+        if (pastInstancesSets?.length > 0) {
+          // get last completed wkt id with this exercise
+          let currentWktId = pastInstancesSets[0]?.workoutId;
+          for (let set of pastInstancesSets) {
+            if (set.workoutId === currentWktId) {
+              // if there is a set number that matches the number
+              // of the set we are adding
+              // we are adding exercise so this is first set
+              if (set.setNumber ===  1) {
+                previousSet = set;
+              }
+            }
+          }
+        }
+
         await insertSet(new Set(
           1, -1, -1, "WORKING", "IN PROGRESS", 
-          exercise.name, workoutId, 0, 0, 0));
+          exercise.name, workoutId, 0, 0, 0,
+          previousSet));
+
+        tempExerAndInstList.push({ 
+          exer: exercise, inst: exerciseInstance, 
+          firstSet: {
+            previous: previousSet
+          }
+        });
+
         numberOfSets = index + 1;
       })
     );
@@ -128,11 +169,44 @@ export default function ActiveWorkoutScreen({
             exercise.name, workoutId, 0, -1
           );
           await insertExerciseInstance(exerciseInstance);
+
+          // get previous set of this exercise from the previous workout
+          // if it exists
+          let previousSet = {
+            weight: "",
+            reps: ""
+          }
+          // get all previous sets of this exercise
+          const pastInstancesSets = await fetchAllSetsFromAllExerciseInstances(
+            exercise.name, workoutId);
+          if (pastInstancesSets?.length > 0) {
+            // get last completed wkt id with this exercise
+            let currentWktId = pastInstancesSets[0]?.workoutId;
+            for (let set of pastInstancesSets) {
+              if (set.workoutId === currentWktId) {
+                // if there is a set number that matches the number
+                // of the set we are adding
+                // we are adding exercise so this is first set
+                if (set.setNumber ===  1) {
+                  previousSet = set;
+                }
+              }
+            }
+          }
+
           await insertSet(new Set(
             1, -1, -1, "WORKING", "IN PROGRESS", 
-            exercise.name, workoutId, 0, 0, 0));
+            exercise.name, workoutId, 0, 0, 0,
+            previousSet));
+            
           numberOfSets++;
-          tempExerAndInstList.push({ exer: exercise, inst: exerciseInstance });
+
+          tempExerAndInstList.push({ 
+            exer: exercise, inst: exerciseInstance, 
+            firstSet: {
+              previous: previousSet
+            }
+          });
         }
       })
     );
@@ -374,6 +448,7 @@ export default function ActiveWorkoutScreen({
                   <Exercise
                     exer={item.exer}
                     inst={item.inst}
+                    previous={item.firstSet.previous}
                     handleOnSetCompleted={handleOnSetCompleted}
                     updateNumSetsCompletedInWkt={updateNumSetsCompleted}
                     updateNumSetsInWkt={updateNumSets}

@@ -19,7 +19,7 @@ export async function init() {
   /* const promise = new Promise((resolve, reject) => {
     database.transaction((tx) => {
       tx.executeSql(
-        `DROP TABLE routines;`,
+        `DROP TABLE exercises;`,
         [],
         () => {
           resolve();
@@ -160,6 +160,7 @@ export function initSets() {
           isWeightRecord INT NOT NULL,
           isRepsRecord INT NOT NULL,
           isVolumeRecord INT NOT NULL,
+          previous TEXT,
           PRIMARY KEY (exerciseName, workoutId, setNumber),
           FOREIGN KEY(exerciseName) REFERENCES exerciseInstances(exerciseName),
           FOREIGN KEY(workoutId) REFERENCES exerciseInstances(workoutId)
@@ -830,9 +831,10 @@ export async function insertSet(set) {
           workoutId,
           isWeightRecord,
           isRepsRecord,
-          isVolumeRecord
+          isVolumeRecord,
+          previous
           ) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
         [
           set.setNumber,
           set.weight,
@@ -843,7 +845,8 @@ export async function insertSet(set) {
           set.workoutId,
           set.isWeightRecord,
           set.isRepsRecord,
-          set.isVolumeRecord
+          set.isVolumeRecord,
+          set.previous
         ],
         (_, result) => {
           resolve(result);
@@ -1380,7 +1383,7 @@ export async function updateSetOrder(
         await insertSet(new Set(
           set.setNumber, set.weight, set.reps, set.type, 
           set.status, exerciseName, workoutId, set.isWeightRecord,
-          set.isRepsRecord, set.isVolumeRecord
+          set.isRepsRecord, set.isVolumeRecord, set.previous
         ));
     })
   );

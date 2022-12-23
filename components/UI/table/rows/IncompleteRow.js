@@ -12,7 +12,8 @@ export default function IncompleteRow({
   setIsCompleted,
   inputChangedHandler,
   isWarmupSet,
-  type
+  type,
+  previous
 }) {
 
   const [lbsInputFocused, setLbsInputFocused] = useState(false);
@@ -38,7 +39,7 @@ export default function IncompleteRow({
         {backgroundColor: 
           isWarmupSet && setIsCompleted ? "#9a2c0a" 
           : setIsCompleted ? "green" : "black",}]}>
-        <Previous />
+        <Previous previous={previous} />
       </Col>
       <Col 
         style={[

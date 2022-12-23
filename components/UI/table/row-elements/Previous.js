@@ -1,10 +1,25 @@
 import { View, Text, StyleSheet } from "react-native";
 import { Colors } from "../../../../constants/colors";
 
-export default function Previous() {
+export default function Previous({ previous }) {
+
+  let renderThis;
+
+  if (previous.weight !== "" && previous.reps !== "") {
+    renderThis = (
+      <Text style={styles.text}>
+        {previous.weight + " x " + previous.reps}
+      </Text>
+    );
+  } else {
+    renderThis = (
+      <Text style={styles.text}>-</Text>
+    );
+  }
+
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Previous</Text>
+      {renderThis}
     </View>
   );
 }
