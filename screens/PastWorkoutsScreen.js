@@ -2,8 +2,8 @@ import { useIsFocused } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { View, Text, StyleSheet, FlatList } from "react-native";
 
-import { fetchCompletedWorkouts } from "../utils/database";
-import PastWorkoutItem from "../components/UI/PastWorkoutItem"
+import { fetchCompletedWorkouts } from "../utils/database/fetchFunctions";
+import PastWorkoutItem from "../components/ListItems/PastWorkoutItem"
 
 export default function PastWorkoutsScreen() {
 

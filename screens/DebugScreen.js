@@ -1,7 +1,15 @@
-import { View, Text, StyleSheet, Button } from 'react-native'
+import { View, Text, Button } from 'react-native'
 import React from 'react'
 
-import { fetchAllExerciseInstances, fetchCompletedWorkouts, fetchExercises, fetchRoutines, fetchSets } from '../utils/database'
+import { 
+  fetchAllExerciseInstances, 
+  fetchCompletedWorkouts, 
+  fetchExercises, 
+  fetchRoutineExercises, 
+  fetchRoutines, 
+  fetchSets 
+} from '../utils/database/fetchFunctions'
+import * as dropFunctions from '../utils/database/dropTableFunctions';
 
 export default function DebugScreen() {
   return (
@@ -43,14 +51,56 @@ export default function DebugScreen() {
           console.log(await fetchRoutines());
         }}
       />
+      <Button 
+        title="print routineExerciseBridges" 
+        onPress={async () => {
+          console.log("routineExerciseBridges")
+          console.log(await fetchRoutineExercises());
+        }}
+      />
 
-      <Button title="drop workouts"/>
-      <Button title="drop sets"/>
-      <Button title="drop exerciseInstances"/>
+      <Button 
+        title="DROP WORKOUTS" 
+        onPress={async () => {
+          await dropFunctions.dropWorkouts();
+        }}
+        color="red"
+      />
+      <Button 
+        title="DROP EXERCISES" 
+        onPress={async () => {
+          await dropFunctions.dropExercises();
+        }}
+        color="red"
+      />
+      <Button 
+        title="DROP ROUTINES" 
+        onPress={async () => {
+          await dropFunctions.dropRoutines();
+        }}
+        color="red"
+      />
+      <Button 
+        title="DROP SETS" 
+        onPress={async () => {
+          await dropFunctions.dropSets();
+        }}
+        color="red"
+      />
+      <Button 
+        title="DROP EXERCISE INSTANCES" 
+        onPress={async () => {
+          await dropFunctions.dropExerciseInstances();
+        }}
+        color="red"
+      />
+      <Button 
+        title="---DROP ALL TABLES---" 
+        onPress={async () => {
+          await dropFunctions.dropAllTables();
+        }}
+        color="red"
+      />
     </View>
   )
 }
-
-const styles = StyleSheet.create({
-  
-})

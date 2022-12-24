@@ -14,9 +14,10 @@ import React, { useState, useEffect } from "react";
 import { useIsFocused } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 
-import { fetchExercises, insertExercise } from "../../../utils/database";
-import ExerciseOption from "../ExerciseOption";
-import { Exercise } from "../../../models/exercise";
+import { fetchExercises } from "../../utils/database/fetchFunctions";
+import { insertExercise } from "../../utils/database/insertFunctions";
+import ExerciseOption from "../ListItems/ExerciseOption";
+import { Exercise } from "../../models/exercise";
 
 export default function PickExerciseForActiveWorkoutModal({
   submitPickedExerciseHandler,

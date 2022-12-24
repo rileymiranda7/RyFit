@@ -17,10 +17,10 @@ import BackButton from "../BackButton";
 import IconButton from "../IconButton";
 import {
   deleteExerciseFromRoutine,
-  fetchRoutine,
   deleteRoutine,
-  updateRoutineOrder,
-} from "../../../utils/database";
+} from "../../utils/database/deleteFunctions";
+import { updateRoutineOrder } from "../../utils/database/updateFunctions";
+import { fetchRoutine } from "../../utils/database/fetchFunctions";
 
 export default function RoutineModal({ navigation, route }) {
   const [loadedExercises, setLoadedExercises] = useState([]);

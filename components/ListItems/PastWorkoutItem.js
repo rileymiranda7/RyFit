@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, Pressable, useWindowDimensions } from 'react-native'
 import { useState, useEffect } from 'react'
 import { useIsFocused, useNavigation } from '@react-navigation/native'
-import { fetchExercisesFromPastWorkout } from '../../utils/database';
+import { fetchExercisesFromPastWorkout } from '../../utils/database/fetchFunctions';
 
 export default function PastWorkoutItem({ 
   workout

@@ -1,5 +1,5 @@
-import { View, Text, Pressable, Modal, StyleSheet } from "react-native";
-import React, { useEffect, useRef, useState } from "react";
+import { View, StyleSheet } from "react-native";
+import React, { useEffect, useState } from "react";
 import { Audio } from 'expo-av';
 
 import IconButton from "../IconButton";
@@ -37,7 +37,7 @@ export default function HeaderTimer({ restTimerAmount, rndm }) {
   };
 
   async function playSound() {
-    const { sound } = await Audio.Sound.createAsync( require('../../../assets/bellAlert.wav')
+    const { sound } = await Audio.Sound.createAsync( require('../../assets/bellAlert.wav')
     );
     setSound(sound);
     await sound.playAsync();

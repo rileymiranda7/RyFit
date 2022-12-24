@@ -2,9 +2,8 @@ import { useNavigation } from "@react-navigation/native";
 import { View, Text, StyleSheet, Pressable, Alert } from "react-native";
 
 import { Exercise } from "../../models/exercise";
-import IconButton from "./IconButton";
-import RoutineModal from "./modals/RoutineModal";
-import { createWorkout } from "../../utils/database";
+import IconButton from "../IconButton";
+import { createWorkout } from "../../utils/database/insertFunctions";
 
 export default function RoutineItem({ routineName, exercises }) {
   let exerciseList;

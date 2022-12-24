@@ -4,7 +4,7 @@ import { useIsFocused } from '@react-navigation/native';
 import { Ionicons } from "@expo/vector-icons";
 import { Col, Row } from "react-native-easy-grid";
 
-import { fetchSetsFromExerciseInstance } from '../../utils/database';
+import { fetchSetsFromExerciseInstance } from '../../utils/database/fetchFunctions';
 
 export default function PastExerciseItem({ 
   workoutId, 

@@ -1,8 +1,5 @@
-import { useState } from "react";
-import { View, Text } from "react-native";
-
 import IconButton from "../../IconButton";
-import { Colors } from "../../../../constants/colors";
+import { Colors } from "../../../constants/colors";
 
 export default function CompletedButton({ inputChangedHandler, setIsCompleted }) {
   

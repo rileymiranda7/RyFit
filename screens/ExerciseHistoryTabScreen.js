@@ -1,12 +1,13 @@
 import { View, Text, StyleSheet, FlatList } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { TouchableOpacity } from 'react-native-gesture-handler'
 import { useIsFocused } from '@react-navigation/native'
 import { showMessage, hideMessage } from "react-native-flash-message";
 
-import {Picker} from '@react-native-picker/picker';
-import { fetchAllSetsFromAllExerciseInstances, fetchExerciseInstanceNotes, fetchExerciseNotes } from '../utils/database';
-import PastExerInstItem from '../components/UI/PastExerInstItem';
+import { 
+  fetchAllSetsFromAllExerciseInstances, 
+  fetchExerciseInstanceNotes, 
+  fetchExerciseNotes } from '../utils/database/fetchFunctions';
+import PastExerInstItem from '../components/ListItems/PastExerInstItem';
 
 export default function ExerciseHistoryTabScreen({ exer, workoutId }) {
 
@@ -18,7 +19,7 @@ export default function ExerciseHistoryTabScreen({ exer, workoutId }) {
       instNotes: "",
       dateShort: "",
       workoutName: "",
-    } 
+    }, ... 
   ]
   */
   const [loadedExerciseNotes, setLoadedExerciseNotes] = useState();
@@ -55,9 +56,8 @@ export default function ExerciseHistoryTabScreen({ exer, workoutId }) {
     setsGrouped.push(currentGroupOfSets);
     
     // get inst notes
-    const exerInstNotes = await fetchExerciseInstanceNotes(exer.name, workoutId);
-    console.log("exerInstNotes");
-    console.log(exerInstNotes);
+    const exerInstNotes = await fetchExerciseInstanceNotes(
+      exer.name, workoutId);
 
     // create inst array
     let instArr = [];
@@ -71,8 +71,6 @@ export default function ExerciseHistoryTabScreen({ exer, workoutId }) {
       });
       i++;
     }
-    console.log("instArr")
-    console.log(instArr)
     
     
     setLoadedPastInstances(instArr);

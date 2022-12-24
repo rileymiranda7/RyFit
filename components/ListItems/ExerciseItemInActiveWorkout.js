@@ -5,14 +5,13 @@ import { Row } from "react-native-easy-grid";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 
-import TableHeaderRow from "./UI/table/rows/TableHeaderRow";
-import IncompleteRow from "./UI/table/rows/IncompleteRow";
-import IconButton from "./UI/IconButton";
-import { 
-  deleteAllSetsFromCurrentExercise, 
-  fetchAllSetsFromAllExerciseInstances, 
-  fetchPreviousSet, 
-  insertSet, 
+import TableHeaderRow from "../table/rows/TableHeaderRow";
+import IncompleteRow from "../table/rows/IncompleteRow";
+import IconButton from "../IconButton";
+import { deleteAllSetsFromCurrentExercise } from "../../utils/database/deleteFunctions";
+import { fetchAllSetsFromAllExerciseInstances } from "../../utils/database/fetchFunctions";
+import { insertSet } from "../../utils/database/insertFunctions";
+import {
   updateExerciseNotes, 
   updateExerciseRestTime, 
   updateExerInstNotes, 
@@ -21,11 +20,11 @@ import {
   updateSetStatus, 
   updateSetType, 
   updateSetWeight
-} from "../utils/database";
-import Set from "../models/set";
-import ExerciseOptionsModal from "./UI/modals/ExerciseOptionsModal";
+} from "../../utils/database/updateFunctions";
+import Set from "../../models/set";
+import ExerciseOptionsModal from "../modals/ExerciseOptionsModal";
 
-export default function Exercise({ 
+export default function ExerciseItemInActiveWorkout({ 
   exer,
   inst,
   previous,

@@ -22,8 +22,10 @@ import DraggableFlatList, {
 } from "react-native-draggable-flatlist";
 import { Ionicons } from "@expo/vector-icons";
 
-import Exercise from "../components/Exercise";
-import PickExerciseForActiveWorkoutModal from "../components/UI/modals/PickExerciseForActiveWorkoutModal";
+import ExerciseItemInActiveWorkout 
+  from "../components/ListItems/ExerciseItemInActiveWorkout";
+import PickExerciseForActiveWorkoutModal 
+  from "../components/modals/PickExerciseForActiveWorkoutModal";
 import { 
   deleteAllExerciseInstancesFromWorkout,
   deleteAllSetsFromCurrentExercise,
@@ -32,17 +34,16 @@ import {
   deleteExerciseInstancesWithNoCompletedSets,
   deleteIncompleteSetsFromWorkout,
   deleteWorkout, 
-  fetchAllSetsFromAllExerciseInstances, 
-  fetchCompletedWorkouts, 
-  fetchRoutine,
-  insertExerciseInstance, 
-  insertSet, 
-  updateExerciseNumberInWorkout, 
+} from "../utils/database/deleteFunctions";
+import {insertExerciseInstance, insertSet } from "../utils/database/insertFunctions";
+import { 
   updateRecords, 
   updateWorkoutDuration, 
   updateWorkoutExerciseOrder, 
   updateWorkoutName 
-} from "../utils/database";
+} from "../utils/database/updateFunctions";
+import { fetchRoutine, fetchAllSetsFromAllExerciseInstances } 
+  from "../utils/database/fetchFunctions";
 import { ExerciseInstance } from "../models/exerciseInstance";
 import Set from "../models/set";
 
@@ -94,7 +95,6 @@ export default function ActiveWorkoutScreen({
   const { routineName, workoutId } = route.params;
 
   const loadRoutine = async (routineName) => {
-    console.log(await fetchCompletedWorkouts());
     const routine = await fetchRoutine(routineName);
     // insert exerciseInstances
     // update exerAndInstList
@@ -119,8 +119,6 @@ export default function ActiveWorkoutScreen({
         // get all previous sets of this exercise
         const pastInstancesSets = await fetchAllSetsFromAllExerciseInstances(
           exercise.name, workoutId);
-          console.log("pastInstancesSets");
-          console.log(pastInstancesSets);
         if (pastInstancesSets?.length > 0) {
           // get last completed wkt id with this exercise
           let currentWktId = pastInstancesSets[0]?.workoutId;
@@ -224,8 +222,6 @@ export default function ActiveWorkoutScreen({
   };
   
   const endWorkout = () => {
-    console.log("numSets: " + numSets);
-    console.log("numSetsCompleted: " + numSetsCompleted);
     const exerList = exerAndInstList.map((exerInst) => {
       return exerInst.exer; });
     if (numSetsCompleted < 1) {
@@ -358,13 +354,10 @@ export default function ActiveWorkoutScreen({
 
   const removeExerFromWorkout = async (
     exerciseNameToBeDeleted, numSetsInExer, numCompletedSetsInExer) => {
-      console.log(exerciseNameToBeDeleted);
     // delete exer and inst from exerAndInstList
     let tempExerAndInstList = exerAndInstList;
     tempExerAndInstList = tempExerAndInstList.filter((exerInst) => 
       exerInst.exer.name !== exerciseNameToBeDeleted);
-    console.log("tempExerAndInstList");
-    console.log(tempExerAndInstList);
     setExerAndInstList(tempExerAndInstList);
     
     // delete ExerciseInstance from db
@@ -386,7 +379,6 @@ export default function ActiveWorkoutScreen({
         loadRoutine(routineName);
         setWorkoutName(routineName);
       }
-      console.log("new workout workoutId: " + workoutId);
     }
   }, [isFocused, routineName]);
 
@@ -463,7 +455,7 @@ export default function ActiveWorkoutScreen({
                     { backgroundColor: isActive ? "red" : item.backgroundColor }, */
                   ]}
                 >
-                  <Exercise
+                  <ExerciseItemInActiveWorkout
                     exer={item.exer}
                     inst={item.inst}
                     previous={item.firstSet.previous}

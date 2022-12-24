@@ -13,17 +13,16 @@ import { useIsFocused, useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 
 import {
-  fetchExercises,
-  fetchRoutine,
-  fetchRoutineSize,
   insertExercise,
   insertIntoRoutineExerciseBridge,
-} from "../utils/database";
-import ExerciseOption from "../components/UI/ExerciseOption";
+} from "../utils/database/insertFunctions";
+import { fetchRoutineSize, fetchExercises } from "../utils/database/fetchFunctions";
+import { fetchRoutine } from "../utils/database/fetchFunctions";
+import ExerciseOption from "../components/ListItems/ExerciseOption";
 import { Exercise } from "../models/exercise";
 import { RoutineExercise } from "../models/routineExercise";
-import IconButton from "../components/UI/IconButton";
-import BackButton from "../components/UI/BackButton";
+import IconButton from "../components/IconButton";
+import BackButton from "../components/BackButton";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 
 export default function PickExerciseForRoutineScreen({ route }) {

@@ -5,9 +5,9 @@ import { Ionicons } from "@expo/vector-icons";
 import { FlatList } from 'react-native-gesture-handler';
 
 
-import BackButton from '../components/UI/BackButton';
-import { fetchExersAndInstsFromPastWorkout } from '../utils/database';
-import PastExerciseItem from '../components/UI/PastExerciseItem';
+import BackButton from '../components/BackButton';
+import { fetchExersAndInstsFromPastWorkout } from '../utils/database/fetchFunctions';
+import PastExerciseItem from '../components/ListItems/PastExerciseItem';
 
 export default function PastWorkoutItemScreen() {
   

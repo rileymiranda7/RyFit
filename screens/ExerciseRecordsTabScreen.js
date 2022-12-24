@@ -2,7 +2,7 @@ import { View, Text, StyleSheet } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { Ionicons } from "@expo/vector-icons";
 import { useIsFocused } from '@react-navigation/native';
-import { fetchExerciseRecords } from '../utils/database';
+import { fetchExerciseRecords } from '../utils/database/fetchFunctions';
 
 export default function ExerciseRecordsTabScreen({ exer, workoutId}) {
 
@@ -10,8 +10,6 @@ export default function ExerciseRecordsTabScreen({ exer, workoutId}) {
 
   const loadRecords = async () => {
     const records = await fetchExerciseRecords(exer.name);
-    console.log("here"),
-    console.log(records)
     setLoadedRecords(records[0]);
   }
 

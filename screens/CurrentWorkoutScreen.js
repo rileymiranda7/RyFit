@@ -9,12 +9,13 @@ import {
   Alert,
   Keyboard
 } from "react-native";
-import React, { useState, useLayoutEffect, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useIsFocused, useNavigation, useRoute } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 
-import { createWorkout, fetchRoutines, fetchSets, insertEmptyRoutine } from "../utils/database";
-import RoutineItem from "../components/UI/RoutineItem";
+import { createWorkout, insertEmptyRoutine } from "../utils/database/insertFunctions";
+import { fetchRoutines } from "../utils/database/fetchFunctions";
+import RoutineItem from "../components/ListItems/RoutineItem";
 
 export default function CurrentWorkoutScreen() {
   const [loadedRoutines, setLoadedRoutines] = useState();

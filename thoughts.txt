@@ -372,3 +372,17 @@ already there
 wont show up in exercise list so dont have to worry about
 active workout 
 should still show up in past workouts "
+
+
+TODO:
+-should put every db function in try catch
+-make icon, splashscreen assets
+-implement notifications for rest timer
+-refactor reused logic and components
+-put all colors in colors file
+-remove unused imports, organize imports
+-remove debug screen
+-upload to appstore connect so you can use on
+test flight on phone to see if any bugs
+-fix profile screens
+-implement change exercise name in exercise settings tab

@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, Pressable } from "react-native";
 
-import { Colors } from "../../../../constants/colors";
+import { Colors } from "../../../constants/colors";
 
 export default function SetNumber({ 
   children, 
