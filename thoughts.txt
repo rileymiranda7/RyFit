@@ -364,9 +364,6 @@ highest set weight
 highest set reps
 highest set volume
 
-"add dismiss keyboard button to show when keyboard is up
-to fix dismiss problem"
-
 "need to add way to delete exercises need exercises screen
 what is involved in deleting an exercise?
 delete from routine 
@@ -375,7 +372,3 @@ already there
 wont show up in exercise list so dont have to worry about
 active workout 
 should still show up in past workouts "
-
-publish new plate calc update
-
-make screen for plate calc in ryfit

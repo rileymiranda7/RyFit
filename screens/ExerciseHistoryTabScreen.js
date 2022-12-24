@@ -116,14 +116,21 @@ export default function ExerciseHistoryTabScreen({ exer, workoutId }) {
     );
   }
 
+  let renderExerciseNotes;
+  if (loadedExerciseNotes && loadedExerciseNotes !== "") {
+    renderExerciseNotes = (
+      <View style={{ borderRadius: 8, backgroundColor: "#9e76c3", marginBottom: 2 }}>
+        <Text style={styles.exerNotesStyle}>{loadedExerciseNotes}</Text>
+      </View>
+    );
+  } else {
+    renderExerciseNotes = (<View></View>)
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.textStyle}>{exer.name}</Text>
-      {loadedExerciseNotes && (
-        <View style={{ borderRadius: 8, backgroundColor: "#9e76c3", marginBottom: 2 }}>
-          <Text style={styles.exerNotesStyle}>{loadedExerciseNotes}</Text>
-        </View>
-      )}
+      {renderExerciseNotes}
       {renderPastInstances}
     </View>
   )
