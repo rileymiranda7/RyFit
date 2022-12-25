@@ -3,70 +3,77 @@ import React from 'react'
 import { Ionicons } from "@expo/vector-icons";
 import { Col, Row } from "react-native-easy-grid";
 import { Colors } from '../../constants/colors';
+import ShadowContainer from '../ShadowContainer';
 
 export default function PastExerInstItem({ setArray, workoutName, date, notes }) {
   return (
     <View style={styles.container}>
-      <View style={styles.headerContainer}>
-        <Text style={styles.workoutNameStyle}>{workoutName}</Text>
-        <Text style={styles.workoutDateTimeStyle}>{date}</Text>
-      </View>
-      <View style={{ borderRadius: 8, backgroundColor: Colors.purple4 }}>
-          <Text style={styles.exerInstNotesStyle}>{notes}</Text>
-      </View>
-      <View style={{maxWidth: "50%", marginLeft: "4%"}}>
-        <Row>
-          <Col style={{ flex: 1}}>
-          </Col>
-          <Col style={styles.lbs}>
-            <Text style={styles.setTextStyle} >
-              {"lbs"}
-            </Text>
-          </Col>
-          <Col style={styles.xIcon}>
-          </Col>
-          <Col style={styles.reps}>
-            <Text style={styles.setTextStyle} >
-              {"reps"}
-            </Text>
-          </Col>
-        </Row>
-      </View>
-      {setArray.map((set, index) => {
-        return (
-          <View key={index} style={{maxWidth: "50%", marginVertical: 2}}>
-            <Row>
-            <Col style={[styles.set,
-              {backgroundColor: set.type === "WARMUP" ? Colors.orange1 
-              : set.type === "LEFT" ? Colors.blue1
-              : set.type === "RIGHT" ? Colors.purple7
-              : ""}]}
-            >
-                <Text style={styles.setNumStyle} >
-                  {set.setNumber}
-                  {set.type === "WARMUP" ? "W" 
-                      : set.type === "LEFT" ? "L" 
-                      : set.type === "RIGHT" ? "R" 
-                      : ""}
-                </Text>
-              </Col>
-              <Col style={styles.lbsVal}>
-                <Text style={styles.setValTextStyle} >
-                  {set.weight}
-                </Text>
-              </Col>
-              <Col style={styles.xIcon}>
-                <Ionicons name="close-outline" size={25} color="white" />
-              </Col>
-              <Col style={styles.repsVal}>
-                <Text style={styles.setValTextStyle}>
-                  {set.reps}
-                </Text>
-              </Col>
-            </Row>
-          </View>
-        );
-      })}
+      <ShadowContainer
+        lightShadowColor={"#6a2afe"}
+        darkShadowColor={"#321478"}
+        margin={8}
+      >
+        <View style={styles.headerContainer}>
+          <Text style={styles.workoutNameStyle}>{workoutName}</Text>
+          <Text style={styles.workoutDateTimeStyle}>{date}</Text>
+        </View>
+        <View style={{ borderRadius: 8, backgroundColor: Colors.purple4 }}>
+            <Text style={styles.exerInstNotesStyle}>{notes}</Text>
+        </View>
+        <View style={{maxWidth: "50%", marginLeft: "4%"}}>
+          <Row>
+            <Col style={{ flex: 1}}>
+            </Col>
+            <Col style={styles.lbs}>
+              <Text style={styles.setTextStyle} >
+                {"lbs"}
+              </Text>
+            </Col>
+            <Col style={styles.xIcon}>
+            </Col>
+            <Col style={styles.reps}>
+              <Text style={styles.setTextStyle} >
+                {"reps"}
+              </Text>
+            </Col>
+          </Row>
+        </View>
+        {setArray.map((set, index) => {
+          return (
+            <View key={index} style={{maxWidth: "50%", marginVertical: 2}}>
+              <Row>
+              <Col style={[styles.set,
+                {backgroundColor: set.type === "WARMUP" ? Colors.orange1 
+                : set.type === "LEFT" ? Colors.blue1
+                : set.type === "RIGHT" ? Colors.purple7
+                : ""}]}
+              >
+                  <Text style={styles.setNumStyle} >
+                    {set.setNumber}
+                    {set.type === "WARMUP" ? "W" 
+                        : set.type === "LEFT" ? "L" 
+                        : set.type === "RIGHT" ? "R" 
+                        : ""}
+                  </Text>
+                </Col>
+                <Col style={styles.lbsVal}>
+                  <Text style={styles.setValTextStyle} >
+                    {set.weight}
+                  </Text>
+                </Col>
+                <Col style={styles.xIcon}>
+                  <Ionicons name="close-outline" size={22} color="white" />
+                </Col>
+                <Col style={styles.repsVal}>
+                  <Text style={styles.setValTextStyle}>
+                    {set.reps}
+                  </Text>
+                </Col>
+              </Row>
+            </View>
+          );
+        })}
+      </ShadowContainer>
     </View>
   )
 }
@@ -78,8 +85,6 @@ const styles = StyleSheet.create({
     minWidth: '80%',
     padding: 5,
     borderRadius: 8,
-    borderWidth: 2,
-    borderColor: "white",
   },
   workoutNameStyle: {
     color: "white",

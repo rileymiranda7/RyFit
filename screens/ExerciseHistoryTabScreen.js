@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     minWidth: "100%",
-    backgroundColor: "black",
+    backgroundColor: Colors.purple8,
   },
   textStyle: {
     color: "white",

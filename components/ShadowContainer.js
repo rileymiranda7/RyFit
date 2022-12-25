@@ -15,7 +15,8 @@ export default function ShadowContainer({
         left={false}
         bottom={false}
         containerStyle={{
-          borderRadius: 10
+          borderRadius: 10,
+          flex: 1
         }}
         shadowOpacity={1}
       >
@@ -25,11 +26,13 @@ export default function ShadowContainer({
           right={false}
           top={false}
           containerStyle={{
-            borderRadius: 10
+            borderRadius: 10,
+            flex: 1
           }}
           shadowOpacity={1}
         >
           <View style={{
+            flex: 1,
             margin: margin,
             borderRadius: 5
             }}
