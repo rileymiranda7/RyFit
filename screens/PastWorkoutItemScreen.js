@@ -123,6 +123,6 @@ const styles = StyleSheet.create({
     margin: 4
   },
   pressed: {
-    opacity: 0.75,
+    opacity: 0.5,
   },
 })

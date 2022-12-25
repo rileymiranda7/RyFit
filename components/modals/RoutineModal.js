@@ -134,7 +134,7 @@ export default function RoutineModal({ navigation, route }) {
                     >
                       <View style={styles.exerciseRow}>
                         <Pressable
-                          style={({ pressed }) => [pressed && { opacity: 0.75 }]}
+                          style={({ pressed }) => [pressed && { opacity: 0.5 }]}
                         >
                         <IconButton
                           icon="trash"
@@ -168,7 +168,7 @@ export default function RoutineModal({ navigation, route }) {
           style={({ pressed }) => [
             styles.button,
             styles.buttonColor,
-            pressed && { opacity: 0.75 },
+            pressed && { opacity: 0.5 },
           ]}
           onPress={() =>
             navigation.navigate("PickExerciseForRoutineScreen", {

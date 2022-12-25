@@ -210,7 +210,7 @@ export default function PickExerciseForActiveWorkoutModal({
             style={({ pressed }) => [
               styles.button,
               styles.buttonClose,
-              pressed && { opacity: 0.75 },
+              pressed && { opacity: 0.5 },
             ]}
             onPress={async () => await combineExercises()}
           >
@@ -220,7 +220,7 @@ export default function PickExerciseForActiveWorkoutModal({
             style={({ pressed }) => [
               styles.button,
               styles.buttonClose,
-              pressed && { opacity: 0.75 },
+              pressed && { opacity: 0.5 },
             ]}
             onPress={() => closeModal()}
           >

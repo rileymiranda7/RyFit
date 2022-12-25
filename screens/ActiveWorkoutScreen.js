@@ -477,7 +477,7 @@ export default function ActiveWorkoutScreen({
                 style={({ pressed }) => [
                   styles.button,
                   styles.buttonOpen,
-                  pressed && { opacity: 0.75 },
+                  pressed && { opacity: 0.5 },
                 ]}
                 onPress={() => setPickExerModalVisible(true)}
               >
@@ -488,7 +488,7 @@ export default function ActiveWorkoutScreen({
                   style={({ pressed }) => [
                     styles.button,
                     styles.endWorkoutButton,
-                    pressed && { opacity: 0.75 },
+                    pressed && { opacity: 0.5 },
                   ]}
                   onPress={() => endWorkout()}
                 >
@@ -498,7 +498,7 @@ export default function ActiveWorkoutScreen({
                   style={({ pressed }) => [
                     styles.button,
                     styles.cancelWorkoutButton,
-                    pressed && { opacity: 0.75 },
+                    pressed && { opacity: 0.5 },
                   ]}
                   onPress={() => cancelWorkout()}
                 >

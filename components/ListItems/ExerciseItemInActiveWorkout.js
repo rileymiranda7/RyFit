@@ -285,7 +285,7 @@ export default function ExerciseItemInActiveWorkout({
         <Pressable 
           style={({ pressed }) => [
             styles.exerciseName,
-            pressed && { opacity: 0.75 }
+            pressed && { opacity: 0.5 }
           ]}
           onPress={() => {
             navigation.navigate("ExerciseScreen", {

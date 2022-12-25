@@ -38,7 +38,7 @@ export default function ExerciseOptionsModal({
       <View style={styles.modalView}>
         <Pressable
           style={({ pressed }) => [
-            pressed && { opacity: 0.75 },
+            pressed && { opacity: 0.5 },
             styles.pressableRow
           ]}
           onPress={() => {
@@ -111,7 +111,7 @@ export default function ExerciseOptionsModal({
             <View style={styles.buttonsRow}>
               <Pressable
                 style={({ pressed }) => [
-                  pressed && { opacity: 0.75 },
+                  pressed && { opacity: 0.5 },
                   styles.button, { backgroundColor: Colors.green3}
                 ]}
                 onPress={async () => {
@@ -139,7 +139,7 @@ export default function ExerciseOptionsModal({
               </Pressable>
               <Pressable
                 style={({ pressed }) => [
-                  pressed && { opacity: 0.75 },
+                  pressed && { opacity: 0.5 },
                   styles.button, { backgroundColor: Colors.red2}
                 ]}
                 onPress={() => setShouldShowRestTimePicker(false)}
@@ -153,7 +153,7 @@ export default function ExerciseOptionsModal({
           <View>
             <Pressable
                 style={({ pressed }) => [
-                  pressed && { opacity: 0.75 },
+                  pressed && { opacity: 0.5 },
                   styles.pressableRow
                 ]}
                 onPress={() => {
@@ -175,7 +175,7 @@ export default function ExerciseOptionsModal({
             </Pressable>
             <Pressable
               style={({ pressed }) => [
-                pressed && { opacity: 0.75 },
+                pressed && { opacity: 0.5 },
                 styles.pressableRow
               ]}
               onPress={() => closeExerOptionsModal()}

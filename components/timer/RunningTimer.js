@@ -193,7 +193,7 @@ export default function RunningTimer({
                 style={({ pressed }) => [
                   styles.button,
                   styles.buttonClose,
-                  pressed && { opacity: 0.75 },
+                  pressed && { opacity: 0.5 },
                 ]}
                 onPress={() => onTimerEnd(true)}
               >
@@ -203,7 +203,7 @@ export default function RunningTimer({
                 style={({ pressed }) => [
                   styles.button,
                   styles.buttonClose,
-                  pressed && { opacity: 0.75 },
+                  pressed && { opacity: 0.5 },
                 ]}
                 onPress={() => setShowActiveTimerModal(!showActiveTimerModal)}
               >
@@ -280,7 +280,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   pressed: {
-    opacity: 0.75,
+    opacity: 0.5,
   },
   modalView: {
     margin: 20,

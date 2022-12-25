@@ -4,6 +4,7 @@ import { View, Text, StyleSheet, FlatList } from "react-native";
 
 import { fetchCompletedWorkouts } from "../utils/database/fetchFunctions";
 import PastWorkoutItem from "../components/ListItems/PastWorkoutItem"
+import { Colors } from "../constants/colors";
 
 export default function PastWorkoutsScreen() {
 
@@ -60,7 +61,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     minWidth: "100%",
-    backgroundColor: "black",
+    backgroundColor: Colors.purple8,
   },
   textStyle: {
     color: "white",

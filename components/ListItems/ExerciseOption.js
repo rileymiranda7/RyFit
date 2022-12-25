@@ -26,7 +26,7 @@ export default function ExerciseOption({
       <Pressable
         style={({ pressed }) => [
           styles.exerciseInListSelected,
-          pressed && { opacity: 0.75 },
+          pressed && { opacity: 0.5 },
         ]}
         onPress={onPress}
       >
@@ -45,7 +45,7 @@ export default function ExerciseOption({
       <Pressable
         style={({ pressed }) => [
           styles.exerciseInListUnselected,
-          pressed && { opacity: 0.75 },
+          pressed && { opacity: 0.5 },
         ]}
         onPress={onPress}
       >

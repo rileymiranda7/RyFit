@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import { useIsFocused, useNavigation } from '@react-navigation/native'
 import { fetchExercisesFromPastWorkout } from '../../utils/database/fetchFunctions';
 import { Colors } from '../../constants/colors';
+import ShadowContainer from '../ShadowContainer';
 
 export default function PastWorkoutItem({ 
   workout
@@ -34,30 +35,36 @@ export default function PastWorkoutItem({
         });
       }}
     >
-      <View style={styles.headerContainer}>
-        <Text 
-          numberOfLines={1}
-          ellipsizeMode="clip"
-          style={styles.workoutNameStyle}
-        >
-          {workout.name}
-        </Text>
-        <Text style={styles.workoutDateTimeStyle}>
-          {workout.dateShort + ' | ' + workout.startTime}
-        </Text>
-      </View>
-      {loadedExercises !== undefined && loadedExercises.length > 0 && 
-      (loadedExercises.map((en, index) => {
-        return (
-          <Text style={styles.exerciseTextStyle} key={index}>
-            {
-              en.exerciseName.length > 40 ? 
-                en.exerciseName.substring(0,40) + "...": 
-                en.exerciseName
-            }
+      <ShadowContainer
+        lightShadowColor={"#6a2afe"}
+        darkShadowColor={"#321478"}
+        margin={7}
+      >
+        <View style={styles.headerContainer}>
+          <Text 
+            numberOfLines={1}
+            ellipsizeMode="clip"
+            style={styles.workoutNameStyle}
+          >
+            {workout.name}
           </Text>
-        );
-      }))}
+          <Text style={styles.workoutDateTimeStyle}>
+            {workout.dateShort + ' | ' + workout.startTime}
+          </Text>
+        </View>
+        {loadedExercises !== undefined && loadedExercises.length > 0 && 
+        (loadedExercises.map((en, index) => {
+          return (
+            <Text style={styles.exerciseTextStyle} key={index}>
+              {
+                en.exerciseName.length > 40 ? 
+                  en.exerciseName.substring(0,40) + "...": 
+                  en.exerciseName
+              }
+            </Text>
+          );
+        }))}
+      </ShadowContainer>
     </Pressable>
   )
 }
@@ -67,10 +74,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.purple8,
     margin: 10,
     minWidth: '80%',
-    padding: 5,
     borderRadius: 8,
-    borderWidth: 2,
-    borderColor: "white",
   },
   workoutNameStyle: {
     color: "white",
@@ -93,6 +97,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   pressed: {
-    opacity: 0.75,
+    opacity: 0.5,
   },
 })

@@ -245,7 +245,7 @@ export default function PickExerciseForRoutineScreen({ route }) {
               style={({ pressed }) => [
                 styles.button,
                 styles.buttonClose,
-                pressed && { opacity: 0.75 },
+                pressed && { opacity: 0.5 },
               ]}
               onPress={() => {
                 if (inputFocused && exerciseNameInput === "") {

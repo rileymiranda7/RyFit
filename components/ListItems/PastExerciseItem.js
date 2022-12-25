@@ -195,7 +195,7 @@ const styles = StyleSheet.create({
     marginVertical: 0,
   },
   pressed: {
-    opacity: 0.75,
+    opacity: 0.5,
   },
   lbsVal: {
     flex: 3,

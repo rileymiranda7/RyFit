@@ -47,7 +47,7 @@ export default function SetTimerModal({
             <Pressable
               style={({ pressed }) => [
                 styles.startButton,
-                pressed && { opacity: 0.75 },
+                pressed && { opacity: 0.5 },
               ]}
               onPress={() => handleOnTimerAmountSet(timerAmount)}
             >
@@ -58,7 +58,7 @@ export default function SetTimerModal({
                 <Pressable
                   style={({ pressed }) => [
                     styles.timerButton,
-                    pressed && { opacity: 0.75 },
+                    pressed && { opacity: 0.5 },
                   ]}
                   onPress={() => handleOnTimerAmountSet(1)}
                 >
@@ -67,7 +67,7 @@ export default function SetTimerModal({
                 <Pressable
                   style={({ pressed }) => [
                     styles.timerButton,
-                    pressed && { opacity: 0.75 },
+                    pressed && { opacity: 0.5 },
                   ]}
                   onPress={() => handleOnTimerAmountSet(1.5)}
                 >
@@ -76,7 +76,7 @@ export default function SetTimerModal({
                 <Pressable
                   style={({ pressed }) => [
                     styles.timerButton,
-                    pressed && { opacity: 0.75 },
+                    pressed && { opacity: 0.5 },
                   ]}
                   onPress={() => handleOnTimerAmountSet(2)}
                 >
@@ -87,7 +87,7 @@ export default function SetTimerModal({
                 <Pressable
                   style={({ pressed }) => [
                     styles.timerButton,
-                    pressed && { opacity: 0.75 },
+                    pressed && { opacity: 0.5 },
                   ]}
                   onPress={() => handleOnTimerAmountSet(3)}
                 >
@@ -96,7 +96,7 @@ export default function SetTimerModal({
                 <Pressable
                   style={({ pressed }) => [
                     styles.timerButton,
-                    pressed && { opacity: 0.75 },
+                    pressed && { opacity: 0.5 },
                   ]}
                   onPress={() => handleOnTimerAmountSet(3.5)}
                 >
@@ -105,7 +105,7 @@ export default function SetTimerModal({
                 <Pressable
                   style={({ pressed }) => [
                     styles.timerButton,
-                    pressed && { opacity: 0.75 },
+                    pressed && { opacity: 0.5 },
                   ]}
                   onPress={() => handleOnTimerAmountSet(4)}
                 >
@@ -116,7 +116,7 @@ export default function SetTimerModal({
                 <Pressable
                   style={({ pressed }) => [
                     styles.timerButton,
-                    pressed && { opacity: 0.75 },
+                    pressed && { opacity: 0.5 },
                   ]}
                   onPress={() => handleOnTimerAmountSet(4.5)}
                 >
@@ -125,7 +125,7 @@ export default function SetTimerModal({
                 <Pressable
                   style={({ pressed }) => [
                     styles.timerButton,
-                    pressed && { opacity: 0.75 },
+                    pressed && { opacity: 0.5 },
                   ]}
                   onPress={() => handleOnTimerAmountSet(5)}
                 >
@@ -134,7 +134,7 @@ export default function SetTimerModal({
                 <Pressable
                   style={({ pressed }) => [
                     styles.timerButton,
-                    pressed && { opacity: 0.75 },
+                    pressed && { opacity: 0.5 },
                   ]}
                   onPress={() => handleOnTimerAmountSet(7)}
                 >
@@ -145,7 +145,7 @@ export default function SetTimerModal({
             <Pressable
               style={({ pressed }) => [
                 styles.cancelButton,
-                pressed && { opacity: 0.75 },
+                pressed && { opacity: 0.5 },
               ]}
               onPress={() => closeModal()}
             >
