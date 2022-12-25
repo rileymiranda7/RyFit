@@ -386,3 +386,9 @@ TODO:
 test flight on phone to see if any bugs
 -fix profile screens
 -implement change exercise name in exercise settings tab
+-make hardcoded strings constants
+
+what goes into changing name of exercise:
+-need to check new name doesn't already exist 
+in db
+-need to update name in exerInstArray

@@ -2,6 +2,7 @@ import { View, Text, StyleSheet } from 'react-native'
 import React from 'react'
 import { Ionicons } from "@expo/vector-icons";
 import { Col, Row } from "react-native-easy-grid";
+import { Colors } from '../../constants/colors';
 
 export default function PastExerInstItem({ setArray, workoutName, date, notes }) {
   return (
@@ -10,7 +11,7 @@ export default function PastExerInstItem({ setArray, workoutName, date, notes })
         <Text style={styles.workoutNameStyle}>{workoutName}</Text>
         <Text style={styles.workoutDateTimeStyle}>{date}</Text>
       </View>
-      <View style={{ borderRadius: 8, backgroundColor: "#835eeb" }}>
+      <View style={{ borderRadius: 8, backgroundColor: Colors.purple4 }}>
           <Text style={styles.exerInstNotesStyle}>{notes}</Text>
       </View>
       <View style={{maxWidth: "50%", marginLeft: "4%"}}>
@@ -36,9 +37,9 @@ export default function PastExerInstItem({ setArray, workoutName, date, notes })
           <View key={index} style={{maxWidth: "50%", marginVertical: 2}}>
             <Row>
             <Col style={[styles.set,
-              {backgroundColor: set.type === "WARMUP" ? "#F15900" 
-              : set.type === "LEFT" ? "#1300ea"
-              : set.type === "RIGHT" ? "#8000b8"
+              {backgroundColor: set.type === "WARMUP" ? Colors.orange1 
+              : set.type === "LEFT" ? Colors.blue1
+              : set.type === "RIGHT" ? Colors.purple7
               : ""}]}
             >
                 <Text style={styles.setNumStyle} >
@@ -55,7 +56,7 @@ export default function PastExerInstItem({ setArray, workoutName, date, notes })
                 </Text>
               </Col>
               <Col style={styles.xIcon}>
-                <Ionicons name="close-outline" size={25} color="#fff" />
+                <Ionicons name="close-outline" size={25} color="white" />
               </Col>
               <Col style={styles.repsVal}>
                 <Text style={styles.setValTextStyle}>
@@ -72,7 +73,7 @@ export default function PastExerInstItem({ setArray, workoutName, date, notes })
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#4e1fbb",
+    backgroundColor: Colors.purple8,
     margin: 10,
     minWidth: '80%',
     padding: 5,
@@ -101,7 +102,7 @@ const styles = StyleSheet.create({
     marginBottom: 2
   },
   setTextStyle: {
-    color: "#9576eb",
+    color: Colors.purple5,
     fontSize: 16
   },
   setValTextStyle: {

@@ -1,7 +1,7 @@
 import { View, Button, StyleSheet, Text, Alert, Pressable } from "react-native";
 import { useState } from "react";
 import { Swipeable, TextInput } from "react-native-gesture-handler";
-import { Row } from "react-native-easy-grid";
+import { Col, Row } from "react-native-easy-grid";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -23,6 +23,7 @@ import {
 } from "../../utils/database/updateFunctions";
 import Set from "../../models/set";
 import ExerciseOptionsModal from "../modals/ExerciseOptionsModal";
+import { Colors } from "../../constants/colors";
 
 export default function ExerciseItemInActiveWorkout({ 
   exer,
@@ -309,7 +310,7 @@ export default function ExerciseItemInActiveWorkout({
 
       <View style={{ flexDirection: "row", marginLeft: "1%", alignItems: "center",
         padding: 5}}>
-        <Ionicons name="document-text-outline" color={"#fff"} size={20} />
+        <Ionicons name="document-text-outline" color={"white"} size={20} />
         <Text style={{color: "white", fontSize: 16,}}>Exercise Notes</Text>
       </View>
 
@@ -324,7 +325,7 @@ export default function ExerciseItemInActiveWorkout({
         placeholder="notes to always show when doing this exercise:
          technique, machine settings, etc"
         maxLength={250}
-        placeholderTextColor="#9e76c3"
+        placeholderTextColor={Colors.purple3}
         onChangeText={async (text) => {
           setExerciseNotes(text);
           await updateExerciseNotes(text, exer.name);
@@ -349,7 +350,7 @@ export default function ExerciseItemInActiveWorkout({
         placeholder="notes just for this workout: soreness, tiredness,
          mood, etc"
         maxLength={250}
-        placeholderTextColor="#835eeb"
+        placeholderTextColor={Colors.purple4}
         onChangeText={async (text) => {
           setExerInstNotes(text);
           await updateExerInstNotes(text, exer.name, workoutId)
@@ -446,7 +447,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   exerNoteInput: {
-    backgroundColor: "#6704c3",
+    backgroundColor: Colors.purple6,
     padding: 5,
     color: "white",
     minWidth: 65,
@@ -456,7 +457,7 @@ const styles = StyleSheet.create({
     marginBottom: 2
   },
   instNoteInput: {
-    backgroundColor: "#9576eb",
+    backgroundColor: Colors.purple5,
     padding: 5,
     color: "white",
     minWidth: 65,

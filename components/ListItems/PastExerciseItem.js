@@ -5,6 +5,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { Col, Row } from "react-native-easy-grid";
 
 import { fetchSetsFromExerciseInstance } from '../../utils/database/fetchFunctions';
+import { Colors } from '../../constants/colors';
 
 export default function PastExerciseItem({ 
   workoutId, 
@@ -36,14 +37,14 @@ export default function PastExerciseItem({
       </Text>
       <View style={{ flexDirection: "row", marginLeft: "1%", alignItems: "center",
         padding: 5}}>
-        <Ionicons name="document-text-outline" color={"#fff"} size={20} />
+        <Ionicons name="document-text-outline" color={"white"} size={20} />
         <Text style={{color: "white", fontSize: 16,}}>Exercise Notes</Text>
       </View>
       <View style={styles.notesContainer}>
-        <View style={{ borderRadius: 8, backgroundColor: "#9e76c3", marginBottom: 2 }}>
+        <View style={{ borderRadius: 8, backgroundColor: Colors.purple3, marginBottom: 2 }}>
           <Text style={styles.exerNotesStyle}>{exerNotes}</Text>
         </View>
-        <View style={{ borderRadius: 8, backgroundColor: "#835eeb" }}>
+        <View style={{ borderRadius: 8, backgroundColor: Colors.purple4 }}>
           <Text style={styles.exerInstNotesStyle}>{exerInstNotes}</Text>
         </View>
       </View>
@@ -72,9 +73,9 @@ export default function PastExerciseItem({
             <View style={{minWidth: "50%", maxWidth: "50%" }}>
               <Row>
                 <Col style={[styles.set, 
-                  {backgroundColor: set.type === "WARMUP" ? "#F15900" 
-                      : set.type === "LEFT" ? "#1300ea"
-                      : set.type === "RIGHT" ? "#8000b8"
+                  {backgroundColor: set.type === "WARMUP" ? Colors.orange1
+                      : set.type === "LEFT" ? Colors.blue1
+                      : set.type === "RIGHT" ? Colors.purple7
                       : ""}]}
                 >
                   <Text style={styles.setNumStyle} >
@@ -91,7 +92,7 @@ export default function PastExerciseItem({
                   </Text>
                 </Col>
                 <Col style={styles.xIcon}>
-                  <Ionicons name="close-outline" size={28} color="#fff" />
+                  <Ionicons name="close-outline" size={28} color="white" />
                 </Col>
                 <Col style={styles.repsVal}>
                   <Text style={styles.setValTextStyle}>
@@ -103,19 +104,19 @@ export default function PastExerciseItem({
             <View style={{ flexDirection: "row", marginTop: 5, marginLeft: 10 }}>
               {set.isWeightRecord === 1 && (
                 <View style={styles.recordContainerRow}>
-                  <Ionicons name="medal-outline" color={"#FF4747"} size={26} />
+                  <Ionicons name="medal-outline" color={Colors.red1} size={26} />
                   <Text style={styles.recordWeightTextStyle}>weight</Text>
                 </View>
               )}
               {set.isRepsRecord === 1 && (
                 <View style={styles.recordContainerRow}>
-                  <Ionicons name="medal-outline" color={"#00FFFF"} size={26} />
+                  <Ionicons name="medal-outline" color={Colors.blue2} size={26} />
                   <Text style={styles.recordRepsTextStyle}>reps</Text>
                 </View>
               )}
               {set.isVolumeRecord === 1 && (
                 <View style={styles.recordContainerRow}>
-                  <Ionicons name="medal-outline" color={"#00FF00"} size={26} />
+                  <Ionicons name="medal-outline" color={Colors.green2} size={26} />
                   <Text style={styles.recordVolumeTextStyle}>volume</Text>
                 </View>
               )}
@@ -168,7 +169,7 @@ const styles = StyleSheet.create({
     marginBottom: 2
   },
   setTextStyle: {
-    color: "#9576eb",
+    color: Colors.purple5,
     fontSize: 18,
     textAlign: "center",
   },
@@ -230,21 +231,21 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   recordWeightTextStyle: {
-    color: "#FF4747",
+    color: Colors.red1,
     fontWeight: "bold",
     textAlign: "center",
     fontSize: 12,
     marginHorizontal: 2
   },
   recordRepsTextStyle: {
-    color: "#00FFFF",
+    color: Colors.blue2,
     fontWeight: "bold",
     textAlign: "center",
     fontSize: 12,
     marginHorizontal: 2
   },
   recordVolumeTextStyle: {
-    color: "#00FF00",
+    color: Colors.green2,
     fontWeight: "bold",
     textAlign: "center",
     fontSize: 12,

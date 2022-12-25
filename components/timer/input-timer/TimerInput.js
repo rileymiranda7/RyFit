@@ -7,6 +7,7 @@ import {
   Pressable,
 } from "react-native";
 import React, { useState, useRef } from "react";
+import { Colors } from "../../../constants/colors";
 
 const CODE_LENGTH = 4;
 
@@ -89,7 +90,7 @@ const style = StyleSheet.create({
     justifyContent: "space-between",
   },
   inputContainer: {
-    borderColor: "#cccccc",
+    borderColor: Colors.gray3,
     borderWidth: 2,
     borderRadius: 4,
     padding: 12,
@@ -99,11 +100,11 @@ const style = StyleSheet.create({
     justifyContent: "center",
   },
   inputContainerFocused: {
-    borderColor: "#0f5181",
+    borderColor: Colors.blue6,
   },
   inputText: {
     fontSize: 24,
-    color: "#ffffff",
+    color: "white",
     textAlign: "center",
   },
   hiddenCodeInput: {
@@ -120,7 +121,7 @@ const style = StyleSheet.create({
     alignItems: "center",
   },
   colonText: {
-    color: "#ffffff",
+    color: "white",
     fontSize: 40,
   },
 });

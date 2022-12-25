@@ -4,6 +4,8 @@ import useCountDown from "react-countdown-hook";
 import IconButton from "../IconButton";
 import { Ionicons } from "@expo/vector-icons";
 
+import { Colors } from "../../constants/colors";
+
 // 1 hour
 const initialTime = 1 * 60 * 60 * 1000; // initial time in milliseconds
 const interval = 1000; // interval to change remaining time amount, defaults to 1000
@@ -182,8 +184,8 @@ export default function RunningTimer({
                   justifyContent: "center"
                   
                 }}>
-                <Ionicons name="timer-outline" color={"#9e76c3"} size={40} />
-                <Text style={[styles.timerText, {color: "#9e76c3", minWidth: "0%"}]}>
+                <Ionicons name="timer-outline" color={Colors.purple3} size={40} />
+                <Text style={[styles.timerText, {color: Colors.purple3, minWidth: "0%"}]}>
                   {humanReadableTime}
                 </Text>
               </View>
@@ -258,7 +260,7 @@ const styles = StyleSheet.create({
   innerContainer: {
     flex: 1,
     flexDirection: "row",
-    backgroundColor: "#6704c3",
+    backgroundColor: Colors.purple6,
     marginBottom: 7,
     marginHorizontal: 0,
     paddingVertical: 2,
@@ -285,13 +287,13 @@ const styles = StyleSheet.create({
     marginTop: "14%",
     width: "90%",
     height: "87%",
-    backgroundColor: "#3e04c3",
+    backgroundColor: Colors.purple10,
     borderRadius: 20,
     paddingHorizontal: 0,
     paddingVertical: 0,
     alignItems: "center",
     justifyContent: "center",
-    shadowColor: "#000",
+    shadowColor: "black",
     shadowOffset: {
       width: 0,
       height: 2,
@@ -305,7 +307,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     fontSize: 20,
-    backgroundColor: "#2196F3",
+    backgroundColor: Colors.blue3,
     margin: 10,
     padding: 4,
   },
@@ -320,7 +322,7 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
   buttonClose: {
-    backgroundColor: "#2196F3",
+    backgroundColor: Colors.blue3,
   },
   textStyle: {
     color: "white",

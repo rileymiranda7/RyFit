@@ -19,9 +19,9 @@ export default function SetNumber({
     >
       <View 
         style={[styles.container, 
-          {backgroundColor: type === "WARMUP" ? "#F15900" 
-            : type === "LEFT" ? "#1300ea"
-            : type === "RIGHT" ? "#8000b8"
+          {backgroundColor: type === "WARMUP" ? Colors.orange1
+            : type === "LEFT" ? Colors.blue1
+            : type === "RIGHT" ? Colors.purple7
             : Colors.gray0}
         ]}
       >

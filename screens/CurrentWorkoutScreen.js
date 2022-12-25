@@ -16,6 +16,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { createWorkout, insertEmptyRoutine } from "../utils/database/insertFunctions";
 import { fetchRoutines } from "../utils/database/fetchFunctions";
 import RoutineItem from "../components/ListItems/RoutineItem";
+import { Colors } from "../constants/colors";
 
 export default function CurrentWorkoutScreen() {
   const [loadedRoutines, setLoadedRoutines] = useState();
@@ -199,7 +200,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   routineButtonText: {
-    color: "#007AFF",
+    color: Colors.blue5,
     fontSize: 20,
     textAlign: "center",
   },
@@ -217,7 +218,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   container: {
-    backgroundColor: "black",
+    backgroundColor: Colors.purple10,
     minWidth: "100%",
     minHeight: "100%",
   },
@@ -241,11 +242,11 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
   buttonClose: {
-    backgroundColor: "#2196F3",
+    backgroundColor: Colors.blue3,
   },
   input: {
     fontSize: 20,
-    backgroundColor: "#b8bbbe",
+    backgroundColor: Colors.gray2,
     padding: 4,
     minWidth: "70%",
     minHeight: "7%",

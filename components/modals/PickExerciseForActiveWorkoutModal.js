@@ -18,6 +18,7 @@ import { fetchExercises } from "../../utils/database/fetchFunctions";
 import { insertExercise } from "../../utils/database/insertFunctions";
 import ExerciseOption from "../ListItems/ExerciseOption";
 import { Exercise } from "../../models/exercise";
+import { Colors } from "../../constants/colors";
 
 export default function PickExerciseForActiveWorkoutModal({
   submitPickedExerciseHandler,
@@ -256,7 +257,7 @@ const styles = StyleSheet.create({
   exerciseListContainer: {
     maxHeight: "49%",
     minWidth: "80%",
-    backgroundColor: "#3305a0"
+    backgroundColor: Colors.purple9
   },
   exerciseItemText: {
     fontSize: 20,
@@ -266,13 +267,13 @@ const styles = StyleSheet.create({
     marginTop: "14%",
     width: "90%",
     height: "87%",
-    backgroundColor: "#3e04c3",
+    backgroundColor: Colors.purple10,
     borderRadius: 20,
     paddingHorizontal: 0,
     paddingVertical: 0,
     alignItems: "center",
     justifyContent: "center",
-    shadowColor: "#000",
+    shadowColor: "black",
     shadowOffset: {
       width: 0,
       height: 2,
@@ -288,13 +289,13 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
   buttonOpen: {
-    backgroundColor: "#F194FF",
+    backgroundColor: Colors.pink1,
   },
   endWorkoutButton: {
-    backgroundColor: "#ff0000",
+    backgroundColor: Colors.red3,
   },
   buttonClose: {
-    backgroundColor: "#2196F3",
+    backgroundColor: Colors.blue3,
   },
   textStyle: {
     color: "white",
@@ -310,12 +311,12 @@ const styles = StyleSheet.create({
   },
   input: {
     fontSize: 22,
-    backgroundColor: "#b8bbbe",
+    backgroundColor: Colors.gray2,
     padding: 6,
     minWidth: "78%",
   },
   inputContainer: {
-    backgroundColor: "#b8bbbe",
+    backgroundColor: Colors.gray2,
     minWidth: "80%",
     height: "8%",
     alignItems: "center",

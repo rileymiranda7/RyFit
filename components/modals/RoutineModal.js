@@ -21,6 +21,7 @@ import {
 } from "../../utils/database/deleteFunctions";
 import { updateRoutineOrder } from "../../utils/database/updateFunctions";
 import { fetchRoutine } from "../../utils/database/fetchFunctions";
+import { Colors } from "../../constants/colors";
 
 export default function RoutineModal({ navigation, route }) {
   const [loadedExercises, setLoadedExercises] = useState([]);
@@ -91,7 +92,7 @@ export default function RoutineModal({ navigation, route }) {
               shouldRemoveRoutine(routineName);
             }}
             size={40}
-            color={"#1f0263"}
+            color={Colors.blue4}
           />
           <Text style={styles.routineName}>
             {
@@ -105,7 +106,7 @@ export default function RoutineModal({ navigation, route }) {
               navigation.goBack();
             }}
             size={40}
-            color={"#6737eb"}
+            color={Colors.purple11}
           />
         </View>
         <View style={styles.exercises}>
@@ -144,7 +145,7 @@ export default function RoutineModal({ navigation, route }) {
                             );
                           }}
                           size={30}
-                      color={"#1f0263"}
+                      color={Colors.blue4}
                     />
                   </Pressable>
                   <Text style={styles.exerciseTextStyle}>
@@ -196,7 +197,7 @@ export default function RoutineModal({ navigation, route }) {
 
 const styles = StyleSheet.create({
   buttonColor: {
-    backgroundColor: "#6737eb",
+    backgroundColor: Colors.purple11,
   },
   button: {
     borderRadius: 20,
@@ -240,7 +241,7 @@ const styles = StyleSheet.create({
     flex: 1,
     minHeight: "100%",
     minWidth: "100%",
-    backgroundColor: "#3e04c3",
+    backgroundColor: Colors.purple10,
   },
   textStyle: {
     color: "white",

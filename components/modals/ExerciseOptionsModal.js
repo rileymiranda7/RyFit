@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import {Picker} from '@react-native-picker/picker';
 import { showMessage, hideMessage } from "react-native-flash-message";
+import { Colors } from "../../constants/colors";
 
 export default function ExerciseOptionsModal({
   closeExerOptionsModal,
@@ -45,7 +46,7 @@ export default function ExerciseOptionsModal({
           }}
         >
           <View style={styles.pressableRow}>
-            <Ionicons name="timer-outline" color={"#fff"} size={24} />
+            <Ionicons name="timer-outline" color={"white"} size={24} />
             <Text style={styles.textStyle}>
               {" Set Rest Timer Amount"}
             </Text>
@@ -111,7 +112,7 @@ export default function ExerciseOptionsModal({
               <Pressable
                 style={({ pressed }) => [
                   pressed && { opacity: 0.75 },
-                  styles.button, { backgroundColor: "#1db643"}
+                  styles.button, { backgroundColor: Colors.green3}
                 ]}
                 onPress={async () => {
                   if (selectedMinutesVal === "10" && 
@@ -139,7 +140,7 @@ export default function ExerciseOptionsModal({
               <Pressable
                 style={({ pressed }) => [
                   pressed && { opacity: 0.75 },
-                  styles.button, { backgroundColor: "#f32121"}
+                  styles.button, { backgroundColor: Colors.red2}
                 ]}
                 onPress={() => setShouldShowRestTimePicker(false)}
               >
@@ -166,7 +167,7 @@ export default function ExerciseOptionsModal({
               }
             >
               <View style={styles.pressableRow}>
-                <Ionicons name="trash" color={"#fff"} size={24} />
+                <Ionicons name="trash" color={"white"} size={24} />
                 <Text style={styles.textStyle}>
                   {" Remove Exercise from Workout"}
                 </Text>
@@ -195,11 +196,11 @@ const styles = StyleSheet.create({
     marginTop: "80%",
     width: "90%",
     height: "50%",
-    backgroundColor: "#3305a0",
+    backgroundColor: Colors.purple9,
     borderRadius: 20,
     padding: 10,
     alignItems: "center",
-    shadowColor: "#000",
+    shadowColor: "black",
     shadowOffset: {
       width: 0,
       height: 2,

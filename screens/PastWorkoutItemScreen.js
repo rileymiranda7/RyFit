@@ -8,6 +8,7 @@ import { FlatList } from 'react-native-gesture-handler';
 import BackButton from '../components/BackButton';
 import { fetchExersAndInstsFromPastWorkout } from '../utils/database/fetchFunctions';
 import PastExerciseItem from '../components/ListItems/PastExerciseItem';
+import { Colors } from '../constants/colors';
 
 export default function PastWorkoutItemScreen() {
   
@@ -48,19 +49,19 @@ export default function PastWorkoutItemScreen() {
                   navigation.goBack();
                 }}
                 size={40}
-                color={"#6737eb"}
+                color={Colors.purple11}
               />
             </View>
               <View style={styles.rowContainer}>
-                <Ionicons name="calendar-outline" size={30} color="#6737eb" />
+                <Ionicons name="calendar-outline" size={30} color={Colors.purple11} />
                 <Text style={styles.infoTextStyle}> {workout.dateFull}</Text>
               </View>
               <View style={styles.rowContainer}>
-                <Ionicons name="time-outline" size={30} color="#6737eb" />
+                <Ionicons name="time-outline" size={30} color={Colors.purple11} />
                 <Text style={styles.infoTextStyle}> {workout.startTime}</Text>
               </View>
               <View style={styles.rowContainer}>
-                <Ionicons name="timer-outline" size={30} color="#6737eb" />
+                <Ionicons name="timer-outline" size={30} color={Colors.purple11} />
                 <Text style={styles.infoTextStyle}> {workout.duration}</Text>
               </View>
             </>
@@ -85,7 +86,7 @@ export default function PastWorkoutItemScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#3e04c3",
+    backgroundColor: Colors.purple10,
     minWidth: "100%",
     minHeight: "100%",
     flex: 1,

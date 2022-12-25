@@ -26,6 +26,7 @@ import ExerciseHistoryTabScreen from "./screens/ExerciseHistoryTabScreen";
 import ExerciseRecordsTabScreen from "./screens/ExerciseRecordsTabScreen";
 import ExerciseSettingsTabScreen from "./screens/ExerciseSettingsTabScreen";
 import PlateCalc from "./PlateCalc/PlateCalc";
+import { Colors } from "./constants/colors"
 
 const Drawer = createDrawerNavigator();
 const BottomTabs = createMaterialBottomTabNavigator();
@@ -83,7 +84,7 @@ function ExerciseTabNavigator() {
     <TopTabs.Navigator
       screenOptions={{
         tabBarLabelStyle: { color: "white" },
-        tabBarStyle: { backgroundColor: "#2d0689" },
+        tabBarStyle: { backgroundColor: Colors.purple1 },
       }}
     >
       <TopTabs.Screen 
@@ -197,7 +198,7 @@ function BottomTabsNavigator({ handleOnSetCompleted }) {
     <BottomTabs.Navigator
       initialRouteName="Workout"
       shifting={true}
-      barStyle={{ backgroundColor: "#2d0689" }}
+      barStyle={{ backgroundColor: Colors.purple1 }}
     >
       <BottomTabs.Screen
         name="PastWorkoutsBottomTabs"
@@ -205,7 +206,7 @@ function BottomTabsNavigator({ handleOnSetCompleted }) {
         options={{
           tabBarLabel: 'Past Workouts',
           tabBarIcon: () => (
-            <Ionicons name="book-outline" color={"#fff"} size={26} />
+            <Ionicons name="book-outline" color={"white"} size={26} />
           ),
           tabBarColor: "green"
         }}
@@ -216,7 +217,7 @@ function BottomTabsNavigator({ handleOnSetCompleted }) {
         options={{
           tabBarLabel: 'Debug',
           tabBarIcon: () => (
-            <Ionicons name="sad-outline" color={"#fff"} size={25} />
+            <Ionicons name="sad-outline" color={"white"} size={25} />
           ),
           tabBarColor: "red"
         }}
@@ -227,7 +228,7 @@ function BottomTabsNavigator({ handleOnSetCompleted }) {
         options={{
           tabBarLabel: 'Plate Calc',
           tabBarIcon: () => (
-            <Ionicons name="calculator-outline" color={"#fff"} size={25} />
+            <Ionicons name="calculator-outline" color={"white"} size={25} />
           ),
           tabBarColor: "pink"
         }}
@@ -243,9 +244,9 @@ function BottomTabsNavigator({ handleOnSetCompleted }) {
         options={{
           tabBarLabel: 'Workout',
           tabBarIcon: () => (
-            <Ionicons name="barbell-outline" color={"#fff"} size={26} />
+            <Ionicons name="barbell-outline" color={"white"} size={26} />
           ),
-          tabBarColor: "#2d0689"
+          tabBarColor: Colors.purple1
         }}
       />
     </BottomTabs.Navigator>
@@ -348,9 +349,9 @@ export default function App() {
         <Drawer.Navigator
           screenOptions={({ navigation }) => ({
             drawerStyle: {
-              backgroundColor: "#5721d4",
+              backgroundColor: Colors.purple2,
             },
-            headerStyle: { backgroundColor: "#2d0689" },
+            headerStyle: { backgroundColor: Colors.purple1 },
             headerTintColor: "white", // color of elements in header not background
           })}
         >
@@ -368,9 +369,20 @@ export default function App() {
                   <HeaderTimer restTimerAmount={restTimerAmount} rndm={rndm} />
                 );
               },
+              drawerActiveTintColor: "white",
+              drawerIcon: () => 
+                <Ionicons name="barbell-outline" color={"white"} size={26} />
             }}
           />
-          <Drawer.Screen name="Profile" component={ProfileScreen} />
+          <Drawer.Screen 
+            name="Profile" 
+            component={ProfileScreen} 
+            options={{
+              drawerActiveTintColor: "white",
+              drawerIcon: () => 
+                <Ionicons name="person-circle-outline" color={"white"} size={26} />
+            }}
+          />
         </Drawer.Navigator>
       </NavigationContainer>
       <FlashMessage position="top" />
@@ -381,7 +393,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "white",
     alignItems: "center",
     justifyContent: "center",
   },

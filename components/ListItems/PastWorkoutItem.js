@@ -2,6 +2,7 @@ import { View, Text, StyleSheet, Pressable, useWindowDimensions } from 'react-na
 import { useState, useEffect } from 'react'
 import { useIsFocused, useNavigation } from '@react-navigation/native'
 import { fetchExercisesFromPastWorkout } from '../../utils/database/fetchFunctions';
+import { Colors } from '../../constants/colors';
 
 export default function PastWorkoutItem({ 
   workout
@@ -63,7 +64,7 @@ export default function PastWorkoutItem({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#4e1fbb",
+    backgroundColor: Colors.purple8,
     margin: 10,
     minWidth: '80%',
     padding: 5,

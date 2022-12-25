@@ -46,6 +46,7 @@ import { fetchRoutine, fetchAllSetsFromAllExerciseInstances }
   from "../utils/database/fetchFunctions";
 import { ExerciseInstance } from "../models/exerciseInstance";
 import Set from "../models/set";
+import { Colors } from "../constants/colors";
 
 export default function ActiveWorkoutScreen({
   handleOnSetCompleted,
@@ -566,18 +567,18 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
   buttonOpen: {
-    backgroundColor: "#F194FF",
+    backgroundColor: Colors.pink1,
   },
   endWorkoutButton: {
     backgroundColor: "green",
     margin: 5
   },
   cancelWorkoutButton: {
-    backgroundColor: "#ff0000",
+    backgroundColor: Colors.red3,
     margin: 5
   },
   buttonClose: {
-    backgroundColor: "#2196F3",
+    backgroundColor: Colors.blue3,
   },
   textStyle: {
     color: "white",
@@ -603,13 +604,13 @@ const styles = StyleSheet.create({
   },
   input: {
     fontSize: 25,
-    backgroundColor: "#b8bbbe",
+    backgroundColor: Colors.gray2,
     padding: 4,
     minWidth: "78%",
     minHeight: "7%",
   },
   inputContainer: {
-    backgroundColor: "#b8bbbe",
+    backgroundColor: Colors.gray2,
     minWidth: "80%",
     height: "8%",
     alignItems: "center",

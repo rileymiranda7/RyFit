@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import TimerInput from "../timer/input-timer/TimerInput";
+import { Colors } from "../../constants/colors";
 
 export default function SetTimerModal({
   modalVisible,
@@ -163,13 +164,13 @@ const styles = StyleSheet.create({
     marginTop: "14%",
     width: "90%",
     height: "87%",
-    backgroundColor: "#3e04c3",
+    backgroundColor: Colors.purple10,
     borderRadius: 20,
     paddingHorizontal: 0,
     paddingVertical: 0,
     alignItems: "center",
     justifyContent: "center",
-    shadowColor: "#000",
+    shadowColor: "black",
     shadowOffset: {
       width: 0,
       height: 2,
@@ -179,7 +180,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   inputContainer: {
-    backgroundColor: "#2196F3",
+    backgroundColor: Colors.blue3,
     minWidth: "80%",
     height: "8%",
     alignItems: "center",
@@ -193,19 +194,19 @@ const styles = StyleSheet.create({
     marginVertical: 20,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#1db643",
+    backgroundColor: Colors.green3,
   },
   timerButton: {
     borderRadius: 26,
     borderWidth: 3,
-    borderColor: "#ffffff",
+    borderColor: "white",
     minWidth: "22%",
     padding: 10,
     elevation: 2,
     marginVertical: 20,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#2196F3",
+    backgroundColor: Colors.blue3,
   },
   cancelButton: {
     borderRadius: 20,
@@ -214,7 +215,7 @@ const styles = StyleSheet.create({
     marginVertical: 20,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#f32121",
+    backgroundColor: Colors.red2,
   },
   textStyle: {
     color: "white",
@@ -231,7 +232,7 @@ const styles = StyleSheet.create({
   },
   input: {
     fontSize: 25,
-    backgroundColor: "#b8bbbe",
+    backgroundColor: Colors.gray2,
     padding: 4,
     minWidth: "78%",
     minHeight: "7%",

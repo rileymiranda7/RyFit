@@ -1,5 +1,6 @@
 import { View, Text, StyleSheet } from "react-native";
 import React from "react";
+import { Colors } from "../../constants/colors";
 
 export default function ThirtyFive() {
   return (
@@ -12,7 +13,7 @@ export default function ThirtyFive() {
 
 const styles = StyleSheet.create({
   plate: {
-    backgroundColor: "#01a11c",
+    backgroundColor: Colors.green4,
     borderRadius: 10,
     borderWidth: 2,
     borderColor: "black",

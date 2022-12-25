@@ -8,6 +8,7 @@ import {
   fetchExerciseInstanceNotes, 
   fetchExerciseNotes } from '../utils/database/fetchFunctions';
 import PastExerInstItem from '../components/ListItems/PastExerInstItem';
+import { Colors } from '../constants/colors';
 
 export default function ExerciseHistoryTabScreen({ exer, workoutId }) {
 
@@ -117,7 +118,7 @@ export default function ExerciseHistoryTabScreen({ exer, workoutId }) {
   let renderExerciseNotes;
   if (loadedExerciseNotes && loadedExerciseNotes !== "") {
     renderExerciseNotes = (
-      <View style={{ borderRadius: 8, backgroundColor: "#9e76c3", marginBottom: 2 }}>
+      <View style={{ borderRadius: 8, backgroundColor: Colors.purple3, marginBottom: 2 }}>
         <Text style={styles.exerNotesStyle}>{loadedExerciseNotes}</Text>
       </View>
     );

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, Pressable } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { Colors } from "../../constants/colors";
 
 export default function ExerciseOption({
   exercise,
@@ -73,7 +74,7 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#6704c3",
+    backgroundColor: Colors.purple6,
   },
   exerciseItemText: {
     fontSize: 20,

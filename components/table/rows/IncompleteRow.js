@@ -6,6 +6,7 @@ import NumberInput from "../row-elements/NumberInput";
 import Previous from "../row-elements/Previous";
 import CompletedButton from "../row-elements/CompletedButton";
 import { useRef, useState } from "react";
+import { Colors } from "../../../constants/colors";
 
 export default function IncompleteRow({
   setNumber,
@@ -25,7 +26,7 @@ export default function IncompleteRow({
     <>
       <Col style={[styles.set, 
         {backgroundColor: 
-          isWarmupSet && setIsCompleted ? "#9a2c0a" 
+          isWarmupSet && setIsCompleted ? Colors.orange2 
           : setIsCompleted ? "green" : "black",}]}>
         <SetNumber
           inputChangedHandler={inputChangedHandler.bind(
@@ -39,7 +40,7 @@ export default function IncompleteRow({
       </Col>
       <Col style={[styles.previous, 
         {backgroundColor: 
-          isWarmupSet && setIsCompleted ? "#9a2c0a" 
+          isWarmupSet && setIsCompleted ? Colors.orange2 
           : setIsCompleted ? "green" : "black",}]}>
         <Previous previous={previous} />
       </Col>
@@ -47,7 +48,7 @@ export default function IncompleteRow({
         style={[
           styles.lbs, 
           {backgroundColor: 
-            isWarmupSet && setIsCompleted ? "#9a2c0a" 
+            isWarmupSet && setIsCompleted ? Colors.orange2 
             : setIsCompleted ? "green" : "black",}]}>
         <NumberInput
           textInputConfig={{
@@ -73,7 +74,7 @@ export default function IncompleteRow({
       <Col 
         style={[styles.reps, 
           {backgroundColor: 
-            isWarmupSet && setIsCompleted ? "#9a2c0a" 
+            isWarmupSet && setIsCompleted ? Colors.orange2 
             : setIsCompleted ? "green" : "black",}]}>
         <NumberInput
           textInputConfig={{
@@ -100,7 +101,7 @@ export default function IncompleteRow({
       </Col>
       <Col style={[styles.completed, 
         {backgroundColor: 
-          isWarmupSet && setIsCompleted ? "#9a2c0a" 
+          isWarmupSet && setIsCompleted ? Colors.orange2 
           : setIsCompleted ? "green" : "black",}]}>
         <CompletedButton
           inputChangedHandler={inputChangedHandler.bind(

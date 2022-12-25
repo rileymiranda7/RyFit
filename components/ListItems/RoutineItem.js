@@ -1,9 +1,11 @@
 import { useNavigation } from "@react-navigation/native";
 import { View, Text, StyleSheet, Pressable, Alert } from "react-native";
+import InsetShadow from "react-native-inset-shadow";
 
 import { Exercise } from "../../models/exercise";
 import IconButton from "../IconButton";
 import { createWorkout } from "../../utils/database/insertFunctions";
+import { Colors } from "../../constants/colors";
 
 export default function RoutineItem({ routineName, exercises }) {
   let exerciseList;
@@ -80,41 +82,67 @@ export default function RoutineItem({ routineName, exercises }) {
         shouldBeginRoutine(routineName);
       }}
     >
-      <View style={styles.headerContainer}>
-        <Text 
-          style={styles.routineNameStyle}
-          numberOfLines={2}
-          ellipsizeMode="tail"
+      <InsetShadow
+        shadowRadius={5}
+        shadowColor="#5405ff"
+        left={false}
+        bottom={false}
+        containerStyle={{
+          borderRadius: 10
+        }}
+        shadowOpacity={1}
+      >
+        <InsetShadow
+          shadowRadius={5}
+          shadowColor="#28037d"
+          right={false}
+          top={false}
+          containerStyle={{
+            borderRadius: 10
+          }}
+          shadowOpacity={1}
         >
-          {routineName}
-        </Text>
-        <View style={styles.buttonContainer}>
-          <IconButton
-            icon="ellipsis-horizontal-circle-outline"
-            size={35}
-            color="white"
-            onPress={() => {
-              navigation.navigate("RoutineModal", {
-                routineName: routineName,
-              });
-            }}
-          />
-        </View>
-      </View>
-      <View style={{paddingBottom: 5}}>
-        {renderList}
-      </View>
+          <View style={{
+            margin: 2,
+            borderRadius: 5
+            }}>
+            <View style={styles.headerContainer}>
+              <Text 
+                style={styles.routineNameStyle}
+                numberOfLines={2}
+                ellipsizeMode="tail"
+              >
+                {routineName}
+              </Text>
+              <View style={styles.buttonContainer}>
+                <IconButton
+                  icon="ellipsis-horizontal-circle-outline"
+                  size={35}
+                  color="white"
+                  onPress={() => {
+                    navigation.navigate("RoutineModal", {
+                      routineName: routineName,
+                    });
+                  }}
+                />
+              </View>
+            </View>
+            <View style={{paddingBottom: 5}}>
+              {renderList}
+            </View>
+          </View>
+        </InsetShadow>
+      </InsetShadow>
     </Pressable>
   );
 }
-
+//#3503a6 #4705e0
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#4e1fbb",
     margin: 2,
     minWidth: "49%",
     maxWidth: "49%",
-    borderRadius: 5
+    borderRadius: 5,
   },
   routineNameStyle: {
     color: "white",

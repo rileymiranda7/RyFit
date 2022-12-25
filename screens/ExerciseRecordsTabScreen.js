@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { Ionicons } from "@expo/vector-icons";
 import { useIsFocused } from '@react-navigation/native';
 import { fetchExerciseRecords } from '../utils/database/fetchFunctions';
+import { Colors } from '../constants/colors';
 
 export default function ExerciseRecordsTabScreen({ exer, workoutId}) {
 
@@ -28,7 +29,7 @@ export default function ExerciseRecordsTabScreen({ exer, workoutId}) {
     renderThis = (
         <View style={styles.recordsContainer}>
           <View style={styles.recordRowLabel}>
-            <Ionicons name="medal-outline" color={"#FF4747"} size={26} />
+            <Ionicons name="medal-outline" color={Colors.red1} size={26} />
             <Text style={styles.recordsLabelTextStyle}>Max Weight: </Text>
           </View>
           <View style={styles.recordRowVal}>
@@ -36,7 +37,7 @@ export default function ExerciseRecordsTabScreen({ exer, workoutId}) {
             <Text style={styles.dateTextStyle}>on {loadedRecords.maxWeightDate}</Text>
           </View>
           <View style={styles.recordRowLabel}>
-            <Ionicons name="medal-outline" color={"#00FFFF"} size={26} />
+            <Ionicons name="medal-outline" color={Colors.blue2} size={26} />
             <Text style={styles.recordsLabelTextStyle}>Max Reps: </Text>
           </View>
           <View style={styles.recordRowVal}>
@@ -44,7 +45,7 @@ export default function ExerciseRecordsTabScreen({ exer, workoutId}) {
             <Text style={styles.dateTextStyle}>on {loadedRecords.maxRepsDate}</Text>
           </View>
           <View style={styles.recordRowLabel}>
-            <Ionicons name="medal-outline" color={"#00FF00"} size={26} />
+            <Ionicons name="medal-outline" color={Colors.green2} size={26} />
             <Text style={styles.recordsLabelTextStyle}>Max Volume: </Text>
           </View>
           <View style={styles.recordRowVal}>
@@ -110,7 +111,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 2
   },
   maxWeightTextStyle: {
-    color: "#FF4747",
+    color: Colors.red1,
     fontWeight: "bold",
     textAlign: "left",
     fontSize: 18,
@@ -118,7 +119,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 2
   },
   maxRepsTextStyle: {
-    color: "#00FFFF",
+    color: Colors.blue2,
     fontWeight: "bold",
     textAlign: "left",
     fontSize: 18,
@@ -126,7 +127,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 2
   },
   maxVolumeTextStyle: {
-    color: "#00FF00",
+    color: Colors.green2,
     fontWeight: "bold",
     textAlign: "left",
     fontSize: 18,

@@ -24,6 +24,7 @@ import { RoutineExercise } from "../models/routineExercise";
 import IconButton from "../components/IconButton";
 import BackButton from "../components/BackButton";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
+import { Colors } from "../constants/colors";
 
 export default function PickExerciseForRoutineScreen({ route }) {
   const [selectedExercises, setSelectedExercises] = useState([]);
@@ -206,13 +207,13 @@ export default function PickExerciseForRoutineScreen({ route }) {
               icon="trash"
               onPress={() => {}}
               size={40}
-              color={"#3e04c3"}
+              color={Colors.purple10}
             />
             <Text style={styles.title}>Select Exercises</Text>
             <BackButton
               onPress={() => navigation.goBack()}
               size={40}
-              color={"#7145eb"}
+              color={Colors.purple12}
             />
           </View>
           <View style={styles.inputContainer}>
@@ -322,7 +323,7 @@ const styles = StyleSheet.create({
     flex: 1,
     minHeight: "100%",
     minWidth: "100%",
-    backgroundColor: "#3e04c3",
+    backgroundColor: Colors.purple10,
   },
   button: {
     borderRadius: 20,
@@ -331,7 +332,7 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   buttonClose: {
-    backgroundColor: "#2196F3",
+    backgroundColor: Colors.blue3,
   },
   textStyle: {
     color: "white",
@@ -341,7 +342,7 @@ const styles = StyleSheet.create({
   },
   input: {
     fontSize: 22,
-    backgroundColor: "#b8bbbe",
+    backgroundColor: Colors.gray2,
     padding: 6,
     minWidth: "78%",
     borderRadius: 8
