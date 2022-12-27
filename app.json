@@ -18,8 +18,9 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "com.rileymiranda7.RyFit"
+      "supportsTablet": false,
+      "bundleIdentifier": "com.rileymiranda7.RyFit",
+      "buildNumber": "1.0"
     },
     "android": {
       "adaptiveIcon": {

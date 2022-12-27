@@ -376,7 +376,6 @@ should still show up in past workouts "
 
 TODO:
 -should put every db function in try catch
--make icon
 -implement notifications for rest timer
 -refactor reused logic and components
 -put all colors in colors file
@@ -384,9 +383,9 @@ TODO:
 -remove debug screen
 -upload to appstore connect so you can use on
 test flight on phone to see if any bugs
--fix profile screens
--implement change exercise name in exercise settings tab
+-fix profile screen
 -make hardcoded strings constants
+-make alerts into banner alerts
 
 what goes into changing name of exercise:
 -need to check new name doesn't already exist 
@@ -408,8 +407,3 @@ hiding exercise more complicated because
 need way to unhide exercise need exercises tab
 need search bar...
 exercises sorted alphabetically
-
-for now just have change exercise name
-
-have to put change exercise name in exercise options
-modal because cant pass functions in route params

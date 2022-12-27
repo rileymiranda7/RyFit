@@ -77,6 +77,7 @@ export default function ActiveWorkoutScreen({
   const [numSets, setNumSets] = useState(0);
   const [shouldShowKeyboardDismiss, setShouldShowKeyboardDismiss] = useState(false);
   const [keyboardHeight, setKeyboardHeight] = useState(0);
+  const [isValidLeaveScreenAttempt, setIsValidLeaveScreenAttempt] = useState(false);
 
   const {
     seconds,
@@ -238,6 +239,7 @@ export default function ActiveWorkoutScreen({
           {
             text: "End Workout",
             onPress: async () => {
+              setIsValidLeaveScreenAttempt(true);
               await deleteAllSetsFromWorkout(workoutId);
               await deleteWorkout(workoutId);
               await deleteExerciseInstancesWithNoCompletedSets(
@@ -264,6 +266,7 @@ export default function ActiveWorkoutScreen({
           {
             text: "End Workout",
             onPress: async () => {
+              setIsValidLeaveScreenAttempt(true);
               const duration = hours + "h " + minutes + "m"
               await updateWorkoutDuration(duration, workoutId);
               await updateWorkoutExerciseOrder(exerAndInstList, workoutId, true, -1);
@@ -293,6 +296,7 @@ export default function ActiveWorkoutScreen({
           {
             text: "End Workout",
             onPress: async () => {
+              setIsValidLeaveScreenAttempt(true);
               await updateWorkoutExerciseOrder(exerAndInstList, workoutId, true, -1);
               const duration = hours + "h " + minutes + "m";
               await updateWorkoutDuration(duration, workoutId);
@@ -320,6 +324,7 @@ export default function ActiveWorkoutScreen({
           {
             text: "Cancel Workout",
             onPress: async () => {
+              setIsValidLeaveScreenAttempt(true);
               await deleteAllSetsFromWorkout(workoutId);
               await deleteAllExerciseInstancesFromWorkout(workoutId);
               await deleteWorkout(workoutId);
@@ -417,6 +422,17 @@ export default function ActiveWorkoutScreen({
       hideSubscription.remove();
     };
   }, [])
+
+  useEffect(
+    () =>
+      navigation.addListener('beforeRemove', (e) => {
+        // Prevent default behavior of leaving the screen
+        if (!isValidLeaveScreenAttempt) {
+          e.preventDefault();
+        }
+      }),
+    [navigation, isValidLeaveScreenAttempt]
+  );
 
 
   return (
