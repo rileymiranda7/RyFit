@@ -18,7 +18,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.rileymiranda7.RyFit"
     },
     "android": {
       "adaptiveIcon": {
@@ -37,6 +38,11 @@
           "color": "#ffffff"
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "8edf712d-7c22-45a6-9e94-bde6dafe75e1"
+      }
+    }
   }
 }
