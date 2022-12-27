@@ -1,7 +1,7 @@
 import { View, Button, StyleSheet, Text, Alert, Pressable } from "react-native";
 import { useState } from "react";
 import { Swipeable, TextInput } from "react-native-gesture-handler";
-import { Col, Row } from "react-native-easy-grid";
+import { Row } from "react-native-easy-grid";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -33,7 +33,8 @@ export default function ExerciseItemInActiveWorkout({
   updateNumSetsCompletedInWkt,
   updateNumSetsInWkt,
   workoutId,
-  removeExerFromWorkout
+  removeExerFromWorkout,
+  changeExerName
 }) {
   // array of set rows
   const [rowArr, setRowArr] = useState([
@@ -424,6 +425,7 @@ export default function ExerciseItemInActiveWorkout({
               numCompletedSetsInExer={numCompletedSetsInExer}
               handleRestTimeSet={handleRestTimeSet}
               restTimeAmount={restTimeAmount}
+              changeExerName={changeExerName}
             />
           )}
       </View>

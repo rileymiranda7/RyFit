@@ -372,7 +372,27 @@ export default function ActiveWorkoutScreen({
     setNumSetsCompleted(numSetsCompleted - numCompletedSetsInExer);
   }
 
-
+  const changeExerName = (oldName, newName) => {
+    let temp = [...exerAndInstList];
+    temp = temp.map((exerInst) => {
+      if (exerInst.exer.name === oldName) {
+        return {
+          ...exerInst,
+          exer: {
+            ...exerInst.exer,
+            name: newName
+          },
+          inst: {
+            ...exerInst.inst,
+            name: newName
+          }
+        } 
+      } else {
+        return exerInst;
+      }
+    });
+    setExerAndInstList(temp);
+  }
 
   useEffect(() => {
     if (isFocused && routineName) {
@@ -465,6 +485,7 @@ export default function ActiveWorkoutScreen({
                     updateNumSetsInWkt={updateNumSets}
                     workoutId={workoutId}
                     removeExerFromWorkout={removeExerFromWorkout}
+                    changeExerName={changeExerName}
                   />
                 </TouchableOpacity>
               </ScaleDecorator>

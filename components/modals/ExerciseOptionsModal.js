@@ -1,9 +1,22 @@
-import { View, Text, StyleSheet, Modal, Pressable } from "react-native";
-import React, { useState } from "react";
+import { 
+  View, 
+  Text, 
+  StyleSheet, 
+  Modal, 
+  Pressable, 
+  Keyboard, 
+  TextInput, 
+  Button,
+  Alert 
+} from "react-native";
+import React, { useState, useEffect } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import {Picker} from '@react-native-picker/picker';
+
 import { showMessage, hideMessage } from "react-native-flash-message";
 import { Colors } from "../../constants/colors";
+import { updateExerciseName } from "../../utils/database/updateFunctions";
+import { exerciseAlreadyExists } from "../../utils/database/fetchFunctions";
 
 export default function ExerciseOptionsModal({
   closeExerOptionsModal,
@@ -12,18 +25,83 @@ export default function ExerciseOptionsModal({
   numSetsInExer,
   numCompletedSetsInExer,
   handleRestTimeSet,
-  restTimeAmount
+  restTimeAmount,
+  changeExerName
 }) {
 
   const [selectedSecondsVal, setSelectedSecondsVal] = useState("00");
   const [selectedMinutesVal, setSelectedMinutesVal] = useState("00");
   const [shouldShowRestTimerPicker, setShouldShowRestTimePicker] = useState(false);
+  const [shouldShowChangeExerName, setShouldShowChangeExerName] = useState(false);
+  const [inputFocused, setInputFocused] = useState(false);
+  const [exerciseNameInput, setExerciseNameInput] = useState("");
+  const [shouldShowKeyboardDismiss, setShouldShowKeyboardDismiss] = useState(false);
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
 
   const convertToWholeMinsAndSecs = (amount) => {
     const mins = Math.floor(amount);
     const secs = Math.round((amount - mins) * 60);
     return { mins, secs};
   }
+
+  const onSubmitNewName = async () => {
+    // check exercise name is valid and doesn't already exist
+    const nameNotAvailable = await exerciseAlreadyExists(exerciseNameInput);
+    if (nameNotAvailable) {
+      Alert.alert(
+        `Exercise with this name already exists!`,
+        "",
+        [
+          {
+            text: "Ok",
+            onPress: () => {
+              return;
+            },
+            style: "cancel",
+          },
+        ]
+      );
+      } else {
+        Alert.alert(
+          `Change Exercise Name`,
+          `Change '${exercise.name.length > 20 ? 
+            exercise.name.substring(0,15) + "...": 
+            exercise.name}' to '${exerciseNameInput.length > 20 ? 
+              exerciseNameInput.substring(0,15) + "...": 
+              exerciseNameInput}'?`,
+          [
+            {
+              text: "Cancel",
+              onPress: () => {},
+              style: "cancel",
+            },
+            {
+              text: "Change",
+              onPress: async () => {
+                await updateExerciseName(exercise.name, exerciseNameInput);
+                changeExerName(exercise.name, exerciseNameInput);
+              },
+              style: "destructive",
+            },
+          ]
+        );
+      }
+  }
+
+  useEffect(() => {
+    const showSubscription = Keyboard.addListener("keyboardDidShow", (event) => {
+      setKeyboardHeight(event.endCoordinates.height);
+      setShouldShowKeyboardDismiss(true);
+    });
+    const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
+      setShouldShowKeyboardDismiss(false);
+    });
+
+    return () => {
+      showSubscription.remove();
+      hideSubscription.remove();
+    };
+  }, [])
 
   return (
     <View>
@@ -36,7 +114,7 @@ export default function ExerciseOptionsModal({
         }}
       >
       <View style={styles.modalView}>
-        <Pressable
+        {!shouldShowChangeExerName && (<Pressable
           style={({ pressed }) => [
             pressed && { opacity: 0.5 },
             styles.pressableRow
@@ -45,14 +123,30 @@ export default function ExerciseOptionsModal({
             setShouldShowRestTimePicker(true);
           }}
         >
-          <View style={styles.pressableRow}>
+          <View style={[styles.pressableRow, {marginTop: 5}]}>
             <Ionicons name="timer-outline" color={"white"} size={24} />
             <Text style={styles.textStyle}>
               {" Set Rest Timer Amount"}
             </Text>
           </View>
-        </Pressable>
-        {shouldShowRestTimerPicker && (
+        </Pressable>)}
+        {!shouldShowRestTimerPicker && (<Pressable
+          style={({ pressed }) => [
+            pressed && { opacity: 0.5 },
+            styles.pressableRow
+          ]}
+          onPress={() => {
+            setShouldShowChangeExerName(true);
+          }}
+        >
+          <View style={[styles.pressableRow, {marginTop: 5}]}>
+            <Ionicons name="create-outline" color={"white"} size={24} />
+            <Text style={styles.textStyle}>
+              {" Change Exercise Name"}
+            </Text>
+          </View>
+        </Pressable>)}
+        {shouldShowRestTimerPicker && !shouldShowChangeExerName && (
           <View style={{ flex: 1, minWidth: "100%"}}>
             <Text style={styles.textStyle}>
               {
@@ -149,7 +243,78 @@ export default function ExerciseOptionsModal({
             </View>
           </View>
         )}
-        {!shouldShowRestTimerPicker && (
+        {shouldShowChangeExerName && !shouldShowRestTimerPicker && (
+          <View style={{ flex: 1, minWidth: "100%"}}>
+            <Text style={styles.exerciseNameTextStyle}>{exercise.name}</Text>
+            <TextInput
+              style={[
+                styles.input, 
+                inputFocused && {
+                  borderWidth: 2,
+                  borderColor: "white"
+                },
+                { marginBottom: 20}
+              ]}
+              onChangeText={setExerciseNameInput}
+              value={exerciseNameInput}
+              placeholder="Enter an Exercise"
+              maxLength={50}
+              keyboardAppearance='dark'
+              onFocus={() => {
+                setInputFocused(!inputFocused);
+              }}
+              onBlur={() => {
+                setInputFocused(!inputFocused);
+              }}
+            />
+            <Pressable
+                style={({ pressed }) => [
+                  pressed && { opacity: 0.5 },
+                  styles.button, 
+                  { 
+                    backgroundColor: Colors.green3,
+                    marginBottom: 20
+                  }
+                ]}
+                onPress={async () => {
+                  await onSubmitNewName();
+                }}
+              >
+                <Text style={styles.textStyle}>Change Exercise Name</Text>
+              </Pressable>
+            <Pressable
+                style={({ pressed }) => [
+                  pressed && { opacity: 0.5 },
+                  styles.button, { backgroundColor: Colors.red2}
+                ]}
+                onPress={() => setShouldShowChangeExerName(false)}
+              >
+                <Text style={styles.textStyle}>Cancel</Text>
+              </Pressable>
+            {shouldShowKeyboardDismiss && (
+                <View 
+                  style={{
+                    position: "absolute",
+                    bottom: keyboardHeight - 120,
+                    right: "0%",
+                  }}
+                >
+                  <Pressable
+                    onPress={() => {
+                      Keyboard.dismiss();
+                      setShouldShowKeyboardDismiss(false);
+                    }}
+                  >
+                    <Ionicons 
+                      name="arrow-down-circle-outline" 
+                      size={60} 
+                      color={"yellow"} 
+                    />
+                  </Pressable>
+                </View>)}
+          </View>
+        )}
+        {!shouldShowRestTimerPicker && !shouldShowChangeExerName && (
           <View>
             <Pressable
                 style={({ pressed }) => [
@@ -167,8 +332,8 @@ export default function ExerciseOptionsModal({
               }
             >
               <View style={styles.pressableRow}>
-                <Ionicons name="trash" color={"white"} size={24} />
-                <Text style={styles.textStyle}>
+                <Ionicons name="trash" color={Colors.red3} size={24} />
+                <Text style={[styles.textStyle, {color: Colors.red3}]}>
                   {" Remove Exercise from Workout"}
                 </Text>
               </View>
@@ -216,10 +381,16 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   pressableRow: {
-    margin: 5,
+    marginHorizontal: 5,
+    marginVertical: 10,
+    paddingVertical: 5,
+    paddingHorizontal: 3,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor: Colors.purple8,
+    borderRadius: 6,
+    minWidth: "95%"
   },
   buttonsRow: {
     margin: 5,
@@ -239,5 +410,19 @@ const styles = StyleSheet.create({
     backgroundColor: "green",
     alignItems: "center",
     justifyContent: "center",
-  }
+  },
+  exerciseNameTextStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
+    fontSize: 20,
+    marginVertical: 5,
+  },
+  input: {
+    fontSize: 22,
+    backgroundColor: Colors.gray2,
+    padding: 6,
+    minWidth: "78%",
+    borderRadius: 8
+  },
 });

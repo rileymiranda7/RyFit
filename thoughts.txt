@@ -376,7 +376,7 @@ should still show up in past workouts "
 
 TODO:
 -should put every db function in try catch
--make icon, splashscreen assets
+-make icon
 -implement notifications for rest timer
 -refactor reused logic and components
 -put all colors in colors file
@@ -392,3 +392,24 @@ what goes into changing name of exercise:
 -need to check new name doesn't already exist 
 in db
 -need to update name in exerInstArray
+
+hide exercise or change exercise name
+
+pass function from activeworkoutscreen to
+ExerciseItemInActiveWorkout to app to
+ExerciseSettingsTabScreen
+
+make new boolean column in exercise 
+shouldShowAsOption so user can 
+hide this exercise from being shown
+as option when picking exercise
+
+hiding exercise more complicated because
+need way to unhide exercise need exercises tab
+need search bar...
+exercises sorted alphabetically
+
+for now just have change exercise name
+
+have to put change exercise name in exercise options
+modal because cant pass functions in route params

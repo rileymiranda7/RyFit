@@ -29,6 +29,27 @@ export async function updateWorkoutName(workoutId, name) {
   return promise;
 }
 
+export async function updateExerciseName(oldName, newName) {
+  const promise = new Promise((resolve, reject) => {
+    database.transaction((tx) => {
+      tx.executeSql(
+        `UPDATE exercises 
+        SET exerciseName = ?
+        WHERE exerciseName = ?;`,
+        [newName, oldName],
+        (_, result) => {
+          resolve(result.rows._array[0]);
+        },
+        (_, error) => {
+          reject(error);
+        }
+      );
+    });
+  });
+
+  return promise;
+}
+
 export async function updateWorkoutDuration(duration, workoutId) {
   const promise = new Promise((resolve, reject) => {
     database.transaction((tx) => {

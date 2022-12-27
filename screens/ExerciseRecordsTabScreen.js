@@ -5,7 +5,7 @@ import { useIsFocused } from '@react-navigation/native';
 import { fetchExerciseRecords } from '../utils/database/fetchFunctions';
 import { Colors } from '../constants/colors';
 
-export default function ExerciseRecordsTabScreen({ exer, workoutId}) {
+export default function ExerciseRecordsTabScreen({ exer}) {
 
   const [loadedRecords, setLoadedRecords] = useState();
 

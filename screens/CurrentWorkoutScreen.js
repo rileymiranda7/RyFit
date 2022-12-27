@@ -14,7 +14,7 @@ import { useIsFocused, useNavigation, useRoute } from "@react-navigation/native"
 import { Ionicons } from "@expo/vector-icons";
 
 import { createWorkout, insertEmptyRoutine } from "../utils/database/insertFunctions";
-import { fetchRoutines } from "../utils/database/fetchFunctions";
+import { doesRoutineAlreadyExist, fetchRoutines } from "../utils/database/fetchFunctions";
 import RoutineItem from "../components/ListItems/RoutineItem";
 import { Colors } from "../constants/colors";
 
@@ -43,9 +43,24 @@ export default function CurrentWorkoutScreen() {
   
   const createRoutine = async () => {
     if (routineName != "") {
-      await insertEmptyRoutine(routineName);
-      loadRoutines();
-      setAddingRoutine(false);
+      const routineAlreayExists = await doesRoutineAlreadyExist(routineName);
+      if (routineAlreayExists) {
+        Alert.alert(
+          `Routine with this name already exists!`,
+          "",
+          [
+            {
+              text: "Ok",
+              onPress: () => {},
+              style: "cancel",
+            },
+          ]
+        );
+      } else {
+        await insertEmptyRoutine(routineName);
+        loadRoutines();
+        setAddingRoutine(false);
+      }
     }
     setRoutineName("");
   };

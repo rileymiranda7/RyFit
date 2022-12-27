@@ -99,12 +99,6 @@ function ExerciseTabNavigator() {
           <ExerciseRecordsTabScreen exer={exer} workoutId={workoutId} />
         )}
       />
-      <TopTabs.Screen 
-        name="Settings"
-        children={() => (
-          <ExerciseSettingsTabScreen exer={exer} workoutId={workoutId} />
-        )}
-      />
     </TopTabs.Navigator>
   );
 }
@@ -208,7 +202,7 @@ function BottomTabsNavigator({ handleOnSetCompleted }) {
           tabBarIcon: () => (
             <Ionicons name="book-outline" color={"white"} size={26} />
           ),
-          tabBarColor: "green"
+          tabBarColor: Colors.purple12
         }}
       />
       <BottomTabs.Screen
@@ -220,17 +214,6 @@ function BottomTabsNavigator({ handleOnSetCompleted }) {
             <Ionicons name="sad-outline" color={"white"} size={25} />
           ),
           tabBarColor: "red"
-        }}
-      />
-      <BottomTabs.Screen
-        name="PlateCalc"
-        component={PlateCalc}
-        options={{
-          tabBarLabel: 'Plate Calc',
-          tabBarIcon: () => (
-            <Ionicons name="calculator-outline" color={"white"} size={25} />
-          ),
-          tabBarColor: "pink"
         }}
       />
       <BottomTabs.Screen
@@ -247,6 +230,17 @@ function BottomTabsNavigator({ handleOnSetCompleted }) {
             <Ionicons name="barbell-outline" color={"white"} size={26} />
           ),
           tabBarColor: Colors.purple1
+        }}
+      />
+      <BottomTabs.Screen
+        name="PlateCalc"
+        component={PlateCalc}
+        options={{
+          tabBarLabel: 'Plate Calc',
+          tabBarIcon: () => (
+            <Ionicons name="calculator-outline" color={"white"} size={25} />
+          ),
+          tabBarColor: Colors.purple10
         }}
       />
     </BottomTabs.Navigator>

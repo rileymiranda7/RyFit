@@ -100,11 +100,11 @@ export async function fetchExercise(exerciseName) {
         `SELECT * FROM exercises WHERE exerciseName = ?`,
         [exerciseName],
         (_, result) => {
-          const exercise = new Exercise(
-            result.rows._array[0].exerciseName,
-            result.rows._array[0].restTime,
-            result.rows._array[0].exerciseNotes
-            );
+            const exercise = new Exercise(
+              result?.rows?._array[0]?.exerciseName,
+              result?.rows?._array[0]?.restTime,
+              result?.rows?._array[0]?.exerciseNotes
+              );
             resolve(exercise);
           },
           (_, error) => {
@@ -113,8 +113,26 @@ export async function fetchExercise(exerciseName) {
           );
         });
       });
-      return promise;
-    }
+  return promise;
+}
+
+export async function exerciseAlreadyExists(exerciseName) {
+  const promise = new Promise((resolve, reject) => {
+    database.transaction((tx) => {
+      tx.executeSql(
+        `SELECT * FROM exercises WHERE exerciseName = ?`,
+        [exerciseName],
+        (_, result) => {
+            resolve(result.rows._array.length > 0);
+          },
+          (_, error) => {
+            reject(error);
+          }
+          );
+        });
+      });
+  return promise;
+}
 
 export function fetchRoutineNamesList() {
   const promise = new Promise((resolve, reject) => {
@@ -138,7 +156,8 @@ export function fetchExercises() {
   const promise = new Promise((resolve, reject) => {
     database.transaction((tx) => {
       tx.executeSql(
-        `SELECT * FROM exercises;`,
+        `SELECT * FROM exercises
+        ORDER BY exerciseName;`,
         [],
         (_, result) => {
           const exercises = [];
@@ -433,6 +452,26 @@ export function fetchExerciseRecords(exerciseName) {
         [exerciseName],
         (_, result) => {
           resolve(result.rows._array);
+        },
+        (_, error) => {
+          reject(error);
+        }
+      );
+    });
+  });
+
+  return promise;
+}
+
+export function doesRoutineAlreadyExist(routineName) {
+  const promise = new Promise((resolve, reject) => {
+    database.transaction((tx) => {
+      tx.executeSql(
+        `SELECT * FROM routines
+        WHERE routineName = ?;`,
+        [routineName],
+        (_, result) => {
+          resolve(result.rows._array.length > 0);
         },
         (_, error) => {
           reject(error);
