@@ -464,7 +464,7 @@ export default function ActiveWorkoutScreen({
                 }</Text>
                 <Text style={styles.colon}>:</Text>
                 <Text style={styles.timerDigit}>{
-                  minutes < 10 ? 0 : minutes % 10
+                  (minutes - (hours * 60)) < 10 ? 0 : (minutes - (hours * 60)) % 10
                 }</Text>
                 <Text style={styles.timerDigit}>{
                   minutes >= 10 ? Math.floor(minutes / 10) : minutes
