@@ -14,7 +14,9 @@ export default function IncompleteRow({
   inputChangedHandler,
   isWarmupSet,
   type,
-  previous
+  previous,
+  flatlistRef,
+  exerNumInList
 }) {
 
   const [lbsInputFocused, setLbsInputFocused] = useState(false);
@@ -62,6 +64,12 @@ export default function IncompleteRow({
             maxLength: 6,
             selectTextOnFocus: true,
             onFocus: () => {
+                flatlistRef.scrollToIndex({
+                  animated: true, 
+                  index: exerNumInList,
+                  viewOffset: -100, 
+                  viewPosition: 0.5
+                });
               setLbsInputFocused(!lbsInputFocused);
             },
             onBlur: () => {
@@ -89,6 +97,12 @@ export default function IncompleteRow({
             maxLength: 5,
             selectTextOnFocus: true,
             onFocus: () => {
+              flatlistRef.scrollToIndex({
+                  animated: true, 
+                  index: exerNumInList,
+                  viewOffset: -100, 
+                  viewPosition: 0.5
+                });
               setRepsInputFocused(!repsInputFocused);
             },
             onBlur: () => {

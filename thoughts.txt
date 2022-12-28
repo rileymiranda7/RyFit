@@ -386,6 +386,7 @@ test flight on phone to see if any bugs
 -fix profile screen
 -make hardcoded strings constants
 -make alerts into banner alerts
+-fix white line on SplashScreen
 
 what goes into changing name of exercise:
 -need to check new name doesn't already exist 
@@ -407,3 +408,14 @@ hiding exercise more complicated because
 need way to unhide exercise need exercises tab
 need search bar...
 exercises sorted alphabetically
+
+flatlist scroll to index not working predictably
+seems random which items work and which don't
+like one will scroll up then down
+moving the exercise that isnt working seems to transfer
+it to other component that was working
+
+i think its working fine now??
+
+didn't change anything, maybe changes while in 
+active workout messed up somehow

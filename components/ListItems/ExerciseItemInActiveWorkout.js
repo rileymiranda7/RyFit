@@ -34,7 +34,9 @@ export default function ExerciseItemInActiveWorkout({
   updateNumSetsInWkt,
   workoutId,
   removeExerFromWorkout,
-  changeExerName
+  changeExerName,
+  flatlistRef,
+  exerNumInList
 }) {
   // array of set rows
   const [rowArr, setRowArr] = useState([
@@ -206,6 +208,8 @@ export default function ExerciseItemInActiveWorkout({
             isWarmupSet={item.type === "WARMUP"}
             type={item.type}
             previous={item.previous}
+            flatlistRef={flatlistRef}
+            exerNumInList={exerNumInList}
           />
         </Row>
       </Swipeable>

@@ -442,10 +442,10 @@ export default function ActiveWorkoutScreen({
     >
       <View style={styles.exerciseList}>
         <DraggableFlatList
-        onDragEnd={async ({ data }) => {
-          setExerAndInstList(data);
-          await updateWorkoutExerciseOrder(data, workoutId, true, -1);
-        }}
+          onDragEnd={async ({ data }) => {
+            setExerAndInstList(data);
+            await updateWorkoutExerciseOrder(data, workoutId, true, -1);
+          }}
           ListHeaderComponent={
             <View style={[styles.rowSpread, { marginBottom: 12}]}>
                 <TextInput
@@ -480,7 +480,7 @@ export default function ActiveWorkoutScreen({
             </View>
           }
           data={exerAndInstList}
-          renderItem={({ item, drag, isActive }) => {
+          renderItem={({ item, index, drag, isActive }) => {
             return (
               <ScaleDecorator>
                 <TouchableOpacity
@@ -502,12 +502,15 @@ export default function ActiveWorkoutScreen({
                     workoutId={workoutId}
                     removeExerFromWorkout={removeExerFromWorkout}
                     changeExerName={changeExerName}
+                    flatlistRef={this.flatlistRef}
+                    exerNumInList={index}
                   />
                 </TouchableOpacity>
               </ScaleDecorator>
             );
           }}
           keyExtractor={(exerAndInst) => exerAndInst.exer.name}
+          ref={(ref) => { this.flatlistRef = ref; }}
           ListFooterComponent={
             <>
               <Pressable
