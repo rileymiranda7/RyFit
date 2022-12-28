@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { Keyboard, StyleSheet } from "react-native";
 import { Col } from "react-native-easy-grid";
 
 import SetNumber from "../row-elements/SetNumber";
@@ -91,8 +91,10 @@ export default function IncompleteRow({
             contextMenuHidden: true,
             keyboardAppearance: 'dark',
             returnKeyType: "done",
-            onSubmitEditing: inputChangedHandler.bind(
-              this, "status", setNumber, ""),
+            onSubmitEditing: () => {
+              inputChangedHandler("status", setNumber, "");
+              Keyboard.dismiss();
+            },
             blurOnSubmit: false,
             maxLength: 5,
             selectTextOnFocus: true,
