@@ -82,6 +82,7 @@ export default function ExerciseItemInActiveWorkout({
             return {
               ...set,
               weight: enteredValue,
+              status: "IN PROGRESS"
             };
           } else if (inputIdentifier === "reps") {
             await updateSetReps(setNumber, workoutId, exer.name, enteredValue);
@@ -89,6 +90,7 @@ export default function ExerciseItemInActiveWorkout({
             return {
               ...set,
               reps: enteredValue,
+              status: "IN PROGRESS"
             };
           } else if (inputIdentifier === "status") {
             // If set status is currently IN PROGRESS

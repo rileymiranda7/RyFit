@@ -419,3 +419,7 @@ i think its working fine now??
 
 didn't change anything, maybe changes while in 
 active workout messed up somehow
+
+when the lbs or reps input is edited need to 
+set set to in progress so you cant have completed
+set with null values
