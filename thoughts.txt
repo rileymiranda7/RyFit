@@ -474,3 +474,11 @@ its working now
 
 maybe in future can add bringing focused set down if too high
 and also do same with focused exer notes text inputs
+
+
+fresh app on iphone crashed when i tried to end workout with one
+exercise and completed sets
+
+exercise created and set data was stored
+
+forgot i changed end workout button

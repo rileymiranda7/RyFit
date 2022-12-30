@@ -655,7 +655,7 @@ export default function ActiveWorkoutScreen({
                     styles.endWorkoutButton,
                     pressed && { opacity: 0.5 },
                   ]}
-                  onPress={() => flatlistRef.scrollToEnd()}//endWorkout()}
+                  onPress={() => endWorkout()}
                 >
                   <Text style={styles.buttonTextStyle}>End Workout</Text>
                 </Pressable>
