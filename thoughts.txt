@@ -415,11 +415,62 @@ like one will scroll up then down
 moving the exercise that isnt working seems to transfer
 it to other component that was working
 
-i think its working fine now??
-
-didn't change anything, maybe changes while in 
-active workout messed up somehow
-
 when the lbs or reps input is edited need to 
 set set to in progress so you cant have completed
 set with null values
+
+i think scroll to offset and scrolltoindex are 
+competing with textinput scrolling somehow
+
+completed button doesnt go back down after going up
+
+not calculating offset right?
+
+have to do same with note text inputs
+
+for some reason lower exercises scroll to right place 
+initially but then scrolls down an exact amount relative to 
+the selected text input
+
+why is it exer 3 and on that does this?
+
+is offset from bottom for lower exercises??
+
+lowest rowY is 730
+
+y value is from top of screen not from top of list!!
+
+but offset IS from top of list!!!
+
+{{{calculate total offset by adding height of exercise title, notes,
+and num sets}}}
+
+
+workout row 30 - 1
+
+exer name options row 32 * numExercises up to and including
+focused exercise
+
+Exercise notes header 34 - added up all before and including 
+focused exercise
+
+TableHeaderRow height 25.7 - numExercises up to and including
+focused exercise
+
+IncompleteRow height 40 - have to add up all before focused
+exercise but on focused exercise need to stop before focused 
+set row - need set row as param
+
+Add set button height 42.3 * numExercises up to NOT including
+focused exercise
+
+space between exer name and exernotes header: 5? * numExercises up to 
+and including focused exercise
+
+space between add set button and next exer name: 8? * numExercises up 
+to and including focused exercise
+
+its working now
+
+maybe in future can add bringing focused set down if too high
+and also do same with focused exer notes text inputs

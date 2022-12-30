@@ -29,6 +29,7 @@ class Set {
     this.isWeightRecord = isWeightRecord;
     this.isRepsRecord = isRepsRecord;
     this.isVolumeRecord = isVolumeRecord;
+    this.previous = previous;
   }
 }
 

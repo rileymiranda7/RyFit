@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   View,
   Text,
@@ -7,9 +7,8 @@ import {
   TextInput,
   Alert,
   TouchableOpacity,
-  KeyboardAvoidingView,
-  Platform,
-  Keyboard
+  Keyboard,
+  Dimensions,
 } from "react-native";
 import {
   useNavigation,
@@ -67,6 +66,11 @@ export default function ActiveWorkoutScreen({
     },
     firstSet: {
       previous: {}
+    },
+    heightInfo: {
+      numSets,
+      exerNotesHeight,
+      instNotesHeight
     }
   } */
 
@@ -77,7 +81,11 @@ export default function ActiveWorkoutScreen({
   const [numSets, setNumSets] = useState(0);
   const [shouldShowKeyboardDismiss, setShouldShowKeyboardDismiss] = useState(false);
   const [keyboardHeight, setKeyboardHeight] = useState(0);
+  const [keyboardY, setKeyboardY] = useState(517);
   const [isValidLeaveScreenAttempt, setIsValidLeaveScreenAttempt] = useState(false);
+  const [scrollOffset, setScrollOffset] = useState(0);
+
+  const flatlistRef = useRef();
 
   const {
     seconds,
@@ -95,6 +103,8 @@ export default function ActiveWorkoutScreen({
   const navigation = useNavigation();
 
   const { routineName, workoutId } = route.params;
+
+  const windowHeight = Dimensions.get('window').height;
 
   const loadRoutine = async (routineName) => {
     const routine = await fetchRoutine(routineName);
@@ -145,6 +155,11 @@ export default function ActiveWorkoutScreen({
           exer: exercise, inst: exerciseInstance, 
           firstSet: {
             previous: previousSet
+          },
+          heightInfo: {
+            numSets: 1,
+            exerNotesHeight: 0,
+            instNotesHeight: 0
           }
         });
 
@@ -209,6 +224,11 @@ export default function ActiveWorkoutScreen({
             exer: exercise, inst: exerciseInstance, 
             firstSet: {
               previous: previousSet
+            },
+            heightInfo: {
+              numSets: 1,
+              exerNotesHeight: 0,
+              instNotesHeight: 0
             }
           });
         }
@@ -399,6 +419,97 @@ export default function ActiveWorkoutScreen({
     setExerAndInstList(temp);
   }
 
+  const onExerNumSetsChanged = (exerName, newNumSets) => {
+    let temp = [...exerAndInstList];
+    temp = temp.map((exerInst) => {
+      if (exerInst.exer.name === exerName) {
+        return {
+          ...exerInst,
+          heightInfo: {
+            ...exerInst.heightInfo,
+            numSets: newNumSets
+          }
+        } 
+      } else {
+        return exerInst;
+      }
+    });
+    setExerAndInstList(temp);
+  }
+
+  const onExerNotesHeightChanged = (exerName, newHeight) => {
+    let temp = [...exerAndInstList];
+    temp = temp.map((exerInst) => {
+      if (exerInst.exer.name === exerName) {
+        return {
+          ...exerInst,
+          heightInfo: {
+            ...exerInst.heightInfo,
+            exerNotesHeight: newHeight
+          }
+        } 
+      } else {
+        return exerInst;
+      }
+    });
+    setExerAndInstList(temp);
+  }
+
+  const onInstNotesHeightChanged = (exerName, newHeight) => {
+    let temp = [...exerAndInstList];
+    temp = temp.map((exerInst) => {
+      if (exerInst.exer.name === exerName) {
+        return {
+          ...exerInst,
+          heightInfo: {
+            ...exerInst.heightInfo,
+            instNotesHeight: newHeight
+          }
+        } 
+      } else {
+        return exerInst;
+      }
+    });
+    setExerAndInstList(temp);
+  }
+
+  const handleGotRowY = (rowY, exerNumInList, setNumber) => {
+    console.log("handleGotRowY")
+    console.log("rowY: " + rowY);
+    console.log(windowHeight)
+    // if focused input is near or below where keyboard will cover
+    if (rowY + 20 >= keyboardY) {
+      // calculate total offset from top
+      // of list to focused set row
+      let targetOffset = 30; // workout name row height
+      targetOffset += (exerNumInList + 1) * 32;// exer name row height
+      targetOffset += (exerNumInList + 1) * 34;// notes header height
+      targetOffset += (exerNumInList + 1) * 25.7;// set header height
+      targetOffset += (exerNumInList) * 42.3;// add set height
+      exerAndInstList.map((exerInst, index) => {
+        if (index <= exerNumInList) {
+          targetOffset += exerInst.heightInfo.exerNotesHeight;
+          targetOffset += exerInst.heightInfo.instNotesHeight;
+          if (index < exerNumInList) {
+            // sets before focused exercise
+            targetOffset += exerInst.heightInfo.numSets * 40; 
+          } else {
+            // focused exercise sets
+            // want offset on previous set to focused set
+            targetOffset += (setNumber - 1) * 40;
+          }
+        }
+      });
+      targetOffset -= 300;
+      console.log("rowY: " + rowY);
+      console.log("keyboardY: " + keyboardY);
+      console.log("targetOffset:" + targetOffset);
+      setTimeout(() => {
+        flatlistRef.current.scrollToOffset({offset: targetOffset, animated: true})
+      }, 700)
+    }
+  } 
+
   useEffect(() => {
     if (isFocused && routineName) {
       if (routineName !== "BLANK") {
@@ -411,7 +522,9 @@ export default function ActiveWorkoutScreen({
   useEffect(() => {
     const showSubscription = Keyboard.addListener("keyboardDidShow", (event) => {
       setKeyboardHeight(event.endCoordinates.height);
+      setKeyboardY(event.endCoordinates.screenY);
       setShouldShowKeyboardDismiss(true);
+      
     });
     const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
       setShouldShowKeyboardDismiss(false);
@@ -435,9 +548,9 @@ export default function ActiveWorkoutScreen({
   );
 
 
+
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
+    <View
       style={styles.container}
     >
       <View style={styles.exerciseList}>
@@ -448,13 +561,13 @@ export default function ActiveWorkoutScreen({
           }}
           ListHeaderComponent={
             <View style={[styles.rowSpread, { marginBottom: 12}]}>
-                <TextInput
-                  style={[styles.textStyle, styles.textInput]}
-                  onChangeText={setWorkoutName}
-                  onBlur={() => resetWorkoutName()}
-                  value={workoutName}
-                  maxLength={20}
-                />
+              <TextInput
+                style={[styles.textStyle, styles.textInput]}
+                onChangeText={setWorkoutName}
+                onBlur={() => resetWorkoutName()}
+                value={workoutName}
+                maxLength={20}
+              />
               <View style={styles.timerContainer}>
                 <Text style={styles.timerDigit}>{
                   hours < 10 ? 0 : hours % 10
@@ -504,13 +617,25 @@ export default function ActiveWorkoutScreen({
                     changeExerName={changeExerName}
                     flatlistRef={this.flatlistRef}
                     exerNumInList={index}
+                    handleGotRowY={handleGotRowY}
+                    onExerNumSetsChanged={onExerNumSetsChanged}
+                    onExerNotesHeightChanged={onExerNotesHeightChanged}
+                    onInstNotesHeightChanged={onInstNotesHeightChanged}
                   />
                 </TouchableOpacity>
               </ScaleDecorator>
             );
           }}
           keyExtractor={(exerAndInst) => exerAndInst.exer.name}
-          ref={(ref) => { this.flatlistRef = ref; }}
+          ref={flatlistRef}
+          onScroll={(e) => {
+            console.log("onscroll")
+            //this.fscrollOffset = e.nativeEvent.contentOffset.y;
+            //setScrollOffset(e.nativeEvent.contentOffset.y);
+            console.log("scrollOffset here");
+            console.log(e.nativeEvent.contentOffset.y)
+          }}
+          scrollToOverflowEnabled={true}
           ListFooterComponent={
             <>
               <Pressable
@@ -530,7 +655,7 @@ export default function ActiveWorkoutScreen({
                     styles.endWorkoutButton,
                     pressed && { opacity: 0.5 },
                   ]}
-                  onPress={() => endWorkout()}
+                  onPress={() => flatlistRef.scrollToEnd()}//endWorkout()}
                 >
                   <Text style={styles.buttonTextStyle}>End Workout</Text>
                 </Pressable>
@@ -546,7 +671,7 @@ export default function ActiveWorkoutScreen({
                 </Pressable>
 
               </View>
-              <View style={{ marginBottom: 100}}></View>
+              <View style={{ marginBottom: 200}}></View>
             </>
           }
         />
@@ -580,7 +705,7 @@ export default function ActiveWorkoutScreen({
           />
         </Pressable>
       </View>)}
-    </KeyboardAvoidingView>
+    </View>
   );
 }
 

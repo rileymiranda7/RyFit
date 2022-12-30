@@ -36,7 +36,11 @@ export default function ExerciseItemInActiveWorkout({
   removeExerFromWorkout,
   changeExerName,
   flatlistRef,
-  exerNumInList
+  exerNumInList,
+  handleGotRowY,
+  onExerNumSetsChanged,
+  onExerNotesHeightChanged,
+  onInstNotesHeightChanged
 }) {
   // array of set rows
   const [rowArr, setRowArr] = useState([
@@ -212,6 +216,7 @@ export default function ExerciseItemInActiveWorkout({
             previous={item.previous}
             flatlistRef={flatlistRef}
             exerNumInList={exerNumInList}
+            handleGotRowY={handleGotRowY}
           />
         </Row>
       </Swipeable>
@@ -239,6 +244,7 @@ export default function ExerciseItemInActiveWorkout({
   const deleteItem = async ({ item, index }) => {
     const setNumberToBeDeleted = index + 1;
     updateNumSetsInWkt(false);
+    onExerNumSetsChanged(exer.name, setRowArr.length - 1);
 
     if (rowArr[index].status === "COMPLETED") {
       updateNumSetsCompletedInWkt(false);
@@ -285,6 +291,9 @@ export default function ExerciseItemInActiveWorkout({
     const seconds = Number(input.substring(2, 4));
     return minutes + seconds / 60;
   };
+
+
+
 
   return (
     <View>
@@ -345,6 +354,9 @@ export default function ExerciseItemInActiveWorkout({
         onBlur={() => {
           setExerNoteInputFocused(!exerNoteInputFocused);
         }}
+        onLayout={(e) => {
+          onExerNotesHeightChanged(exer.name, e.nativeEvent.layout.height)
+        }}
       />
       <TextInput 
         style={[styles.instNoteInput, exerInstNoteInputFocused && { 
@@ -370,6 +382,9 @@ export default function ExerciseItemInActiveWorkout({
         onBlur={() => {
           setExerInstNoteInputFocused(!exerInstNoteInputFocused);
         }}
+        onLayout={(e) => {
+          onInstNotesHeightChanged(exer.name, e.nativeEvent.layout.height)
+        }}
       />
 
       <TableHeaderRow />
@@ -379,10 +394,10 @@ export default function ExerciseItemInActiveWorkout({
           await deleteItem({ item, index });
         })
       )}
-
       <Button 
         title="Add Set" 
         onPress={async () => {
+          onExerNumSetsChanged(exer.name, setRowArr.length + 1);
           // get previous set of this exercise from the previous workout
           // if it exists
           let previousSet = {

@@ -15,14 +15,15 @@ export default function IncompleteRow({
   isWarmupSet,
   type,
   previous,
-  flatlistRef,
-  exerNumInList
+  exerNumInList,
+  handleGotRowY
 }) {
 
   const [lbsInputFocused, setLbsInputFocused] = useState(false);
   const [repsInputFocused, setRepsInputFocused] = useState(false);
 
   const repsInputRef = useRef();
+
 
   return (
     <>
@@ -64,12 +65,6 @@ export default function IncompleteRow({
             maxLength: 6,
             selectTextOnFocus: true,
             onFocus: () => {
-                flatlistRef.scrollToIndex({
-                  animated: true, 
-                  index: exerNumInList,
-                  viewOffset: -100, 
-                  viewPosition: 0.5
-                });
               setLbsInputFocused(!lbsInputFocused);
             },
             onBlur: () => {
@@ -77,6 +72,9 @@ export default function IncompleteRow({
             },
           }}
           isFocused={lbsInputFocused}
+          handleGotRowY={handleGotRowY}
+          exerNumInList={exerNumInList}
+          setNumber={setNumber}
         />
       </Col>
       <Col 
@@ -99,12 +97,6 @@ export default function IncompleteRow({
             maxLength: 5,
             selectTextOnFocus: true,
             onFocus: () => {
-              flatlistRef.scrollToIndex({
-                  animated: true, 
-                  index: exerNumInList,
-                  viewOffset: -100, 
-                  viewPosition: 0.5
-                });
               setRepsInputFocused(!repsInputFocused);
             },
             onBlur: () => {
@@ -113,6 +105,9 @@ export default function IncompleteRow({
             ref: repsInputRef
           }}
           isFocused={repsInputFocused}
+          handleGotRowY={handleGotRowY}
+          exerNumInList={exerNumInList}
+          setNumber={setNumber}
         />
       </Col>
       <Col style={[styles.completed, 

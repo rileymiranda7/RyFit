@@ -1,9 +1,28 @@
+import { useEffect } from "react";
 import { View, TextInput, StyleSheet } from "react-native";
 import { Colors } from "../../../constants/colors";
 
-export default function NumberInput({ textInputConfig, isFocused }) {
+export default function NumberInput({ 
+  textInputConfig, 
+  isFocused, 
+  handleGotRowY,
+  exerNumInList,
+  setNumber 
+}) {
+
+  useEffect(() => {
+    this.numberInput.measure( (fx, fy, width, height, px, py) => {
+      if (isFocused) {
+        handleGotRowY(py, exerNumInList, setNumber);
+      }
+  }) 
+  }, [isFocused])
+  
+
   return (
-    <View>
+    <View
+      ref={view => { this.numberInput = view;}}
+    >
       <TextInput 
         style={[
           styles.input, 
@@ -11,7 +30,8 @@ export default function NumberInput({ textInputConfig, isFocused }) {
             borderWidth: 1,
             borderColor: "white"
           }]} 
-        {...textInputConfig} />
+        {...textInputConfig}
+      />
     </View>
   );
 }

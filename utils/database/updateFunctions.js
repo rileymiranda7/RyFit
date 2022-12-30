@@ -1,11 +1,12 @@
 import * as SQLite from "expo-sqlite";
 const database = SQLite.openDatabase("RyFit.db");
 
-import { Set } from "../../models/set"
+import Set from "../../models/set"
 import { 
   fetchExerciseRecords, 
   fetchSetsFromExerciseInstance, 
   fetchWorkoutDateShort } from "./fetchFunctions";
+import { insertSet } from "./insertFunctions";
 
 export async function updateWorkoutName(workoutId, name) {
   const promise = new Promise((resolve, reject) => {
@@ -287,11 +288,12 @@ export async function updateSetOrder(
   workoutId, exerciseName, newSetOrder) {
   await Promise.all(
     newSetOrder.map(async (set) => {
-        await insertSet(new Set(
-          set.setNumber, set.weight, set.reps, set.type, 
-          set.status, exerciseName, workoutId, set.isWeightRecord,
-          set.isRepsRecord, set.isVolumeRecord, set.previous
-        ));
+      const setObj = new Set(
+        set.setNumber, set.weight, set.reps, set.type, 
+        set.status, exerciseName, workoutId, set.isWeightRecord,
+        set.isRepsRecord, set.isVolumeRecord, set.previous
+      );
+      await insertSet(setObj);
     })
   );
 }
