@@ -129,7 +129,7 @@ export default function PickExerciseForActiveWorkoutModal({
     pickExerciseList = (
       <View>
         <Text style={{ color: "white"}}>
-          Pick Exercise(s) Below. 
+          Pick exercise(s) below or type a new exercise above. 
           Note: exercises already in workout will not be added
           </Text>
         <FlatList

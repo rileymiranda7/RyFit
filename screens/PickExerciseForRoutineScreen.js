@@ -175,7 +175,10 @@ export default function PickExerciseForRoutineScreen({ route }) {
   if (loadedExercises && loadedExercises.length > 0) {
     pickExerciseList = (
       <View style={styles.exerciseList}>
-        <Text style={styles.smallTitle}>Pick Exercises Below</Text>
+        <Text style={styles.smallTitle}>
+          Pick exercise(s) below or type a new exercise above. 
+          Note: exercises already in routine will not be added
+        </Text>
         <FlatList
           data={loadedExercises}
           renderItem={(e) => {
