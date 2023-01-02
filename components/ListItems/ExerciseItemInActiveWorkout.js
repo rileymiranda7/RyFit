@@ -1,5 +1,5 @@
 import { View, Button, StyleSheet, Text, Alert, Pressable } from "react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Swipeable, TextInput } from "react-native-gesture-handler";
 import { Row } from "react-native-easy-grid";
 import { useNavigation } from "@react-navigation/native";
@@ -40,7 +40,8 @@ export default function ExerciseItemInActiveWorkout({
   handleGotRowY,
   onExerNumSetsChanged,
   onExerNotesHeightChanged,
-  onInstNotesHeightChanged
+  onInstNotesHeightChanged,
+  workoutStatus
 }) {
   // array of set rows
   const [rowArr, setRowArr] = useState([
@@ -121,7 +122,8 @@ export default function ExerciseItemInActiveWorkout({
                       onPress: () => {},
                       style: "default",
                     }
-                  ]
+                  ],
+                  {userInterfaceStyle: "dark"}
                 );
               }
             } else {
@@ -294,6 +296,15 @@ export default function ExerciseItemInActiveWorkout({
 
 
 
+  useEffect(() => {
+    (async () => {
+      if (workoutStatus === "WORKOUT COMPLETED") {
+        await updateExerciseNotes(exerciseNotes, exer.name);
+      }
+    })();
+  }, [workoutStatus])
+  
+
 
   return (
     <View>
@@ -337,6 +348,7 @@ export default function ExerciseItemInActiveWorkout({
           borderColor: "white" 
         }]}
         multiline={true}
+        scrollEnabled={false}
         keyboardAppearance='dark'
         placeholder="notes to always show when doing this exercise:
          technique, machine settings, etc"
@@ -344,7 +356,6 @@ export default function ExerciseItemInActiveWorkout({
         placeholderTextColor={Colors.purple3}
         onChangeText={async (text) => {
           setExerciseNotes(text);
-          await updateExerciseNotes(text, exer.name);
         }}
         defaultValue={exer.notes}
         value={exerciseNotes}
@@ -365,6 +376,7 @@ export default function ExerciseItemInActiveWorkout({
           borderColor: "white" 
         }]}
         multiline={true}
+        scrollEnabled={false}
         keyboardAppearance='dark'
         placeholder="notes just for this workout: soreness, tiredness,
          mood, etc"

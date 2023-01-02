@@ -51,35 +51,45 @@ export default function RoutineModal({ navigation, route }) {
   };
 
   function shouldRemoveExerciseFromRoutine(exerciseName, routineName) {
-    Alert.alert("Remove Exercise", "Remove exercise from routine?", [
-      {
-        text: "Cancel",
-        onPress: () => {},
-        style: "cancel",
-      },
-      {
-        text: "Remove",
-        onPress: () => {
-          removeExerciseFromRoutine(exerciseName, routineName);
+    Alert.alert(
+      "Remove Exercise", 
+      "Remove exercise from routine?", 
+      [
+        {
+          text: "Cancel",
+          onPress: () => {},
+          style: "cancel",
         },
-      },
-    ]);
+        {
+          text: "Remove",
+          onPress: () => {
+            removeExerciseFromRoutine(exerciseName, routineName);
+          },
+        },
+      ],
+      {userInterfaceStyle: "dark"}
+    );
   }
 
   function shouldRemoveRoutine(routineName) {
-    Alert.alert("Remove Routine", "Delete Routine?", [
-      {
-        text: "Cancel",
-        onPress: () => {},
-        style: "cancel",
-      },
-      {
-        text: "Delete",
-        onPress: () => {
-          removeRoutine(routineName);
+    Alert.alert(
+      "Remove Routine", 
+      "Delete Routine?", 
+      [
+        {
+          text: "Cancel",
+          onPress: () => {},
+          style: "cancel",
         },
-      },
-    ]);
+        {
+          text: "Delete",
+          onPress: () => {
+            removeRoutine(routineName);
+          },
+        },
+      ],
+      {userInterfaceStyle: "dark"}
+    );
   }
 
   return (

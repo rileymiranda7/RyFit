@@ -271,9 +271,14 @@ export default function App() {
     //scheduleNotificationsHandler();
     setTimerIsRunning(!timerIsRunning);
     if (!timerWasCanceled) {
-      Alert.alert("Time For Next Set!", "", [
-        { text: "OK", onPress: () => {} },
-      ]);
+      Alert.alert(
+        "Time For Next Set!", 
+        "", 
+        [
+          { text: "OK", onPress: () => {} },
+        ],
+        {userInterfaceStyle: "dark"}
+      );
     }
   };
 
@@ -302,7 +307,8 @@ export default function App() {
       if (finalStatus !== "granted") {
         Alert.alert(
           "Permission required",
-          "Push notifications need the appropriate permissions."
+          "Push notifications need the appropriate permissions.",
+          {userInterfaceStyle: "dark"}
         );
         return;
       }

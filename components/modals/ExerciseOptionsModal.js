@@ -59,7 +59,8 @@ export default function ExerciseOptionsModal({
             },
             style: "cancel",
           },
-        ]
+        ],
+        {userInterfaceStyle: "dark"}
       );
       } else {
         Alert.alert(
@@ -83,7 +84,8 @@ export default function ExerciseOptionsModal({
               },
               style: "destructive",
             },
-          ]
+          ],
+          {userInterfaceStyle: "dark"}
         );
       }
   }

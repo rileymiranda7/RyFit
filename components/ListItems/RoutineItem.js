@@ -33,7 +33,8 @@ export default function RoutineItem({ routineName, exercises }) {
             });
           },
         },
-      ]
+      ],
+      {userInterfaceStyle: "dark"}
     );
   }
 

@@ -110,7 +110,8 @@ export default function PickExerciseForRoutineScreen({ route }) {
             }
           },
         },
-      ]
+      ],
+      {userInterfaceStyle: "dark"}
     );
   }
 

@@ -482,3 +482,6 @@ exercise and completed sets
 exercise created and set data was stored
 
 forgot i changed end workout button
+
+exercise notes getting saved when workout is canceled
+only save exercise notes when exercise is being canceled

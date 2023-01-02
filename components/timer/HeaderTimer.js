@@ -20,9 +20,11 @@ export default function HeaderTimer({ restTimerAmount, rndm }) {
 
   const handleOnTimerAmountSet = (amount) => {
     if (amount > 10) {
-      alert("Timer cannot be over 10 minutes!");
+      alert("Timer cannot be over 10 minutes!",
+      {userInterfaceStyle: "dark"});
     } else if (amount <= 0) {
-      alert("Timer cannot be 0 minutes!");
+      alert("Timer cannot be 0 minutes!",
+      {userInterfaceStyle: "dark"});
     } else {
       setTimerAmount(Number(amount));
       setShowSetTimerModal(false);
@@ -51,7 +53,8 @@ export default function HeaderTimer({ restTimerAmount, rndm }) {
     setShowSetTimerModal(false);
     if (!wasCanceled) {
       playSound();
-      alert("Time for next set!");
+      alert("Time for next set!",
+      {userInterfaceStyle: "dark"});
     }
   };
 

@@ -83,7 +83,7 @@ export default function ActiveWorkoutScreen({
   const [keyboardHeight, setKeyboardHeight] = useState(0);
   const [keyboardY, setKeyboardY] = useState(517);
   const [isValidLeaveScreenAttempt, setIsValidLeaveScreenAttempt] = useState(false);
-  const [scrollOffset, setScrollOffset] = useState(0);
+  const [workoutStatus, setWorkoutStatus] = useState("IN PROGRESS")
 
   const flatlistRef = useRef();
 
@@ -270,7 +270,8 @@ export default function ActiveWorkoutScreen({
             },
             style: "destructive",
           },
-        ]
+        ],
+        {userInterfaceStyle: "dark"}
       );
       return;
     } else if (numSets - numSetsCompleted > 0) {
@@ -286,6 +287,7 @@ export default function ActiveWorkoutScreen({
           {
             text: "End Workout",
             onPress: async () => {
+              setWorkoutStatus("WORKOUT COMPLETED");
               setIsValidLeaveScreenAttempt(true);
               const duration = hours + "h " + minutes + "m"
               await updateWorkoutDuration(duration, workoutId);
@@ -300,7 +302,8 @@ export default function ActiveWorkoutScreen({
             },
             style: "destructive",
           },
-        ]
+        ],
+        {userInterfaceStyle: "dark"}
         );
     }
     else {
@@ -316,6 +319,7 @@ export default function ActiveWorkoutScreen({
           {
             text: "End Workout",
             onPress: async () => {
+              setWorkoutStatus("WORKOUT COMPLETED");
               setIsValidLeaveScreenAttempt(true);
               await updateWorkoutExerciseOrder(exerAndInstList, workoutId, true, -1);
               const duration = hours + "h " + minutes + "m";
@@ -326,37 +330,39 @@ export default function ActiveWorkoutScreen({
               });
             },
           },
-        ]
+        ],
+        {userInterfaceStyle: "dark"}
         );
       }
     }
 
-    const cancelWorkout = async () => {
-      Alert.alert(
-        `Cancel Workout?`,
-        "All workout data will be deleted",
-        [
-          {
-            text: "Continue Workout",
-            onPress: () => {},
-            style: "cancel",
+  const cancelWorkout = async () => {
+    Alert.alert(
+      `Cancel Workout?`,
+      "All workout data will be deleted",
+      [
+        {
+          text: "Continue Workout",
+          onPress: () => {},
+          style: "cancel",
+        },
+        {
+          text: "Cancel Workout",
+          onPress: async () => {
+            setIsValidLeaveScreenAttempt(true);
+            await deleteAllSetsFromWorkout(workoutId);
+            await deleteAllExerciseInstancesFromWorkout(workoutId);
+            await deleteWorkout(workoutId);
+            navigation.navigate("CurrentWorkout", {
+              workoutWasCompleted: false
+            });
           },
-          {
-            text: "Cancel Workout",
-            onPress: async () => {
-              setIsValidLeaveScreenAttempt(true);
-              await deleteAllSetsFromWorkout(workoutId);
-              await deleteAllExerciseInstancesFromWorkout(workoutId);
-              await deleteWorkout(workoutId);
-              navigation.navigate("CurrentWorkout", {
-                workoutWasCompleted: false
-              });
-            },
-            style: "destructive",
-          },
-        ]
-      );
-    }
+          style: "destructive",
+        },
+      ],
+      {userInterfaceStyle: "dark"}
+    );
+  }
 
   const updateNumSetsCompleted = (shouldAddOneSet) => {
     if (shouldAddOneSet) {
@@ -621,6 +627,7 @@ export default function ActiveWorkoutScreen({
                     onExerNumSetsChanged={onExerNumSetsChanged}
                     onExerNotesHeightChanged={onExerNotesHeightChanged}
                     onInstNotesHeightChanged={onInstNotesHeightChanged}
+                    workoutStatus={workoutStatus}
                   />
                 </TouchableOpacity>
               </ScaleDecorator>

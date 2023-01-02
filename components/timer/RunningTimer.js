@@ -67,7 +67,8 @@ export default function RunningTimer({
   const add10 = () => {
     // when between 50-59 seconds
     if (getTimeLeft() + 10 * 1000 >= 10 * 60 * 1000) {
-      alert("Max timer limit reached: 10 minutes");
+      alert("Max timer limit reached: 10 minutes",
+      {userInterfaceStyle: "dark"});
       return;
     }
     if (secDigit1 === 5) {

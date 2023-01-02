@@ -54,7 +54,8 @@ export default function CurrentWorkoutScreen() {
               onPress: () => {},
               style: "cancel",
             },
-          ]
+          ],
+          {userInterfaceStyle: "dark"}
         );
       } else {
         await insertEmptyRoutine(routineName);
@@ -81,7 +82,8 @@ export default function CurrentWorkoutScreen() {
               text: "Ok",
               onPress: () => {},
             },
-          ]
+          ],
+          {userInterfaceStyle: "dark"}
         );
         workoutWasCompleted = false;
     }
