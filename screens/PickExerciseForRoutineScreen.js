@@ -176,8 +176,7 @@ export default function PickExerciseForRoutineScreen({ route }) {
     pickExerciseList = (
       <View style={styles.exerciseList}>
         <Text style={styles.smallTitle}>
-          Pick exercise(s) below or type a new exercise above. 
-          Note: exercises already in routine will not be added
+          Pick exercises below or type a new or existing exercise above.
         </Text>
         <FlatList
           data={loadedExercises}
@@ -309,8 +308,8 @@ const styles = StyleSheet.create({
   },
   smallTitle: {
     color: "white",
-    fontWeight: "bold",
-    fontSize: 20,
+    fontSize: 15,
+    textAlign: "center"
   },
   header: {
     flexDirection: "row",
@@ -321,6 +320,7 @@ const styles = StyleSheet.create({
   },
   exerciseList: {
     minWidth: "100%",
+    maxHeight: "60%",
     padding: 10,
   },
   container: {

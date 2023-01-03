@@ -128,9 +128,8 @@ export default function PickExerciseForActiveWorkoutModal({
   if (loadedExercises && loadedExercises.length > 0) {
     pickExerciseList = (
       <View>
-        <Text style={{ color: "white"}}>
-          Pick exercise(s) below or type a new exercise above. 
-          Note: exercises already in workout will not be added
+        <Text style={styles.smallTitle}>
+        Pick exercises below or type a new or existing exercise above.
           </Text>
         <FlatList
           data={loadedExercises}
@@ -257,8 +256,10 @@ export default function PickExerciseForActiveWorkoutModal({
 const styles = StyleSheet.create({
   exerciseListContainer: {
     maxHeight: "49%",
-    minWidth: "80%",
-    backgroundColor: Colors.purple9
+    minWidth: "98%",
+    padding: 5,
+    backgroundColor: Colors.purple9,
+    borderRadius: 8
   },
   exerciseItemText: {
     fontSize: 20,
@@ -324,5 +325,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginVertical: 20,
     borderRadius: 8
+  },
+  smallTitle: {
+    color: "white",
+    fontSize: 15,
+    textAlign: "center"
   },
 });

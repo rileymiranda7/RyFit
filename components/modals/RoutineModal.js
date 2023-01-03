@@ -213,7 +213,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     paddingVertical: 10,
     elevation: 2,
-    marginVertical: 20,
+    marginBottom: 15,
     marginHorizontal: 50,
   },
   addButtonRow: {
@@ -227,6 +227,8 @@ const styles = StyleSheet.create({
   },
   exercises: {
     margin: 10,
+    flex: 1,
+    maxHeight: "80%"
   },
   exerciseTextStyle: {
     color: "white",
