@@ -29,6 +29,7 @@ export default function ExerciseItemInActiveWorkout({
   exer,
   inst,
   previous,
+  heightInfo,
   handleOnSetCompleted, 
   updateNumSetsCompletedInWkt,
   updateNumSetsInWkt,
@@ -246,7 +247,7 @@ export default function ExerciseItemInActiveWorkout({
   const deleteItem = async ({ item, index }) => {
     const setNumberToBeDeleted = index + 1;
     updateNumSetsInWkt(false);
-    onExerNumSetsChanged(exer.name, setRowArr.length - 1);
+    onExerNumSetsChanged(exer.name, heightInfo.numSets - 1);
 
     if (rowArr[index].status === "COMPLETED") {
       updateNumSetsCompletedInWkt(false);
@@ -409,7 +410,7 @@ export default function ExerciseItemInActiveWorkout({
       <Button 
         title="Add Set" 
         onPress={async () => {
-          onExerNumSetsChanged(exer.name, setRowArr.length + 1);
+          onExerNumSetsChanged(exer.name, heightInfo.numSets + 1);
           // get previous set of this exercise from the previous workout
           // if it exists
           let previousSet = {

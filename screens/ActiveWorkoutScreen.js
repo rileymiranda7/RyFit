@@ -480,9 +480,6 @@ export default function ActiveWorkoutScreen({
   }
 
   const handleGotRowY = (rowY, exerNumInList, setNumber) => {
-    console.log("handleGotRowY")
-    console.log("rowY: " + rowY);
-    console.log(windowHeight)
     // if focused input is near or below where keyboard will cover
     if (rowY + 20 >= keyboardY) {
       // calculate total offset from top
@@ -506,10 +503,7 @@ export default function ActiveWorkoutScreen({
           }
         }
       });
-      targetOffset -= 500;
-      console.log("rowY: " + rowY);
-      console.log("keyboardY: " + keyboardY);
-      console.log("targetOffset:" + targetOffset);
+      targetOffset -= 300;
       setTimeout(() => {
         flatlistRef.current.scrollToOffset({offset: targetOffset, animated: true})
       }, 700)
@@ -615,6 +609,7 @@ export default function ActiveWorkoutScreen({
                     exer={item.exer}
                     inst={item.inst}
                     previous={item.firstSet.previous}
+                    heightInfo={item.heightInfo}
                     handleOnSetCompleted={handleOnSetCompleted}
                     updateNumSetsCompletedInWkt={updateNumSetsCompleted}
                     updateNumSetsInWkt={updateNumSets}

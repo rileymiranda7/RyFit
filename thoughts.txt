@@ -491,3 +491,4 @@ or use keyboardawareflatlist npm module?
 but then cant drag exercises
 
 I THINK ITS ADDING SETS THATS MESSING UP OFFSET
+num sets not getting updated
