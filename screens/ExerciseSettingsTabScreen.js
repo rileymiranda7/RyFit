@@ -119,8 +119,8 @@ export default function ExerciseSettingsTabScreen({ exer }) {
           <View 
             style={{
               position: "absolute",
-              bottom: keyboardHeight + 20,
-              right: "8%",
+              bottom: keyboardHeight,
+              right: "0%",
             }}
           >
             <Pressable
@@ -131,8 +131,8 @@ export default function ExerciseSettingsTabScreen({ exer }) {
             >
               <Ionicons 
                 name="arrow-down-circle-outline" 
-                size={60} 
-                color={"yellow"} 
+                size={50} 
+                color={'rgba(255, 255, 10, 0.5)'} 
               />
             </Pressable>
           </View>)}

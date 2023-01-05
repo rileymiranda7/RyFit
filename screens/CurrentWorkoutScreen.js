@@ -186,8 +186,8 @@ export default function CurrentWorkoutScreen() {
           <View 
             style={{
               position: "absolute",
-              bottom: keyboardHeight + 20,
-              right: "8%",
+              bottom: keyboardHeight,
+              right: "1%",
             }}
           >
             <Pressable
@@ -198,8 +198,8 @@ export default function CurrentWorkoutScreen() {
             >
               <Ionicons 
                 name="arrow-down-circle-outline" 
-                size={60} 
-                color={"yellow"} 
+                size={50} 
+                color={'rgba(255, 255, 10, 0.5)'} 
               />
             </Pressable>
           </View>)}

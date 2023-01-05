@@ -691,7 +691,7 @@ export default function ActiveWorkoutScreen({
         style={{
           position: "absolute",
           bottom: keyboardHeight,
-          right: "1%",
+          right: "25%",
         }}
       >
         <Pressable
@@ -702,7 +702,7 @@ export default function ActiveWorkoutScreen({
         >
           <Ionicons 
             name="arrow-down-circle-outline" 
-            size={60} 
+            size={40} 
             color={'rgba(255, 255, 10, 0.5)'} 
           />
         </Pressable>
