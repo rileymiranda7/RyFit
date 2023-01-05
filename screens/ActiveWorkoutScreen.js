@@ -506,7 +506,7 @@ export default function ActiveWorkoutScreen({
           }
         }
       });
-      targetOffset -= 300;
+      targetOffset -= 500;
       console.log("rowY: " + rowY);
       console.log("keyboardY: " + keyboardY);
       console.log("targetOffset:" + targetOffset);
@@ -583,10 +583,10 @@ export default function ActiveWorkoutScreen({
                 }</Text>
                 <Text style={styles.colon}>:</Text>
                 <Text style={styles.timerDigit}>{
-                  minutes >= 60 || minutes < 10 ? 0 : minutes % 10
+                  minutes >= 60 || minutes < 10 ? 0 : Math.floor(minutes / 10)
                 }</Text>
                 <Text style={styles.timerDigit}>{
-                  minutes >= 10 ? Math.floor(minutes / 10) : minutes
+                  minutes >= 10 ? minutes % 10 : minutes
                 }</Text>
                 <Text style={styles.colon}>:</Text>
                 <Text style={styles.timerDigit}>{

@@ -485,3 +485,9 @@ forgot i changed end workout button
 
 exercise notes getting saved when workout is canceled
 only save exercise notes when exercise is being canceled
+
+convert activeworkout flatlist to scrollview??
+or use keyboardawareflatlist npm module?
+but then cant drag exercises
+
+I THINK ITS ADDING SETS THATS MESSING UP OFFSET
