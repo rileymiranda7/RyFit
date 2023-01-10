@@ -492,3 +492,21 @@ but then cant drag exercises
 
 I THINK ITS ADDING SETS THATS MESSING UP OFFSET
 num sets not getting updated
+
+need to fix exercise name too long in activeworkout
+need to fix with all user inputs everywhere:
+- exercise names
+- routine names
+- workout names
+- notes?
+
+problem is cant use length of string to tell
+how wide string is
+
+upper case letters letters are wider
+some letters in this font are wider than others
+
+font is not monospaced like menlo
+
+can use numberOfLines={1}
+

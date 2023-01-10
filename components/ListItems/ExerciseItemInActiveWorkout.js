@@ -313,6 +313,7 @@ export default function ExerciseItemInActiveWorkout({
         <Pressable 
           style={({ pressed }) => [
             styles.exerciseName,
+            styles.nameBox,
             pressed && { opacity: 0.5 }
           ]}
           onPress={() => {
@@ -324,16 +325,29 @@ export default function ExerciseItemInActiveWorkout({
         >
           <Text
             style={styles.exerciseTitleStyle}
+            numberOfLines={1}
           >{exer.name}</Text>
         </Pressable>
-        <IconButton
-          icon="ellipsis-horizontal-circle-outline"
-          size={30}
-          color="white"
-          onPress={() => {
-            openExerOptionsModal();
-          }}
-        />
+        <View style={{ 
+          flex: 1, 
+          backgroundColor: "#140438", 
+          borderRadius: 8, 
+          margin: 2,
+          justifyContent: "center",
+          alignItems: "center"
+          }}>
+          <Ionicons name="swap-vertical-outline" color="white" size={20} />
+        </View>
+        <View style={styles.ellipsesBox}>
+          <IconButton
+            icon="ellipsis-horizontal-circle-outline"
+            size={30}        
+            color="white"
+            onPress={() => {
+              openExerOptionsModal();
+            }}
+          />
+        </View>
       </View>
 
       <View style={{ flexDirection: "row", marginLeft: "1%", alignItems: "center",
@@ -468,8 +482,11 @@ export default function ExerciseItemInActiveWorkout({
 }
 
 const styles = StyleSheet.create({
-  nameRow: {
-    flex: 1,
+  nameBox: {
+    flex: 8,
+  },
+  ellipsesBox: {
+    flex: 1
   },
   nameAndOptionsRow: {
     flex: 1,

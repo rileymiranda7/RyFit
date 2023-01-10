@@ -31,10 +31,11 @@ export default function ExerciseOption({
         onPress={onPress}
       >
         <Ionicons name={"radio-button-on-outline"} size={24} color={"white"} />
-        <Text style={styles.exerciseItemText}>
+        <Text 
+          style={styles.exerciseItemText}
+          numberOfLines={1}
+        >
           {
-            exercise.name.length > 27 ? 
-            exercise.name.substring(0, 27) + "..." :
             exercise.name
           }
         </Text>
@@ -50,10 +51,11 @@ export default function ExerciseOption({
         onPress={onPress}
       >
         <Ionicons name={"radio-button-off-outline"} size={24} color={"white"} />
-        <Text style={styles.exerciseItemText}>
+        <Text 
+          style={styles.exerciseItemText}
+          numberOfLines={1}
+        >
           {
-            exercise.name.length > 27 ? 
-            exercise.name.substring(0,27) + "..." :
             exercise.name
           }
         </Text>
@@ -77,7 +79,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.purple6,
   },
   exerciseItemText: {
-    fontSize: 20,
+    fontSize: 15,
     color: "white",
     marginHorizontal: 5,
   },

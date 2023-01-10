@@ -312,7 +312,7 @@ const styles = StyleSheet.create({
     color: "white",
   },
   input: {
-    fontSize: 22,
+    fontSize: 16,
     backgroundColor: Colors.gray2,
     padding: 6,
     minWidth: "78%",
