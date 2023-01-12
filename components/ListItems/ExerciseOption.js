@@ -30,15 +30,19 @@ export default function ExerciseOption({
         ]}
         onPress={onPress}
       >
-        <Ionicons name={"radio-button-on-outline"} size={24} color={"white"} />
-        <Text 
-          style={styles.exerciseItemText}
-          numberOfLines={1}
-        >
-          {
-            exercise.name
-          }
-        </Text>
+        <View style={{ flex: 1 }}>
+          <Ionicons name={"radio-button-on-outline"} size={24} color={"white"} />
+        </View>
+        <View style={{ flex: 9 }}>
+          <Text 
+            style={styles.exerciseItemText}
+            numberOfLines={1}
+          >
+            {
+              exercise.name
+            }
+          </Text>
+        </View>
       </Pressable>
     );
   } else {
@@ -50,15 +54,19 @@ export default function ExerciseOption({
         ]}
         onPress={onPress}
       >
-        <Ionicons name={"radio-button-off-outline"} size={24} color={"white"} />
-        <Text 
-          style={styles.exerciseItemText}
-          numberOfLines={1}
-        >
-          {
-            exercise.name
-          }
-        </Text>
+        <View style={{ flex: 1}}>
+          <Ionicons name={"radio-button-off-outline"} size={24} color={"white"} />
+        </View>
+        <View style={{ flex: 9 }}>
+          <Text 
+            style={styles.exerciseItemText}
+            numberOfLines={1}
+          >
+            {
+              exercise.name
+            }
+          </Text>
+        </View>
       </Pressable>
     );
   }

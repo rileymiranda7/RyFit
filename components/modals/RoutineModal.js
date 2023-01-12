@@ -146,26 +146,26 @@ export default function RoutineModal({ navigation, route }) {
                         <Pressable
                           style={({ pressed }) => [pressed && { opacity: 0.5 }]}
                         >
-                        <IconButton
-                          icon="trash"
-                          onPress={() => {
-                            shouldRemoveExerciseFromRoutine(
-                              item.name,
-                              routineName
-                            );
-                          }}
-                          size={30}
-                      color={Colors.blue4}
-                    />
-                  </Pressable>
-                  <Text style={styles.exerciseTextStyle}>
-                    {
-                    item.name.length > 27 ? 
-                      item.name.substring(0,27) + "...": 
-                      item.name
-                    }
-                  </Text>
-                </View>
+                          <IconButton
+                            icon="trash"
+                            onPress={() => {
+                              shouldRemoveExerciseFromRoutine(
+                                item.name,
+                                routineName
+                              );
+                            }}
+                            size={30}
+                            color={Colors.blue4}
+                          />
+                        </Pressable>
+                        <View style={{ maxWidth: "90%"}}>
+                          <Text style={styles.exerciseTextStyle}>
+                            {
+                              item.name
+                            }
+                          </Text>
+                        </View>
+                      </View>
                     </TouchableOpacity>
                   </ScaleDecorator>
                 );
@@ -232,7 +232,7 @@ const styles = StyleSheet.create({
   },
   exerciseTextStyle: {
     color: "white",
-    fontSize: 20,
+    fontSize: 15,
     marginVertical: 10,
     marginHorizontal: 5,
   },

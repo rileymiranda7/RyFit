@@ -510,3 +510,8 @@ font is not monospaced like menlo
 
 can use numberOfLines={1}
 
+there should be places where the whole name is shown
+like exercise names in routine screen
+routine name in routine screen
+exercise name in past workout screen
+exercise name in exercise in history and records screens
