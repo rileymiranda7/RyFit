@@ -205,7 +205,7 @@ function BottomTabsNavigator({ handleOnSetCompleted }) {
           tabBarColor: Colors.purple12
         }}
       />
-      <BottomTabs.Screen
+      {/* <BottomTabs.Screen
         name="Debug"
         component={DebugScreen}
         options={{
@@ -215,7 +215,7 @@ function BottomTabsNavigator({ handleOnSetCompleted }) {
           ),
           tabBarColor: "red"
         }}
-      />
+      /> */}
       <BottomTabs.Screen
         name="Workout"
         //component={CurrentWorkoutStackNavigator}

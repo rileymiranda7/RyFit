@@ -515,3 +515,6 @@ like exercise names in routine screen
 routine name in routine screen
 exercise name in past workout screen
 exercise name in exercise in history and records screens
+
+splash screen doesnt fit to screen on iphone 8+
+timer input layout not right on ipad
