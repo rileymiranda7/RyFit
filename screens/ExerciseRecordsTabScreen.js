@@ -62,7 +62,7 @@ export default function ExerciseRecordsTabScreen({ exer}) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.exerciseNameTextStyle}>{exer.name}</Text>
+      <Text style={[styles.exerciseNameTextStyle, { margin: 12 }]}>{exer.name}</Text>
       {renderThis}
     </View>
   )
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "bold",
     textAlign: "center",
-    fontSize: 20,
+    fontSize: 16,
     marginVertical: 5,
   },
   recordsLabelTextStyle: {

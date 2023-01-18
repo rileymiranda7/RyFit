@@ -128,7 +128,7 @@ export default function ExerciseHistoryTabScreen({ exer, workoutId }) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.textStyle}>{exer.name}</Text>
+      <Text style={[styles.textStyle, { margin: 12 }]}>{exer.name}</Text>
       {renderExerciseNotes}
       {renderPastInstances}
     </View>
@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "bold",
     textAlign: "center",
-    fontSize: 20,
+    fontSize: 16,
     marginVertical: 5,
   },
   noPastInstancesTextStyle: {

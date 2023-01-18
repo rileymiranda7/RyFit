@@ -508,13 +508,17 @@ some letters in this font are wider than others
 
 font is not monospaced like menlo
 
-can use numberOfLines={1}
+can use numberOfLines={1} and 
+flex size
 
 there should be places where the whole name is shown
 like exercise names in routine screen
 routine name in routine screen
 exercise name in past workout screen
 exercise name in exercise in history and records screens
-
+exercise name in active workout
 splash screen doesnt fit to screen on iphone 8+
 timer input layout not right on ipad
+change to slider?
+
+swipe down to dismiss shows when coming from records to history
