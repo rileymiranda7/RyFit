@@ -55,11 +55,13 @@ export default function PastWorkoutItem({
         {loadedExercises !== undefined && loadedExercises.length > 0 && 
         (loadedExercises.map((en, index) => {
           return (
-            <Text style={styles.exerciseTextStyle} key={index}>
+            <Text 
+              style={[styles.exerciseTextStyle]} 
+              key={index}
+              numberOfLines={1}
+            >
               {
-                en.exerciseName.length > 40 ? 
-                  en.exerciseName.substring(0,40) + "...": 
-                  en.exerciseName
+                en.exerciseName
               }
             </Text>
           );
