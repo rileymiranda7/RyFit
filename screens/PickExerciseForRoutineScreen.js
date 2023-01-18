@@ -258,12 +258,8 @@ export default function PickExerciseForRoutineScreen({ route }) {
                 }
               }}
             >
-              <Text style={styles.textStyle}>
-                Add to {
-                  routineName.length > 20 ? 
-                    routineName.substring(0,20) + "...": 
-                    routineName
-                }
+              <Text style={styles.textStyle} numberOfLines={1}>
+                Add to {routineName}
               </Text>
             </Pressable>
           </View>

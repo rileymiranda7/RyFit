@@ -43,13 +43,12 @@ export default function PastWorkoutItem({
         <View style={styles.headerContainer}>
           <Text 
             numberOfLines={1}
-            ellipsizeMode="clip"
-            style={styles.workoutNameStyle}
+            style={[styles.workoutNameStyle, {flex: 8}]}
           >
             {workout.name}
           </Text>
-          <Text style={styles.workoutDateTimeStyle}>
-            {workout.dateShort + ' | ' + workout.startTime}
+          <Text style={[styles.workoutDateTimeStyle, {flex: 2}]}>
+            {workout.dateShort}
           </Text>
         </View>
         {loadedExercises !== undefined && loadedExercises.length > 0 && 
@@ -82,8 +81,7 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 15,
     fontWeight: "bold",
-    textAlign: "center",
-    maxWidth: "55%",
+    textAlign: "left",
   },
   workoutDateTimeStyle: {
     color: "white",

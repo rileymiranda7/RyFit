@@ -104,13 +104,6 @@ export default function RoutineModal({ navigation, route }) {
             size={40}
             color={Colors.blue4}
           />
-          <Text style={styles.routineName}>
-            {
-              routineName.length > 20 ? 
-                routineName.substring(0,10) + "...": 
-                routineName
-            }
-          </Text>
           <BackButton
             onPress={() => {
               navigation.goBack();
@@ -118,6 +111,13 @@ export default function RoutineModal({ navigation, route }) {
             size={40}
             color={Colors.purple11}
           />
+        </View>
+        <View style={{ alignItems: "center", justifyContent: "center"}}>
+          <Text 
+            style={[styles.routineName, { maxWidth: "90%" }]}
+          >
+            {routineName}
+          </Text>
         </View>
         <View style={styles.exercises}>
           {(!loadedExercises || loadedExercises.length === 0) && (
@@ -240,7 +240,7 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "bold",
     textAlign: "center",
-    fontSize: 25,
+    fontSize: 20,
   },
   header: {
     flexDirection: "row",
