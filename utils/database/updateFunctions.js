@@ -319,6 +319,27 @@ export async function updateExerciseRestTime(exerciseName, newRestTime) {
   return promise;
 }
 
+export async function updateExerciseSetTimerOn(exerciseName, newStatus) {
+  const promise = new Promise((resolve, reject) => {
+    database.transaction((tx) => {
+      tx.executeSql(
+        `UPDATE exercises 
+        SET setTimerOn = ?
+        WHERE exerciseName = ?;`,
+        [newStatus, exerciseName],
+        (_, result) => {
+          resolve(result);
+        },
+        (_, error) => {
+          reject(error);
+        }
+      );
+    });
+  });
+
+  return promise;
+}
+
 export async function updateExerciseNotes(newNotes, exerciseName) {
   const promise = new Promise((resolve, reject) => {
     database.transaction((tx) => {

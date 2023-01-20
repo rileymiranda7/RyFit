@@ -83,7 +83,7 @@ export default function PickExerciseForRoutineScreen({ route }) {
 
   async function addExercise() {
     const newExercise = new Exercise(
-      exerciseNameInput, "3", null, 0, "", 0, "", 0, "");
+      exerciseNameInput, "3", 1, null, 0, "", 0, "", 0, "");
     await insertExercise(newExercise);
     submitPickedExerciseHandler([...selectedExercises, newExercise]);
   }
@@ -140,7 +140,7 @@ export default function PickExerciseForRoutineScreen({ route }) {
       ) {
         submitPickedExerciseHandler([
           ...selectedExercises,
-          new Exercise(exerciseNameInput, "3:00", null, null),
+          new Exercise(exerciseNameInput, "3:00", 1, null, null),
         ]);
       } else {
         submitPickedExerciseHandler(selectedExercises);

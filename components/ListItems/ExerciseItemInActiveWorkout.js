@@ -14,6 +14,7 @@ import { insertSet } from "../../utils/database/insertFunctions";
 import {
   updateExerciseNotes, 
   updateExerciseRestTime, 
+  updateExerciseSetTimerOn, 
   updateExerInstNotes, 
   updateSetOrder, 
   updateSetReps, 
@@ -28,9 +29,9 @@ import { Colors } from "../../constants/colors";
 export default function ExerciseItemInActiveWorkout({ 
   exer,
   inst,
+  handleOnSetCompleted, 
   previous,
   heightInfo,
-  handleOnSetCompleted, 
   updateNumSetsCompletedInWkt,
   updateNumSetsInWkt,
   workoutId,
@@ -60,6 +61,7 @@ export default function ExerciseItemInActiveWorkout({
   ]);
   const [restTimeAmount, setRestTimeAmount] = useState(
     exer?.restTime ? exer.restTime : "2.25");
+  const [setTimerOn, setSetTimerOn] = useState(exer?.setTimerOn === 1 ? true : false);
   const [exerOptionsModalVisible, setExerOptionsModalVisible] = useState(false);
   // set counters for exercise
   const [currentNumberOfSets, setCurrentNumberOfSets] = useState(1);
@@ -109,7 +111,9 @@ export default function ExerciseItemInActiveWorkout({
               if (set.weight && set.reps && 
                 isNumeric(set.weight) && isNumeric(set.reps)) {
                 shouldStatusBeCompleted = true;
-                handleOnSetCompleted(restTimeAmount);
+                if (setTimerOn) {
+                  handleOnSetCompleted(restTimeAmount);
+                }
                 updateNumSetsCompletedInWkt(true);
                 setNumCompletedSetsInExer(numCompletedSetsInExer + 1);
               } else {
@@ -295,6 +299,11 @@ export default function ExerciseItemInActiveWorkout({
     return minutes + seconds / 60;
   };
 
+  const handleSetTimerStatusChanged = async () => {
+    setSetTimerOn(!setTimerOn);
+    await updateExerciseSetTimerOn(exer.name, !setTimerOn === true ? 1 : 0);
+  }
+
 
 
   useEffect(() => {
@@ -474,6 +483,8 @@ export default function ExerciseItemInActiveWorkout({
               handleRestTimeSet={handleRestTimeSet}
               restTimeAmount={restTimeAmount}
               changeExerName={changeExerName}
+              setTimerOn={setTimerOn}
+              handleSetTimerStatusChanged={handleSetTimerStatusChanged}
             />
           )}
       </View>

@@ -50,10 +50,10 @@ const promise = new Promise((resolve, reject) => {
   database.transaction((tx) => {
     tx.executeSql(
       `INSERT INTO exercises (
-        exerciseName, restTime, exerciseNotes, maxWeight, maxWeightDate,
+        exerciseName, restTime, setTimerOn, exerciseNotes, maxWeight, maxWeightDate,
         maxReps, maxRepsDate, maxVolume, maxVolumeDate)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);`,
-      [e.name, e.restTime, e.notes, e.maxWeight, e.maxWeightDate, e.maxReps,
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
+      [e.name, e.restTime, e.setTimerOn, e.notes, e.maxWeight, e.maxWeightDate, e.maxReps,
         e.maxRepsDate, e.maxVolume, e.maxVolumeDate],
       (_, result) => {
         resolve(result);

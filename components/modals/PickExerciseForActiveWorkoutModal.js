@@ -52,7 +52,7 @@ export default function PickExerciseForActiveWorkoutModal({
 
   async function addExercise() {
     const newExercise = new Exercise(
-      exerciseNameInput, "3", null, 0, "", 0, "", 0, "");
+      exerciseNameInput, "3", 1, null, 0, "", 0, "", 0, "");
     await insertExercise(newExercise);
     await submitPickedExerciseHandler([...selectedExercises, newExercise]);
   }
@@ -109,7 +109,7 @@ export default function PickExerciseForActiveWorkoutModal({
       ) {
         await submitPickedExerciseHandler([
           ...selectedExercises,
-          new Exercise(exerciseNameInput, "3:00", null, null),
+          new Exercise(exerciseNameInput, "3:00", 1, null, null),
         ]);
       } else {
         await submitPickedExerciseHandler(selectedExercises);

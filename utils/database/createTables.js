@@ -37,6 +37,7 @@ export function initExercises() {
         CREATE TABLE IF NOT EXISTS exercises (
           exerciseName TEXT PRIMARY KEY NOT NULL,
           restTime TEXT,
+          setTimerOn INT,
           exerciseNotes TEXT,
           maxWeight REAL,
           maxWeightDate TEXT,

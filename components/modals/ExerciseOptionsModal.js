@@ -7,7 +7,8 @@ import {
   Keyboard, 
   TextInput, 
   Button,
-  Alert 
+  Alert, 
+  Switch
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import { Ionicons } from "@expo/vector-icons";
@@ -26,7 +27,9 @@ export default function ExerciseOptionsModal({
   numCompletedSetsInExer,
   handleRestTimeSet,
   restTimeAmount,
-  changeExerName
+  changeExerName,
+  setTimerOn,
+  handleSetTimerStatusChanged
 }) {
 
   const [selectedSecondsVal, setSelectedSecondsVal] = useState("00");
@@ -37,6 +40,8 @@ export default function ExerciseOptionsModal({
   const [exerciseNameInput, setExerciseNameInput] = useState("");
   const [shouldShowKeyboardDismiss, setShouldShowKeyboardDismiss] = useState(false);
   const [keyboardHeight, setKeyboardHeight] = useState(0);
+  const [switchOn, setSwitchOn] = useState(setTimerOn)
+
 
   const convertToWholeMinsAndSecs = (amount) => {
     const mins = Math.floor(amount);
@@ -150,15 +155,17 @@ export default function ExerciseOptionsModal({
         </Pressable>)}
         {shouldShowRestTimerPicker && !shouldShowChangeExerName && (
           <View style={{ flex: 1, minWidth: "100%"}}>
-            <Text style={styles.textStyle}>
-              {
-                "Current Rest Time: " +
-                convertToWholeMinsAndSecs(restTimeAmount).mins +
-                " min " +
-                convertToWholeMinsAndSecs(restTimeAmount).secs + 
-                " s"
-              }
-            </Text>
+            <View style={{flexDirection: "row", justifyContent:  "space-between"}}>
+              <Text style={styles.textStyle}>
+                {
+                  "Current: " +
+                  convertToWholeMinsAndSecs(restTimeAmount).mins +
+                  " min " +
+                  convertToWholeMinsAndSecs(restTimeAmount).secs + 
+                  " s"
+                }
+              </Text>
+            </View>
             <View style={styles.pressableRow}>
               <Picker
                 style={{ minWidth: "30%" }}
@@ -259,7 +266,7 @@ export default function ExerciseOptionsModal({
               ]}
               onChangeText={setExerciseNameInput}
               value={exerciseNameInput}
-              placeholder="Enter an Exercise"
+              placeholder="Enter a new name"
               maxLength={50}
               keyboardAppearance='dark'
               onFocus={() => {
@@ -318,6 +325,23 @@ export default function ExerciseOptionsModal({
         )}
         {!shouldShowRestTimerPicker && !shouldShowChangeExerName && (
           <View>
+            <View style={styles.pressableRow}>
+              <Text style={styles.textStyle}>
+              Set Timer:
+              </Text>
+              <View style={{ margin: 5, marginLeft: "5%"}}>
+                <Switch 
+                  trackColor={{ false: "#767577", true: "#81b0ff" }}
+                  thumbColor={switchOn ? "#f5dd4b" : "#f4f3f4"}
+                  ios_backgroundColor="#3e3e3e"
+                  onValueChange={async () => {
+                    setSwitchOn(switchOn);
+                    await handleSetTimerStatusChanged();
+                  }}
+                  value={setTimerOn}
+                />
+              </View>
+            </View>
             <Pressable
                 style={({ pressed }) => [
                   pressed && { opacity: 0.5 },
@@ -378,9 +402,8 @@ const styles = StyleSheet.create({
   },
   textStyle: {
     color: "white",
-    fontWeight: "bold",
     textAlign: "center",
-    fontSize: 16,
+    fontSize: 15,
   },
   pressableRow: {
     marginHorizontal: 5,
@@ -417,7 +440,7 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "bold",
     textAlign: "center",
-    fontSize: 20,
+    fontSize: 16,
     marginVertical: 5,
   },
   input: {

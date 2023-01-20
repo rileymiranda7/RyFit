@@ -517,8 +517,17 @@ routine name in routine screen
 exercise name in past workout screen
 exercise name in exercise in history and records screens
 exercise name in active workout
+
 splash screen doesnt fit to screen on iphone 8+
+
 timer input layout not right on ipad
 change to slider?
 
 swipe down to dismiss shows when coming from records to history
+
+for rest timer on/off use switch in exercise options
+
+restTimer field in exercises table will be int value 
+0 is false and 1 is true
+
+clean up RoutineItem.js

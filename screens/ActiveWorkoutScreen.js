@@ -56,7 +56,8 @@ export default function ActiveWorkoutScreen({
     exer: {
       name,
       restTime,
-      notes 
+      notes,
+      setTimerOn
     },
     inst: {
       name,
@@ -219,7 +220,7 @@ export default function ActiveWorkoutScreen({
             previousSet));
             
           numberOfSets++;
-
+          console.log("exercise setTimerOn", exercise.setTimerOn);
           tempExerAndInstList.push({ 
             exer: exercise, inst: exerciseInstance, 
             firstSet: {

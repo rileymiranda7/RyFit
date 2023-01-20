@@ -103,6 +103,7 @@ export async function fetchExercise(exerciseName) {
             const exercise = new Exercise(
               result?.rows?._array[0]?.exerciseName,
               result?.rows?._array[0]?.restTime,
+              result?.rows?._array[0]?.setTimerOn,
               result?.rows?._array[0]?.exerciseNotes
               );
             resolve(exercise);
@@ -166,6 +167,7 @@ export function fetchExercises() {
               new Exercise(
                 e.exerciseName,
                 e.restTime,
+                e.setTimerOn,
                 e.exerciseNotes,
                 e.maxWeight,
                 e.maxWeightDate,
