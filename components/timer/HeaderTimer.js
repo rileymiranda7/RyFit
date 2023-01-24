@@ -6,7 +6,11 @@ import IconButton from "../IconButton";
 import RunningTimer from "./RunningTimer";
 import SetTimerModal from "../modals/SetTimerModal";
 
-export default function HeaderTimer({ restTimerAmount, rndm }) {
+export default function HeaderTimer({ 
+  restTimerAmount, 
+  rndm,
+  sendTimerNotif
+}) {
   const [timerIsRunning, setTimerIsRunning] = useState(false);
   const [showSetTimerModal, setShowSetTimerModal] = useState(false);
   const [timerAmount, setTimerAmount] = useState("5");
@@ -38,12 +42,12 @@ export default function HeaderTimer({ restTimerAmount, rndm }) {
 
   };
 
-  async function playSound() {
+  /* async function playSound() {
     const { sound } = await Audio.Sound.createAsync( require('../../assets/bellAlert.wav')
     );
     setSound(sound);
     await sound.playAsync();
-  }
+  } */
 
   const onTimerEnd = (wasCanceled) => {
     if (useRestTime) {
@@ -52,19 +56,12 @@ export default function HeaderTimer({ restTimerAmount, rndm }) {
     setTimerIsRunning(false);
     setShowSetTimerModal(false);
     if (!wasCanceled) {
-      playSound();
-      alert("Time for next set!",
-      {userInterfaceStyle: "dark"});
+      //playSound();
+      /* alert("Time for next set!",
+      {userInterfaceStyle: "dark"}); */
+      sendTimerNotif();
     }
   };
-
-  useEffect(() => {
-    return sound
-      ? () => {
-          sound.unloadAsync();
-        }
-      : undefined;
-  }, [sound]);
 
   useEffect(() => {
     if (initialRender) {

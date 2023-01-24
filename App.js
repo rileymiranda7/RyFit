@@ -366,7 +366,11 @@ export default function App() {
               title: "RyFit",
               headerRight: () => {
                 return (
-                  <HeaderTimer restTimerAmount={restTimerAmount} rndm={rndm} />
+                  <HeaderTimer 
+                    restTimerAmount={restTimerAmount} 
+                    rndm={rndm}
+                    sendTimerNotif={scheduleNotificationsHandler}
+                  />
                 );
               },
               drawerActiveTintColor: "white",
