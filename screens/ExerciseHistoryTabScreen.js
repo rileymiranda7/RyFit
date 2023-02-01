@@ -83,7 +83,8 @@ export default function ExerciseHistoryTabScreen({ exer, workoutId }) {
       showMessage({
         message: "Swipe down from tab bar to dismiss",
         type: "info",
-        statusBarHeight: 50
+        position: "bottom",
+        floating: true
       });
       loadData()
     }

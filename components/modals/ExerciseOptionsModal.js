@@ -166,50 +166,52 @@ export default function ExerciseOptionsModal({
                 }
               </Text>
             </View>
-            <View style={styles.pressableRow}>
-              <Picker
-                style={{ minWidth: "30%" }}
-                itemStyle={{ color: "white" }}
-                selectedValue={selectedMinutesVal}
-                onValueChange={(itemValue, itemIndex) => {
-                  setSelectedMinutesVal(itemValue);
-                }
-                }>
-                <Picker.Item label="0" value="00" />
-                <Picker.Item label="1" value="01" />
-                <Picker.Item label="2" value="02" />
-                <Picker.Item label="3" value="03" />
-                <Picker.Item label="4" value="04" />
-                <Picker.Item label="5" value="05" />
-                <Picker.Item label="6" value="06" />
-                <Picker.Item label="7" value="07" />
-                <Picker.Item label="8" value="08" />
-                <Picker.Item label="9" value="09" />
-                <Picker.Item label="10" value="10" />
-              </Picker>
-              <Text style={styles.textStyle}>min</Text>
-              <Picker
-                style={{ minWidth: "30%" }}
-                itemStyle={{ color: "white" }}
-                selectedValue={selectedSecondsVal}
-                onValueChange={(itemValue, itemIndex) => {
-                  setSelectedSecondsVal(itemValue);
-                }
-                }>
-                <Picker.Item label="0" value="00" />
-                <Picker.Item label="5" value="05" />
-                <Picker.Item label="10" value="10" />
-                <Picker.Item label="15" value="15" />
-                <Picker.Item label="20" value="20" />
-                <Picker.Item label="25" value="25" />
-                <Picker.Item label="30" value="30" />
-                <Picker.Item label="35" value="35" />
-                <Picker.Item label="40" value="40" />
-                <Picker.Item label="45" value="45" />
-                <Picker.Item label="50" value="50" />
-                <Picker.Item label="55" value="55" />
-              </Picker>
-              <Text style={styles.textStyle}>s</Text>
+            <View style={{ maxHeight: "94%"}}>
+              <View style={styles.pickerContainer}>
+                <Picker
+                  style={{ minWidth: "30%",  }}
+                  itemStyle={{ color: "white", fontSize: 15, height: "70%" }}
+                  selectedValue={selectedMinutesVal}
+                  onValueChange={(itemValue, itemIndex) => {
+                    setSelectedMinutesVal(itemValue);
+                  }
+                  }>
+                  <Picker.Item label="0" value="00" />
+                  <Picker.Item label="1" value="01" />
+                  <Picker.Item label="2" value="02" />
+                  <Picker.Item label="3" value="03" />
+                  <Picker.Item label="4" value="04" />
+                  <Picker.Item label="5" value="05" />
+                  <Picker.Item label="6" value="06" />
+                  <Picker.Item label="7" value="07" />
+                  <Picker.Item label="8" value="08" />
+                  <Picker.Item label="9" value="09" />
+                  <Picker.Item label="10" value="10" />
+                </Picker>
+                <Text style={styles.textStyle}>min</Text>
+                <Picker
+                  style={{ minWidth: "30%"}}
+                  itemStyle={{ color: "white", fontSize: 15, height: "70%" }}
+                  selectedValue={selectedSecondsVal}
+                  onValueChange={(itemValue, itemIndex) => {
+                    setSelectedSecondsVal(itemValue);
+                  }
+                  }>
+                  <Picker.Item label="0" value="00" />
+                  <Picker.Item label="5" value="05" />
+                  <Picker.Item label="10" value="10" />
+                  <Picker.Item label="15" value="15" />
+                  <Picker.Item label="20" value="20" />
+                  <Picker.Item label="25" value="25" />
+                  <Picker.Item label="30" value="30" />
+                  <Picker.Item label="35" value="35" />
+                  <Picker.Item label="40" value="40" />
+                  <Picker.Item label="45" value="45" />
+                  <Picker.Item label="50" value="50" />
+                  <Picker.Item label="55" value="55" />
+                </Picker>
+                <Text style={styles.textStyle}>s</Text>
+              </View>
             </View>
             <View style={styles.buttonsRow}>
               <Pressable
@@ -223,14 +225,16 @@ export default function ExerciseOptionsModal({
                       showMessage({
                         message: "Auto Rest Timer has max of 10 min!",
                         type: "danger",
-                        statusBarHeight: 50
+                        position: "top",
+                        floating: true
                       });
                   } else if (selectedMinutesVal === "00" && 
                   selectedSecondsVal === "00") {
                     showMessage({
                       message: "Auto Rest Timer cannot be 0 min 0 s!",
                       type: "danger",
-                      statusBarHeight: 50
+                      position: "top",
+                      floating: true
                     });
                   } else {
                     await handleRestTimeSet(selectedMinutesVal + selectedSecondsVal);
@@ -383,13 +387,13 @@ export default function ExerciseOptionsModal({
 
 const styles = StyleSheet.create({
   modalView: {
-    margin: 20,
-    marginTop: "80%",
+    margin: "5%",
+    marginTop: "70%",
     width: "90%",
-    height: "50%",
+    height: "65%",
     backgroundColor: Colors.purple9,
     borderRadius: 20,
-    padding: 10,
+    padding: "7%",
     alignItems: "center",
     shadowColor: "black",
     shadowOffset: {
@@ -417,13 +421,18 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     minWidth: "95%"
   },
+  pickerContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: Colors.purple8,
+  },
   buttonsRow: {
-    margin: 5,
-    flex: 1,
+    margin: 0,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-around",
-    minWidth: "70%"
+    minWidth: "70%",
   },
   button: {
     borderRadius: 20,

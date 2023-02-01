@@ -91,7 +91,7 @@ export default function SetTimerModal({
               <Text style={styles.textStyle}>s</Text>
             </View>
             <View style={styles.timerButtonsContainer}>
-              <View style={styles.startButtonRow}>
+              <View style={styles.startCancelButtonRow}>
                 <Pressable
                   style={({ pressed }) => [
                     styles.startButton,
@@ -103,13 +103,16 @@ export default function SetTimerModal({
                       showMessage({
                         message: "Auto Rest Timer has max of 10 min!",
                         type: "danger",
+                        position: "bottom",
+                        floating: true
                       });
                   } else if (selectedMinutesVal === "00" && 
                   selectedSecondsVal === "00") {
                     showMessage({
                       message: "Auto Rest Timer cannot be 0 min 0 s!",
                       type: "danger",
-                      
+                      position: "bottom",
+                      floating: true
                     });
                   } else {
                     handleOnTimerAmountSet(
@@ -119,6 +122,15 @@ export default function SetTimerModal({
                   }}
                 >
                   <Text style={styles.textStyle}>Start Timer</Text>
+                </Pressable>
+                <Pressable
+                  style={({ pressed }) => [
+                    styles.cancelButton,
+                    pressed && { opacity: 0.5 },
+                  ]}
+                  onPress={() => closeModal()}
+                >
+                  <Text style={styles.textStyle}>Cancel</Text>
                 </Pressable>
               </View>
               <View style={styles.timerButtonsRow1}>
@@ -208,17 +220,6 @@ export default function SetTimerModal({
                   <Text style={styles.textStyle}>7:00</Text>
                 </Pressable>
               </View>
-              <View style={styles.closeButtonRow}>
-                <Pressable
-                  style={({ pressed }) => [
-                    styles.cancelButton,
-                    pressed && { opacity: 0.5 },
-                  ]}
-                  onPress={() => closeModal()}
-                >
-                  <Text style={styles.textStyle}>Cancel</Text>
-                </Pressable>
-              </View>
             </View>
           </View>
         </View>
@@ -230,7 +231,7 @@ export default function SetTimerModal({
 const styles = StyleSheet.create({
   modalView: {
     margin: "5%",
-    marginTop: "26%",
+    marginTop: "15%",
     width: "90%",
     height: "85%",
     backgroundColor: Colors.purple10,
@@ -250,8 +251,8 @@ const styles = StyleSheet.create({
   },
   pickerContainer: {
     marginHorizontal: 5,
-    marginVertical: 10,
-    paddingVertical: 5,
+    marginVertical: 0,
+    paddingVertical: 0,
     paddingHorizontal: 3,
     flexDirection: "row",
     alignItems: "center",
@@ -270,31 +271,31 @@ const styles = StyleSheet.create({
   },
   startButton: {
     borderRadius: 20,
+    borderColor: Colors.green3,
+    borderWidth: 2,
     padding: 10,
     elevation: 2,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: Colors.green3,
   },
   timerButton: {
-    borderRadius: 26,
-    borderWidth: 1,
-    borderColor: "white",
+    borderRadius: 5,
     minWidth: "22%",
     padding: 10,
     elevation: 2,
-    marginVertical: 20,
+    marginVertical: 5,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: Colors.blue3,
+    backgroundColor: Colors.purple1,
   },
   cancelButton: {
     borderRadius: 20,
+    borderColor: Colors.red2,
+    borderWidth: 2,
     padding: 10,
     elevation: 2,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: Colors.red2,
   },
   textStyle: {
     color: "white",
@@ -317,40 +318,29 @@ const styles = StyleSheet.create({
   },
   timerButtonsContainer: {
     flex: 1,
-    minWidth: "80%",
-    maxWidth: "90%",
+    minWidth: "70%",
+    maxWidth: "70%",
     minHeight: "15%",
-    maxHeight: "50%"
+    maxHeight: "40%"
   },
-  startButtonRow: {
-    minHeight: "5%",
-    maxHeight: "13%",
-    minWidth: "4%",
+  startCancelButtonRow: {
     flexDirection: "row",
-    justifyContent: "center",
+    justifyContent: "space-around",
+    marginVertical: 5
   },
   timerButtonsRow1: {
-    minHeight: "13%",
-    minWidth: "4%",
     flexDirection: "row",
     justifyContent: "space-between",
   },
   timerButtonsRow2: {
-    minHeight: "13%",
-    minWidth: "4%",
     flexDirection: "row",
     justifyContent: "space-between",
   },
   timerButtonsRow3: {
-    minHeight: "13%",
-    minWidth: "4%",
     flexDirection: "row",
     justifyContent: "space-between",
   },
   closeButtonRow: {
-    minHeight: "5%",
-    maxHeight: "13%",
-    minWidth: "4%",
     flexDirection: "row",
     justifyContent: "center",
   },
