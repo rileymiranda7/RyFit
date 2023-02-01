@@ -205,7 +205,7 @@ function BottomTabsNavigator({ handleOnSetCompleted }) {
           tabBarColor: Colors.purple12
         }}
       />
-      <BottomTabs.Screen
+      {/* <BottomTabs.Screen
         name="Debug"
         component={DebugScreen}
         options={{
@@ -215,7 +215,7 @@ function BottomTabsNavigator({ handleOnSetCompleted }) {
           ),
           tabBarColor: "red"
         }}
-      />
+      /> */}
       <BottomTabs.Screen
         name="Workout"
         //component={CurrentWorkoutStackNavigator}
@@ -303,7 +303,7 @@ export default function App() {
         const { status } = await Notifications.requestPermissionsAsync();
         finalStatus = status;
       }
-
+      console.log("final status", finalStatus);
       if (finalStatus !== "granted") {
         Alert.alert(
           "Permission required",
@@ -378,7 +378,7 @@ export default function App() {
                 <Ionicons name="barbell-outline" color={"white"} size={26} />
             }}
           />
-          <Drawer.Screen 
+          {/* <Drawer.Screen 
             name="Profile" 
             component={ProfileScreen} 
             options={{
@@ -386,7 +386,7 @@ export default function App() {
               drawerIcon: () => 
                 <Ionicons name="person-circle-outline" color={"white"} size={26} />
             }}
-          />
+          /> */}
         </Drawer.Navigator>
       </NavigationContainer>
       <FlashMessage position="top" />
