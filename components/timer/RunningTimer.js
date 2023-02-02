@@ -170,7 +170,7 @@ export default function RunningTimer({
         >
           <View>
             <View style={styles.modalView}>
-              <Text style={styles.titleText}>Active Timer Modal</Text>
+              <Text style={styles.titleText}>Rest Timer</Text>
               <View style={styles.timerContainer}>
                 <Text style={styles.timerText}>
                   {minDigit1}
@@ -308,7 +308,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     fontSize: 20,
-    backgroundColor: Colors.blue3,
     margin: 10,
     padding: 4,
   },

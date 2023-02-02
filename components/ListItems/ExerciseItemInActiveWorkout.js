@@ -245,6 +245,7 @@ export default function ExerciseItemInActiveWorkout({
           weight: "",
           reps: "",
           status: "IN PROGRESS",
+          type: "WORKING",
           isWeightRecord: 0,
           isRepsRecord: 0,
           isVolumeRecord: 0

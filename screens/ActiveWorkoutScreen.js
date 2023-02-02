@@ -232,7 +232,6 @@ export default function ActiveWorkoutScreen({
             previousSet));
             
           numberOfSets++;
-          console.log("exercise setTimerOn", exercise.setTimerOn);
           tempExerAndInstList.push({ 
             exer: exercise, inst: exerciseInstance, 
             firstSet: {
@@ -525,9 +524,7 @@ export default function ActiveWorkoutScreen({
   } 
 
   async function restoreWorkout() {
-    console.log("wkt", workout)
     setWorkoutName(workout.name);
-    console.log("diffInMins", diffInMins)
     exersAndInsts.map(async (exerInst) => {
       let sets = await fetchSetsFromExerciseInstance(exerInst.exerciseName, workoutId);
       let completedSets = 0;
@@ -697,11 +694,8 @@ export default function ActiveWorkoutScreen({
           keyExtractor={(exerAndInst) => exerAndInst.exer.name}
           ref={flatlistRef}
           onScroll={(e) => {
-            console.log("onscroll")
             //this.fscrollOffset = e.nativeEvent.contentOffset.y;
             //setScrollOffset(e.nativeEvent.contentOffset.y);
-            console.log("scrollOffset here");
-            console.log(e.nativeEvent.contentOffset.y)
           }}
           scrollToOverflowEnabled={true}
           ListFooterComponent={

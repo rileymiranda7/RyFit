@@ -69,9 +69,7 @@ export default function CurrentWorkoutScreen({ workoutInProgress }) {
   useEffect(() => {
     // check if workout was active when app shutdown
     (async () => {
-      console.log("workoutInProgress", workoutInProgress)
       if (workoutInProgress) {
-        console.log("WORKOUT IN PROGRESS")
         const workoutData = await fetchActiveWorkout();
         // get workout duration
         const currentTime12hour = 
@@ -85,14 +83,10 @@ export default function CurrentWorkoutScreen({ workoutInProgress }) {
           currentTimeHours = Number(currentTime12hour.substring(0,2));
           currentTimeMins = Number(currentTime12hour.substring(3,5));
         }
-        console.log("currentTimeHours", currentTimeHours)
-        console.log("currentTimeMins", currentTimeMins)
         const currentTimeAmPm = currentTime12hour.substring(currentTime12hour.length - 2);
         let currentTimeInMins = (currentTimeHours * 60)
         if (currentTimeAmPm === "PM") { currentTimeInMins += (12 * 60); }
         currentTimeInMins += currentTimeMins;
-
-        console.log("currentTimeInMins", currentTimeInMins)
 
         let startTime12hour = workoutData.workout.startTime;
         let startTimeHours;
@@ -108,8 +102,6 @@ export default function CurrentWorkoutScreen({ workoutInProgress }) {
         let startTimeInMins = (startTimeHours * 60)
         if (startTimeAmPm === "PM") { startTimeInMins += (12 * 60); }
         startTimeInMins += startTimeMins;
-
-        console.log("startTimeInMins", startTimeInMins)
 
         let diffInMins = currentTimeInMins - startTimeInMins;
 

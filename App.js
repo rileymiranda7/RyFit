@@ -209,7 +209,7 @@ function BottomTabsNavigator({ handleOnSetCompleted, workoutInProgress }) {
           tabBarColor: Colors.purple12
         }}
       />
-      <BottomTabs.Screen
+      {/* <BottomTabs.Screen
         name="Debug"
         component={DebugScreen}
         options={{
@@ -219,7 +219,7 @@ function BottomTabsNavigator({ handleOnSetCompleted, workoutInProgress }) {
           ),
           tabBarColor: "red"
         }}
-      />
+      /> */}
       <BottomTabs.Screen
         name="Workout"
         //component={CurrentWorkoutStackNavigator}
@@ -288,11 +288,11 @@ export default function App() {
       }
       console.log("final status", finalStatus);
       if (finalStatus !== "granted") {
-        Alert.alert(
+        /* Alert.alert(
           "Permission required",
           "Push notifications need the appropriate permissions.",
           {userInterfaceStyle: "dark"}
-        );
+        ); */
         return;
       }
 
