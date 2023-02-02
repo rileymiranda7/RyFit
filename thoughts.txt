@@ -555,14 +555,27 @@ set data in activeworkout
 APP IS GOING TO RENDER APP.JS AND THEN CurrentWorkout
 NEED TO WORK IN CurrentWorkoutScreen
 
-// check if workout was active when app shutdown
-    (async () => {
-      if (await workoutInProgress()) {
-        console.log("WORKOUT IN PROGRESS")
-        const workoutData = await fetchActiveWorkout();
-        
-      } else {
-        console.log("workout not in progress")
-      }
+need to pass ExerciseItemInActiveWorkout array of restored sets
 
-    })();
+need to restore:
+- exercises in order with notes
+- sets
+- duration
+- workout name
+
+when restoring the exercises and sets the exercises, 
+instances, and sets should already exist in database 
+so don't need to create and add to database just need to 
+add to state array
+
+dont put previous set in exerAndInstList put in setArr for 
+restoring
+
+sets should already have previous stored in db
+
+i think notes heights should update themselves
+
+just need to test now
+
+didnt restore:
+- duration

@@ -314,7 +314,6 @@ export default function App() {
     (async () => {
       const workoutStillActive = await workoutInProgress();
       setWorkoutIsInProgress(workoutStillActive);
-      console.log("workoutIsInProgress", workoutIsInProgress)
     })();
     
   }, []);

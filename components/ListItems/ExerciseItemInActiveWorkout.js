@@ -29,6 +29,7 @@ import { Colors } from "../../constants/colors";
 export default function ExerciseItemInActiveWorkout({ 
   exer,
   inst,
+  restoredSetsArr,
   handleOnSetCompleted, 
   previous,
   heightInfo,
@@ -46,19 +47,21 @@ export default function ExerciseItemInActiveWorkout({
   workoutStatus
 }) {
   // array of set rows
-  const [rowArr, setRowArr] = useState([
-    {
-      setNumber: 1,
-      previous: previous,
-      weight: "",
-      reps: "",
-      status: "IN PROGRESS",
-      type: "WORKING",
-      isWeightRecord: 0,
-      isRepsRecord: 0,
-      isVolumeRecord: 0
-    },
-  ]);
+  const [rowArr, setRowArr] = useState(restoredSetsArr ? restoredSetsArr : 
+    [
+      {
+        setNumber: 1,
+        previous: previous,
+        weight: "",
+        reps: "",
+        status: "IN PROGRESS",
+        type: "WORKING",
+        isWeightRecord: 0,
+        isRepsRecord: 0,
+        isVolumeRecord: 0
+      },
+    ]
+  );
   const [restTimeAmount, setRestTimeAmount] = useState(
     exer?.restTime ? exer.restTime : "2.25");
   const [setTimerOn, setSetTimerOn] = useState(exer?.setTimerOn === 1 ? true : false);
@@ -377,7 +380,7 @@ export default function ExerciseItemInActiveWorkout({
         scrollEnabled={false}
         keyboardAppearance='dark'
         placeholder="notes to always show when doing this exercise:
-         technique, machine settings, etc"
+          technique, machine settings, etc"
         maxLength={250}
         placeholderTextColor={Colors.purple3}
         onChangeText={async (text) => {
@@ -406,7 +409,7 @@ export default function ExerciseItemInActiveWorkout({
         scrollEnabled={false}
         keyboardAppearance='dark'
         placeholder="notes just for this workout: soreness, tiredness,
-         mood, etc"
+          mood, etc"
         maxLength={250}
         placeholderTextColor={Colors.purple4}
         onChangeText={async (text) => {

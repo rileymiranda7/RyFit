@@ -5,7 +5,7 @@ export default function Previous({ previous }) {
 
   let renderThis;
 
-  if (previous.weight !== "" && previous.reps !== "") {
+  if (previous.weight && previous.reps) {
     renderThis = (
       <Text style={styles.text}>
         {previous.weight + " x " + previous.reps}

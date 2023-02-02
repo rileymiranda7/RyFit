@@ -10,6 +10,8 @@ import { Colors } from "../../../constants/colors";
 
 export default function IncompleteRow({
   setNumber,
+  lbsValue,
+  repsValue,
   setIsCompleted,
   inputChangedHandler,
   isWarmupSet,
@@ -70,6 +72,7 @@ export default function IncompleteRow({
             onBlur: () => {
               setLbsInputFocused(!lbsInputFocused);
             },
+            defaultValue: lbsValue === -1 ? "" : lbsValue.toString()
           }}
           isFocused={lbsInputFocused}
           handleGotRowY={handleGotRowY}
@@ -102,7 +105,8 @@ export default function IncompleteRow({
             onBlur: () => {
               setRepsInputFocused(!repsInputFocused);
             },
-            ref: repsInputRef
+            ref: repsInputRef,
+            defaultValue: repsValue === -1 ? "" : repsValue.toString()
           }}
           isFocused={repsInputFocused}
           handleGotRowY={handleGotRowY}

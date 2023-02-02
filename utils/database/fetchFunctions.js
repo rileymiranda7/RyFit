@@ -252,7 +252,7 @@ export function fetchLastWorkout() {
           resolve(result.rows._array[0]);
         },
         (_, error) => {
-          reject(error);
+          resolve(false);
         }
       );
     });

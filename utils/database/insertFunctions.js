@@ -69,27 +69,27 @@ return promise;
 }
 
 export async function createWorkout(name) {
-const dateShort = 
-(new Date().toLocaleDateString(undefined,{dateStyle:'short'})).toString();
-const dateFull =
-(new Date().toLocaleDateString(undefined,{dateStyle:'full'})).toString();
-const startTime = 
-(new Date().toLocaleTimeString(undefined,{timeStyle:'short'})).toString();
-const promise = new Promise((resolve, reject) => {
-  database.transaction((tx) => {
-    tx.executeSql(
-      `INSERT INTO workouts (dateShort, dateFull, startTime, name, timestamp) 
-      VALUES (?, ?, ?, ?, datetime('now')) 
-      RETURNING workoutId;`,
-      [dateShort, dateFull, startTime, name],
-      (_, result) => {
-        resolve(result.rows._array[0].workoutId);
-      },
-      (_, error) => {
-        reject(error);
-      }
-    );
-  });
+  const dateShort = 
+  (new Date().toLocaleDateString(undefined,{dateStyle:'short'})).toString();
+  const dateFull =
+  (new Date().toLocaleDateString(undefined,{dateStyle:'full'})).toString();
+  const startTime = 
+  (new Date().toLocaleTimeString(undefined,{timeStyle:'short'})).toString();
+  const promise = new Promise((resolve, reject) => {
+    database.transaction((tx) => {
+      tx.executeSql(
+        `INSERT INTO workouts (dateShort, dateFull, startTime, name, timestamp) 
+        VALUES (?, ?, ?, ?, datetime('now')) 
+        RETURNING workoutId;`,
+        [dateShort, dateFull, startTime, name],
+        (_, result) => {
+          resolve(result.rows._array[0].workoutId);
+        },
+        (_, error) => {
+          reject(error);
+        }
+      );
+    });
 });
 
 return promise;

@@ -41,7 +41,7 @@ import {
   updateWorkoutExerciseOrder, 
   updateWorkoutName 
 } from "../utils/database/updateFunctions";
-import { fetchRoutine, fetchAllSetsFromAllExerciseInstances } 
+import { fetchRoutine, fetchAllSetsFromAllExerciseInstances, fetchSetsFromExerciseInstance } 
   from "../utils/database/fetchFunctions";
 import { ExerciseInstance } from "../models/exerciseInstance";
 import Set from "../models/set";
@@ -72,7 +72,17 @@ export default function ActiveWorkoutScreen({
       numSets,
       exerNotesHeight,
       instNotesHeight
-    }
+    }, 
+    restoredSetsArr: [
+      setNumber={item.setNumber}
+      lbsValue={item.weight}
+      repsValue={item.reps}
+      setIsCompleted={item.status === "COMPLETED"}
+      inputChangedHandler={inputChangedHandler}
+      isWarmupSet={item.type === "WARMUP"}
+      type={item.type}
+      previous={item.previous}
+    ]
   } */
 
   const [pickExerModalVisible, setPickExerModalVisible] = useState(false);
@@ -88,18 +98,26 @@ export default function ActiveWorkoutScreen({
 
   const flatlistRef = useRef();
 
+  
+  const route = useRoute();
+  const { routineName, workoutId, restoringWorkout, workout,
+    exersAndInsts, diffInMins} = route.params;
+    
+  let offset = new Date();
+  let diffInSeconds = (diffInMins * 60)
+  offset.setSeconds(offset.getSeconds() + diffInSeconds);
+  
   const {
     seconds,
     minutes,
     hours,
-  } = useStopwatch({ autoStart: true });
-
-  const route = useRoute();
-  const isFocused = useIsFocused();
+    start
+  } = useStopwatch({ autoStart: false,
+    offsetTimestamp: offset
+  });
+  
   const navigation = useNavigation();
-
-  const { routineName, workoutId, restoringWorkout, workout,
-    exersAndInsts} = route.params;
+  const isFocused = useIsFocused();
 
   const loadRoutine = async (routineName) => {
     const routine = await fetchRoutine(routineName);
@@ -506,6 +524,46 @@ export default function ActiveWorkoutScreen({
     }
   } 
 
+  async function restoreWorkout() {
+    console.log("wkt", workout)
+    setWorkoutName(workout.name);
+    console.log("diffInMins", diffInMins)
+    exersAndInsts.map(async (exerInst) => {
+      let sets = await fetchSetsFromExerciseInstance(exerInst.exerciseName, workoutId);
+      let completedSets = 0;
+      for (let set of sets) {
+        if (set.status === "COMPLETED") {
+          completedSets++;
+        }
+      }
+      const arrItem = {
+        exer: {
+          name: exerInst.exerciseName,
+          restTime: exerInst.restTime,
+          notes: exerInst.exerciseNotes,
+          setTimerOn: exerInst.setTimerOn
+        },
+        inst: {
+          name: exerInst.exerciseName,
+          workoutId: workoutId,
+          numSetsCompleted: completedSets,
+          numberInWorkout: exerInst.numberInWorkout,
+          exerInstNotes: exerInst.exerInstNotes
+        },
+        firstSet: { // don't use in restoring; sets already have this
+          previous: {}
+        },
+        heightInfo: {
+          numSets: sets.length,
+          exerNotesHeight: 0,
+          instNotesHeight: 0
+        }, 
+        restoredSetsArr: sets
+      }
+      exerAndInstList.push(arrItem);
+    });
+  }
+  
   useEffect(() => {
     if (isFocused && routineName) {
       if (routineName !== "BLANK") {
@@ -542,6 +600,17 @@ export default function ActiveWorkoutScreen({
       }),
     [navigation, isValidLeaveScreenAttempt]
   );
+
+  useEffect(() => {
+    (async () => {
+      if (restoringWorkout) {
+        await restoreWorkout();
+        start();
+      } else {
+        start();
+      }
+    })();
+  }, [restoringWorkout])
 
 
 
@@ -604,7 +673,8 @@ export default function ActiveWorkoutScreen({
                   <ExerciseItemInActiveWorkout
                     exer={item.exer}
                     inst={item.inst}
-                    previous={item.firstSet.previous}
+                    restoredSetsArr={item?.restoredSetsArr}
+                    previous={item?.firstSet?.previous}
                     heightInfo={item.heightInfo}
                     handleOnSetCompleted={handleOnSetCompleted}
                     updateNumSetsCompletedInWkt={updateNumSetsCompleted}

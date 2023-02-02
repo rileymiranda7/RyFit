@@ -69,17 +69,57 @@ export default function CurrentWorkoutScreen({ workoutInProgress }) {
   useEffect(() => {
     // check if workout was active when app shutdown
     (async () => {
-      console.log("HEREE")
       console.log("workoutInProgress", workoutInProgress)
       if (workoutInProgress) {
         console.log("WORKOUT IN PROGRESS")
         const workoutData = await fetchActiveWorkout();
+        // get workout duration
+        const currentTime12hour = 
+          (new Date().toLocaleTimeString(undefined,{timeStyle:'short'})).toString();
+        let currentTimeHours;
+        let currentTimeMins;
+        if (currentTime12hour.length === 7) {
+          currentTimeHours = Number(currentTime12hour.substring(0,1));
+          currentTimeMins = Number(currentTime12hour.substring(2,4));
+        } else {
+          currentTimeHours = Number(currentTime12hour.substring(0,2));
+          currentTimeMins = Number(currentTime12hour.substring(3,5));
+        }
+        console.log("currentTimeHours", currentTimeHours)
+        console.log("currentTimeMins", currentTimeMins)
+        const currentTimeAmPm = currentTime12hour.substring(currentTime12hour.length - 2);
+        let currentTimeInMins = (currentTimeHours * 60)
+        if (currentTimeAmPm === "PM") { currentTimeInMins += (12 * 60); }
+        currentTimeInMins += currentTimeMins;
+
+        console.log("currentTimeInMins", currentTimeInMins)
+
+        let startTime12hour = workoutData.workout.startTime;
+        let startTimeHours;
+        let startTimeMins;
+        if (currentTime12hour.length === 7) {
+          startTimeHours = Number(startTime12hour.substring(0,1));
+          startTimeMins = Number(startTime12hour.substring(2,4));
+        } else {
+          startTimeHours = Number(startTime12hour.substring(0,2));
+          startTimeMins = Number(startTime12hour.substring(3,5));
+        }
+        const startTimeAmPm = startTime12hour.substring(startTime12hour.length - 2);
+        let startTimeInMins = (startTimeHours * 60)
+        if (startTimeAmPm === "PM") { startTimeInMins += (12 * 60); }
+        startTimeInMins += startTimeMins;
+
+        console.log("startTimeInMins", startTimeInMins)
+
+        let diffInMins = currentTimeInMins - startTimeInMins;
+
         navigation.navigate("ActiveWorkout", {
           restoringWorkout: true,
           workout: workoutData.workout,
           exersAndInsts: workoutData.exersAndInsts,
           routineName: "BLANK",
-          workoutId: workoutData.workout.workoutId
+          workoutId: workoutData.workout.workoutId,
+          diffInMins: diffInMins
         });
       }
 
