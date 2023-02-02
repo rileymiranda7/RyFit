@@ -2,7 +2,7 @@
   "expo": {
     "name": "RyFit",
     "slug": "RyFit",
-    "version": "1.1.5",
+    "version": "1.1.6",
     "orientation": "portrait",
     "icon": "./assets/RyFitIcon.png",
     "userInterfaceStyle": "light",
@@ -20,7 +20,7 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.rileymiranda7.RyFit",
-      "buildNumber": "1.0"
+      "buildNumber": "1.1"
     },
     "android": {
       "adaptiveIcon": {
