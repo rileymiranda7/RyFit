@@ -27,6 +27,7 @@ import ExerciseRecordsTabScreen from "./screens/ExerciseRecordsTabScreen";
 import ExerciseSettingsTabScreen from "./screens/ExerciseSettingsTabScreen";
 import PlateCalc from "./PlateCalc/PlateCalc";
 import { Colors } from "./constants/colors"
+import { workoutInProgress } from "./utils/database/fetchFunctions";
 
 const Drawer = createDrawerNavigator();
 const BottomTabs = createMaterialBottomTabNavigator();
@@ -104,7 +105,8 @@ function ExerciseTabNavigator() {
 }
 
 // Navigators listed with most nested first
-function CurrentWorkoutStackNavigator({ handleOnSetCompleted }) {
+function CurrentWorkoutStackNavigator({ handleOnSetCompleted, workoutInProgress }) {
+
   return (
     <Stack.Navigator
       screenOptions={({ navigation }) => ({
@@ -116,8 +118,10 @@ function CurrentWorkoutStackNavigator({ handleOnSetCompleted }) {
     >
       <Stack.Screen
         name="CurrentWorkout"
-        component={CurrentWorkoutScreen}
         //component={CurrentWorkoutScreen}
+        children={() => (
+          <CurrentWorkoutScreen workoutInProgress={workoutInProgress} />
+        )}
         title="Current Workout"
         options={{
           headerShown: false,
@@ -187,7 +191,7 @@ function PastWorkoutsStackNavigator() {
   );
 }
 
-function BottomTabsNavigator({ handleOnSetCompleted }) {
+function BottomTabsNavigator({ handleOnSetCompleted, workoutInProgress }) {
   return (
     <BottomTabs.Navigator
       initialRouteName="Workout"
@@ -205,7 +209,7 @@ function BottomTabsNavigator({ handleOnSetCompleted }) {
           tabBarColor: Colors.purple12
         }}
       />
-      {/* <BottomTabs.Screen
+      <BottomTabs.Screen
         name="Debug"
         component={DebugScreen}
         options={{
@@ -215,13 +219,14 @@ function BottomTabsNavigator({ handleOnSetCompleted }) {
           ),
           tabBarColor: "red"
         }}
-      /> */}
+      />
       <BottomTabs.Screen
         name="Workout"
         //component={CurrentWorkoutStackNavigator}
         children={() => (
           <CurrentWorkoutStackNavigator
             handleOnSetCompleted={handleOnSetCompleted}
+            workoutInProgress={workoutInProgress}
           />
         )}
         options={{
@@ -251,42 +256,19 @@ SplashScreen.preventAutoHideAsync();
 
 export default function App() {
   requestPermissionsAsync();
-  const [timerIsRunning, setTimerIsRunning] = useState(false);
   const [restTimerAmount, setRestTimerAmount] = useState("0");
-  const [resetTimer, setResetTimer] = useState(false);
-  const [showActiveTimerModal, setShowActiveTimerModal] = useState(false);
   const [rndm, setRndm] = useState(0.5);
   const [dbInitialized, setDbInitialized] = useState(false);
+  const [workoutIsInProgress, setWorkoutIsInProgress] = useState();
 
   const handleOnSetCompleted = (restTimerAmount) => {
     setRestTimerAmount(restTimerAmount);
     setRndm(Math.random());
   };
 
-  const handleTimerPressed = () => {
-    setShowActiveTimerModal(!showActiveTimerModal);
-  };
-
-  const handleOnTimerEnd = (timerWasCanceled) => {
-    //scheduleNotificationsHandler();
-    setTimerIsRunning(!timerIsRunning);
-    if (!timerWasCanceled) {
-      Alert.alert(
-        "Time For Next Set!", 
-        "", 
-        [
-          { text: "OK", onPress: () => {} },
-        ],
-        {userInterfaceStyle: "dark"}
-      );
-    }
-  };
-
-  const exitActiveTimerModal = () => {
-    setShowActiveTimerModal(false);
-  };
 
   useEffect(() => {
+    // initialize database if not already
     init()
       .then(() => {
         setDbInitialized(true);
@@ -294,7 +276,8 @@ export default function App() {
       .catch((err) => {
         console.log(err);
       });
-
+    
+    // set up notifications
     async function configurePushNotifications() {
       const { status } = await Notifications.getPermissionsAsync();
       let finalStatus = status;
@@ -322,9 +305,18 @@ export default function App() {
           importance: Notifications.AndroidImportance.DEFAULT,
         });
       }
+
+      configurePushNotifications();
     }
 
-    configurePushNotifications();
+
+    // check if workout is still in progress
+    (async () => {
+      const workoutStillActive = await workoutInProgress();
+      setWorkoutIsInProgress(workoutStillActive);
+      console.log("workoutIsInProgress", workoutIsInProgress)
+    })();
+    
   }, []);
 
   const onLayoutRootView = useCallback(async () => {
@@ -360,6 +352,7 @@ export default function App() {
             children={() => (
               <BottomTabsNavigator
                 handleOnSetCompleted={handleOnSetCompleted}
+                workoutInProgress={workoutIsInProgress}
               />
             )}
             options={{

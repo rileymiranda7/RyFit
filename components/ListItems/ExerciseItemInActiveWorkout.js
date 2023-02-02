@@ -74,6 +74,8 @@ export default function ExerciseItemInActiveWorkout({
 
   const navigation = useNavigation();
 
+  const originalExerNotes = exer.notes;
+
   function isNumeric(n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
   }
@@ -308,8 +310,8 @@ export default function ExerciseItemInActiveWorkout({
 
   useEffect(() => {
     (async () => {
-      if (workoutStatus === "WORKOUT COMPLETED") {
-        await updateExerciseNotes(exerciseNotes, exer.name);
+      if (workoutStatus === "WORKOUT CANCELED") {
+        await updateExerciseNotes(originalExerNotes, exer.name);
       }
     })();
   }, [workoutStatus])
@@ -380,6 +382,7 @@ export default function ExerciseItemInActiveWorkout({
         placeholderTextColor={Colors.purple3}
         onChangeText={async (text) => {
           setExerciseNotes(text);
+          updateExerciseNotes(text, exer.name)
         }}
         defaultValue={exer.notes}
         value={exerciseNotes}

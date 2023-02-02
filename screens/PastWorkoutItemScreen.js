@@ -18,7 +18,6 @@ export default function PastWorkoutItemScreen() {
   const navigation = useNavigation();
   const route = useRoute();
   const { workout } = route.params;
-  const { width: windowWidth } = useWindowDimensions();
 
   const loadExercises = async () => {
     const exercisesAndInsts = await 

@@ -28,6 +28,7 @@ export default function RoutineItem({ routineName, exercises }) {
           onPress: async () => {
             const workoutId = await createWorkout(routineName);
             navigation.navigate("ActiveWorkout", {
+              restoringWorkout: false,
               routineName: routineName,
               workoutId: workoutId
             });

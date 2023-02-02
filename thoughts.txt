@@ -1,3 +1,5 @@
+MAKE APP BUILD: eas build -p ios
+
 A Workout consists of Exercises
 
 An Exercise consists of a 
@@ -531,3 +533,36 @@ restTimer field in exercises table will be int value
 0 is false and 1 is true
 
 clean up RoutineItem.js
+
+workout isn't completed if duration is null
+exercise positions do get updated when drag is done
+so why do we update at end of workout too?
+
+exercise notes are not updated till workout is completed
+this is because if exercise notes are updated during workout
+but then workout is deleted the old notes will be lost
+
+ok fixed this by storing old exer notes in const then
+if workout canceled old notes are restored
+
+otherwise exercise notes are updated in db on change
+
+dont really need to set workout completed status now but
+
+fetch workout and exer and inst data in app but load 
+set data in activeworkout
+
+APP IS GOING TO RENDER APP.JS AND THEN CurrentWorkout
+NEED TO WORK IN CurrentWorkoutScreen
+
+// check if workout was active when app shutdown
+    (async () => {
+      if (await workoutInProgress()) {
+        console.log("WORKOUT IN PROGRESS")
+        const workoutData = await fetchActiveWorkout();
+        
+      } else {
+        console.log("workout not in progress")
+      }
+
+    })();

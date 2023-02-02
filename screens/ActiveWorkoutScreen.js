@@ -92,20 +92,14 @@ export default function ActiveWorkoutScreen({
     seconds,
     minutes,
     hours,
-    days,
-    isRunning,
-    start,
-    pause,
-    reset,
   } = useStopwatch({ autoStart: true });
 
   const route = useRoute();
   const isFocused = useIsFocused();
   const navigation = useNavigation();
 
-  const { routineName, workoutId } = route.params;
-
-  const windowHeight = Dimensions.get('window').height;
+  const { routineName, workoutId, restoringWorkout, workout,
+    exersAndInsts} = route.params;
 
   const loadRoutine = async (routineName) => {
     const routine = await fetchRoutine(routineName);
@@ -260,6 +254,7 @@ export default function ActiveWorkoutScreen({
           {
             text: "End Workout",
             onPress: async () => {
+              setWorkoutStatus("WORKOUT CANCELED");
               setIsValidLeaveScreenAttempt(true);
               await deleteAllSetsFromWorkout(workoutId);
               await deleteWorkout(workoutId);

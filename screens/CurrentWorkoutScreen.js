@@ -14,11 +14,11 @@ import { useIsFocused, useNavigation, useRoute } from "@react-navigation/native"
 import { Ionicons } from "@expo/vector-icons";
 
 import { createWorkout, insertEmptyRoutine } from "../utils/database/insertFunctions";
-import { doesRoutineAlreadyExist, fetchRoutines } from "../utils/database/fetchFunctions";
+import { doesRoutineAlreadyExist, fetchActiveWorkout, fetchRoutines } from "../utils/database/fetchFunctions";
 import RoutineItem from "../components/ListItems/RoutineItem";
 import { Colors } from "../constants/colors";
 
-export default function CurrentWorkoutScreen() {
+export default function CurrentWorkoutScreen({ workoutInProgress }) {
   const [loadedRoutines, setLoadedRoutines] = useState();
   const [addingRoutine, setAddingRoutine] = useState(false);
   const [routineName, setRoutineName] = useState("");
@@ -65,6 +65,26 @@ export default function CurrentWorkoutScreen() {
     }
     setRoutineName("");
   };
+
+  useEffect(() => {
+    // check if workout was active when app shutdown
+    (async () => {
+      console.log("HEREE")
+      console.log("workoutInProgress", workoutInProgress)
+      if (workoutInProgress) {
+        console.log("WORKOUT IN PROGRESS")
+        const workoutData = await fetchActiveWorkout();
+        navigation.navigate("ActiveWorkout", {
+          restoringWorkout: true,
+          workout: workoutData.workout,
+          exersAndInsts: workoutData.exersAndInsts,
+          routineName: "BLANK",
+          workoutId: workoutData.workout.workoutId
+        });
+      }
+
+    })();
+  }, [workoutInProgress])
 
   useEffect(() => {
     if (isFocused) {
@@ -161,7 +181,7 @@ export default function CurrentWorkoutScreen() {
     );
   } else {
     renderRoutines = (<View style={styles.routinesContainer}>
-      <Text style={styles.noRoutinesTextStyle}>No routines found{"\n"}Create one above</Text>
+      <Text style={styles.noRoutinesTextStyle}>No routines found</Text>
     </View>)
   }
 
@@ -175,6 +195,7 @@ export default function CurrentWorkoutScreen() {
         onPress={async () => {
           const workoutId = await createWorkout('New Workout');
           navigation.navigate("ActiveWorkout", {
+            restoringWorkout: false,
             routineName: "BLANK",
             workoutId: workoutId
           });

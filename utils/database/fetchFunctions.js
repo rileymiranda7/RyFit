@@ -228,6 +228,39 @@ export async function fetchWorkoutDateShort(workoutId) {
   return promise;
 }
 
+export async function workoutInProgress() {
+  const workout = await fetchLastWorkout();
+  // make sure workouts table exists and that 
+  // last workout was not completed
+  return workout?.workoutId && !workout?.duration;
+}
+
+export async function fetchActiveWorkout() {
+  const workout = await fetchLastWorkout();
+  const exersAndInsts = await fetchExersAndInstsFromPastWorkout(workout.workoutId);
+  return { workout: workout, exersAndInsts: exersAndInsts};
+}
+
+export function fetchLastWorkout() {
+  const promise = new Promise((resolve, reject) => {
+    database.transaction((tx) => {
+      tx.executeSql( 
+        `SELECT * FROM workouts
+        ORDER BY timestamp DESC;`,
+        [],
+        (_, result) => {
+          resolve(result.rows._array[0]);
+        },
+        (_, error) => {
+          reject(error);
+        }
+      );
+    });
+  });
+
+  return promise;
+}
+
 export function fetchCompletedWorkouts() {
   const promise = new Promise((resolve, reject) => {
     database.transaction((tx) => {
